@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/btmHome"
+        android:title="@string/home"
+        android:icon="@drawable/ic_home"/>
+    <item android:id="@+id/btmAdmin"
+        android:title="@string/staff_admin"
+        android:icon="@drawable/ic_administrator"/>
+    <item android:id="@+id/btmDonation"
+        android:title="@string/donation"
+        android:icon="@drawable/ic_donation"/>
+    <item android:id="@+id/btmReport"
+        android:title="@string/report"
+        android:icon="@drawable/ic_report_bottom_nav"/>
+    <item android:id="@+id/btmAccount"
+        android:title="@string/account"
+        android:icon="@drawable/ic_account"/>
+</menu>

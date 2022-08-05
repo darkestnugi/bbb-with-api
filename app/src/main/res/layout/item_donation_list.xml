@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cvDonationItems"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="7dp"
+    android:layout_marginBottom="7dp"
+    android:elevation="10dp"
+    app:cardCornerRadius="12dp"
+    tools:ignore="UnusedAttribute">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="30dp">
+
+        <ImageView
+            android:id="@+id/ivImageListDonation"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/iv_background_image_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvAmountTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/amount"
+            android:textColor="#272727"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/ivImageListDonation"
+            app:layout_constraintTop_toBottomOf="@id/ivImageListDonation" />
+
+        <TextView
+            android:id="@+id/tvTotalAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Rp. 200.000"
+            android:textColor="#219653"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/ivImageListDonation"
+            app:layout_constraintTop_toBottomOf="@id/tvAmountTitle" />
+
+        <TextView
+            android:id="@+id/tvTransactionDateTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/transaction_date"
+            android:textColor="#272727"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@id/ivImageListDonation"
+            app:layout_constraintTop_toBottomOf="@id/ivImageListDonation" />
+
+        <TextView
+            android:id="@+id/tvTransactionDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Semoga Bermanfaat"
+            android:textColor="#272727"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/tvTransactionDateTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvTransactionDateTitle" />
+
+        <TextView
+            android:id="@+id/tvReferenceNumberTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/volunteer_name"
+            android:textColor="#272727"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tvAmountTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvTotalAmount" />
+
+        <TextView
+            android:id="@+id/tvReferenceNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="2222222"
+            android:textColor="#272727"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tvReferenceNumberTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvReferenceNumberTitle" />
+
+        <TextView
+            android:id="@+id/tvTransactionStatusTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/transaction_status"
+            android:textColor="#272727"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tvTransactionDateTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvTransactionDate" />
+
+        <TextView
+            android:id="@+id/tvTransactionStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/tv_background_transcation_status"
+            android:paddingHorizontal="22dp"
+            android:paddingVertical="8dp"
+            android:text="Menunggu Verifikasi"
+            android:textColor="#FCCC11"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/tvTransactionStatusTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvTransactionStatusTitle"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnEditDonation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="12dp"
+            android:background="@drawable/btn_custom_logout"
+            android:text="@string/edit"
+            android:textAllCaps="false"
+            android:textColor="#EB5757"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTransactionStatus" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

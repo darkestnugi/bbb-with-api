@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.accountdetail.AccountDetailActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/toolbarHeaderDetailAccount"
+            layout="@layout/layout_toolbar_with_backbutton" />
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarHeaderDetailAccount">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvAccountDetailName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:maxLength="255"
+                    android:singleLine="true"
+                    android:text="@string/name"
+                    android:textColor="#272727"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/etAccountDetailName"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="12dp"
+                    android:enabled="false"
+                    android:background="@drawable/et_custom_login"
+                    android:hint="@string/hint_name"
+                    android:inputType="text"
+                    android:maxLength="255"
+                    android:padding="13dp"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAccountDetailName" />
+
+                <TextView
+                    android:id="@+id/tvAccountDetailUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:maxLength="255"
+                    android:singleLine="true"
+                    android:text="@string/username"
+                    android:textColor="#272727"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etAccountDetailName" />
+
+                <EditText
+                    android:id="@+id/etAccountDetailUserName"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/et_custom_login"
+                    android:hint="@string/hint_username"
+                    android:inputType="text"
+                    android:enabled="false"
+                    android:maxLength="255"
+                    android:padding="13dp"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAccountDetailUserName" />
+
+                <TextView
+                    android:id="@+id/tvAccountDetailPhoneNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="24dp"
+                    android:maxLength="255"
+                    android:singleLine="true"
+                    android:text="@string/phonenumber"
+                    android:textColor="#272727"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etAccountDetailUserName" />
+
+                <com.example.bbbwithapi.helper.PhoneNumberEditText
+                    android:id="@+id/etAccountDetailPhoneNumber"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/et_custom_login"
+                    android:hint="@string/hint_phonenumber"
+                    android:textSize="14sp"
+                    android:maxLength="255"
+                    android:padding="13dp"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:textColor="#272727"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAccountDetailPhoneNumber" />
+
+                <TextView
+                    android:id="@+id/tvAccountDetailEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="24dp"
+                    android:maxLength="255"
+                    android:singleLine="true"
+                    android:text="@string/prompt_email"
+                    android:textColor="#272727"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etAccountDetailPhoneNumber" />
+
+                <EditText
+                    android:id="@+id/etAccountDetailEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/et_custom_login"
+                    android:hint="@string/hint_division"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="255"
+                    android:enabled="false"
+                    android:padding="13dp"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAccountDetailEmail" />
+
+                <TextView
+                    android:id="@+id/tvAccountDetailDivision"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="24dp"
+                    android:maxLength="255"
+                    android:singleLine="true"
+                    android:text="@string/prompt_division"
+                    android:textColor="#272727"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/etAccountDetailEmail" />
+
+                <Spinner
+                    android:id="@+id/spinnerEdtDivision"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/et_custom_login"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAccountDetailDivision" />
+
+                <TextView
+                    android:id="@+id/tvAccountDetailTeam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="24dp"
+                    android:maxLength="255"
+                    android:singleLine="true"
+                    android:text="@string/prompt_team"
+                    android:textColor="#272727"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerEdtDivision" />
+
+                <Spinner
+                    android:id="@+id/spinnerEdtTeam"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/et_custom_login"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAccountDetailTeam" />
+
+                <TextView
+                    android:id="@+id/tvAccountDetailUserClass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="24dp"
+                    android:maxLength="255"
+                    android:singleLine="true"
+                    android:text="@string/prompt_userclass"
+                    android:textColor="#272727"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerEdtTeam" />
+
+                <Spinner
+                    android:id="@+id/spinnerEdtClass"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/et_custom_login"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAccountDetailUserClass" />
+
+                <TextView
+                    android:id="@+id/tvGender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="24dp"
+                    android:maxLength="255"
+                    android:singleLine="true"
+                    android:text="@string/gender"
+                    android:textColor="#272727"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerEdtClass" />
+
+                <RadioGroup
+                    android:id="@+id/rgGender"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal"
+                    android:enabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvGender">
+
+                    <RadioButton
+                        android:id="@+id/rbMen"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="13dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/et_custom_login"
+                        android:padding="13dp"
+                        android:enabled="false"
+                        android:text="@string/men"
+                        android:textColor="#888888" />
+
+                    <RadioButton
+                        android:id="@+id/rbWomen"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:background="@drawable/et_custom_login"
+                        android:padding="13dp"
+                        android:text="@string/women"
+                        android:textColor="#888888" />
+                </RadioGroup>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSaveAccountDetail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/btn_custom_yellow"
+                    android:text="@string/save"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    app:layout_constraintTop_toBottomOf="@id/rgGender"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

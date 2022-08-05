@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/Theme.BBBwithAPI"
+    android:background="@drawable/wallpaper"
+    tools:context=".presentation.report.ReportDetailActivity">
+
+    <include
+        android:id="@+id/toolbarHeader"
+        layout="@layout/layout_toolbar_with_backbutton"/>
+
+    <ScrollView
+        android:id="@+id/layoutScrollMain"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/toolbarHeader"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageULoading"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/loading"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:id="@+id/txtUserId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                tools:text="ID"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/txtUTransactionDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:layout_marginTop="20dp"
+                android:textColor="#272727"
+                android:text="Tanggal Donasi"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etName" />
+
+            <com.example.bbbwithapi.helper.DatePickerHelper
+                android:id="@+id/edtUTransactionDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:datePickerMode="calendar"
+                android:paddingLeft="5sp"
+                android:paddingTop="5sp"
+                android:paddingRight="5sp"
+                android:paddingBottom="5sp"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etBirthDate" />
+
+            <TextView
+                android:id="@+id/txtUProgram"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jenis Program"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:layout_marginTop="20dp"
+                android:textColor="#272727"
+                />
+
+            <Spinner
+                android:id="@+id/spinnerEdtProgram"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:padding="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:id="@+id/txtUIntroduce"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jumlah Perkenalan"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:layout_marginTop="20dp"
+                android:textColor="#272727"
+                android:visibility="gone"
+                />
+
+            <EditText
+                android:id="@+id/edtUIntroduce"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:padding="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:hint="Masukkan Jumlah Perkenalan disini"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:inputType="number"
+                android:singleLine="true"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:id="@+id/txtUFollowUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jumlah Follow Up"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:layout_marginTop="20dp"
+                android:textColor="#272727"
+                android:visibility="gone"
+                />
+
+            <EditText
+                android:id="@+id/edtUFollowUp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:padding="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:hint="Masukkan Follow Up disini"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:inputType="number"
+                android:singleLine="true"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:id="@+id/txtUSuccess"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jumlah Donatur"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:layout_marginTop="20dp"
+                android:textColor="#272727"
+                />
+
+            <EditText
+                android:id="@+id/edtUSuccess"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:padding="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:hint="Masukkan Jumlah Donatur disini"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:inputType="number"
+                android:singleLine="true"
+                />
+
+            <TextView
+                android:id="@+id/txtUSuccess1Million"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jumlah Donatur Berkualitas (Sekali Donasi diatas 1 Juta Rupiah)"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:singleLine="false"
+                android:layout_marginTop="20dp"
+                android:textColor="#272727"
+                />
+
+            <EditText
+                android:id="@+id/edtUSuccess1Million"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:padding="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:hint="Masukkan Jumlah Donatur Berkualitas disini"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:inputType="number"
+                android:singleLine="true"
+                />
+
+            <TextView
+                android:id="@+id/txtUNominal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jumlah Total Donasi"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:layout_marginTop="20dp"
+                android:textColor="#272727"
+                />
+
+            <com.example.bbbwithapi.helper.CurrencyEditText
+                android:id="@+id/edtUNominal"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:padding="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:hint="Masukkan Jumlah Total Donasi disini"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:id="@+id/txtUReferenceNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Id Relawan"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:layout_marginTop="20dp"
+                android:textColor="#272727"
+                />
+
+            <EditText
+                android:id="@+id/edtUReferenceNumber"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:padding="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:hint="Masukkan Id Relawan disini"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:inputType="number"
+                android:singleLine="true"
+                />
+
+            <TextView
+                android:id="@+id/txtUReferenceName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/volunteer_name"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:layout_marginTop="20dp"
+                android:textColor="#272727"
+                />
+
+            <EditText
+                android:id="@+id/edtUReferenceName"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:padding="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:hint="Masukkan Nama Relawan disini"
+                android:textSize="14sp"
+                android:maxLength="1000"
+                android:inputType="text"
+                android:singleLine="false"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="30dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnUsave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_custom_yellow"
+                    android:textAllCaps="false"
+                    android:text="@string/send"
+                    android:textColor="#ffffff"
+                    android:layout_marginTop="10sp"
+                    android:layout_marginBottom="10sp"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

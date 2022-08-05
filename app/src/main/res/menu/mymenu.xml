@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/pengaturan"
+        android:title="Pengaturan"
+        android:tooltipText="Pengaturan"
+        android:orderInCategory="10"
+        android:icon="@mipmap/ic_pengaturan_round"
+        app:showAsAction="always">
+        <menu>
+            <item android:id="@+id/myprofile"
+                android:title="Profil Saya"
+                android:tooltipText="Profil Saya"
+                android:orderInCategory="11"
+                android:icon="@mipmap/ic_orang_round"
+                app:showAsAction="never"/>
+            <item android:id="@+id/logout"
+                android:title="Logout"
+                android:tooltipText="Logout"
+                android:orderInCategory="12"
+                android:icon="@mipmap/ic_logout_round"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
+</menu>

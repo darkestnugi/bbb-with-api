@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wallpaper"
+    android:theme="@style/Theme.BBBwithAPI">
+
+    <include
+        android:id="@+id/toolbarRegister"
+        layout="@layout/layout_toolbar_with_backbutton" />
+
+    <ScrollView
+        android:id="@+id/layoutScrollMain"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toTopOf="@id/btnUsave"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarRegister">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageULoading"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/loading"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txtUName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:text="@string/name"
+                android:textColor="#272727"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/edtUName"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:hint="@string/hint_name"
+                android:inputType="text"
+                android:maxLength="255"
+                android:padding="13dp"
+                android:singleLine="true"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtUName" />
+
+            <TextView
+                android:id="@+id/txtUUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:text="@string/username"
+                android:textColor="#272727"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edtUName" />
+
+            <EditText
+                android:id="@+id/edtUUserName"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:padding="13dp"
+                android:inputType="text"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:hint="@string/hint_username"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtUUserName"/>
+
+            <TextView
+                android:id="@+id/txtUMobilePhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:text="@string/phonenumber"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#272727"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edtUUserName"/>
+
+            <com.example.bbbwithapi.helper.PhoneNumberEditText
+                android:id="@+id/edtUMobilePhone"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:padding="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:hint="@string/hint_phonenumber"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textColor="#272727"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtUMobilePhone"/>
+
+            <TextView
+                android:id="@+id/txtUEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:text="@string/prompt_email"
+                android:textSize="14sp"
+                android:textColor="#272727"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edtUMobilePhone"/>
+
+            <EditText
+                android:id="@+id/edtUEmail"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@drawable/et_custom_login"
+                android:inputType="textEmailAddress"
+                android:maxLength="255"
+                android:textSize="14sp"
+                android:padding="13dp"
+                android:hint="@string/enter_email_hint"
+                android:singleLine="true"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtUEmail"/>
+
+            <TextView
+                android:id="@+id/txtUDivision"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:text="@string/prompt_division"
+                android:textColor="#272727"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edtUEmail" />
+
+            <Spinner
+                android:id="@+id/spinnerEdtDivision"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtUDivision" />
+
+            <TextView
+                android:id="@+id/txtUTeam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:text="@string/prompt_team"
+                android:textColor="#272727"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerEdtDivision" />
+
+            <Spinner
+                android:id="@+id/spinnerEdtTeam"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtUTeam" />
+
+            <TextView
+                android:id="@+id/txtUUserClass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:text="@string/prompt_userclass"
+                android:textColor="#272727"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spinnerEdtTeam" />
+
+            <Spinner
+                android:id="@+id/spinnerEdtClass"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtUUserClass" />
+
+            <TextView
+                android:id="@+id/txtUSex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:text="@string/gender"
+                android:textColor="#272727"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/spinnerEdtClass"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <RadioGroup
+                android:id="@+id/rgSex"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtUSex">
+                <RadioButton
+                    android:id="@+id/rbMen"
+                    android:text="@string/men"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="13dp"
+                    android:layout_height="wrap_content"
+                    android:padding="13dp"
+                    android:textColor="#888888"
+                    android:background="@drawable/et_custom_login"/>
+
+                <RadioButton
+                    android:id="@+id/rbWomen"
+                    android:text="@string/women"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:padding="13dp"
+                    android:textColor="#888888"
+                    android:background="@drawable/et_custom_login"/>
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/txtUPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#272727"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:text="@string/prompt_password"
+                app:layout_constraintTop_toBottomOf="@id/rgSex"/>
+
+            <EditText
+                android:id="@+id/edtUPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:hint="@string/hint_password"
+                android:textSize="14sp"
+                android:padding="13dp"
+                android:textColor="#272727"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                app:layout_constraintTop_toBottomOf="@id/txtUPassword"/>
+
+            <ImageView
+                android:id="@+id/ivEyePasswordRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_eye_disable"
+                android:layout_marginTop="23dp"
+                android:layout_marginEnd="14dp"
+                app:layout_constraintEnd_toEndOf="@id/edtUPassword"
+                app:layout_constraintTop_toBottomOf="@id/txtUPassword"/>
+
+            <TextView
+                android:id="@+id/txtUConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#272727"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:text="@string/confirm_password"
+                app:layout_constraintTop_toBottomOf="@id/edtUPassword"/>
+
+            <EditText
+                android:id="@+id/edtUConfirmPassword"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:inputType="textPassword"
+                android:hint="@string/enter_confirm_password_hint"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:padding="13dp"
+                android:textColor="#272727"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtUConfirmPassword"/>
+
+            <ImageView
+                android:id="@+id/ivEyeConfirmPasswordRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_eye_disable"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="14dp"
+                app:layout_constraintEnd_toEndOf="@id/edtUConfirmPassword"
+                app:layout_constraintTop_toBottomOf="@id/txtUConfirmPassword"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnUsave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/btn_custom_yellow"
+        android:text="@string/register"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintTop_toBottomOf="@id/layoutScrollMain"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

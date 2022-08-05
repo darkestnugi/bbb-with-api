@@ -1,3 +1,162 @@
 <resources>
-    <string name="app_name">BBBwithAPI</string>
+    <string name="app_name">Visi Maha Karya</string>
+
+    <string name="slide_1_title">Latar Belakang</string>
+    <string name="slide_1_1_desc">Yayasan Visi Maha Karya adalah lembaga nirlaba yang menjembatani antara masyarakat Indonesia yang membutuhkan perhatian dengan masyarakat Indonesia yang memiliki perhatian. Menyadari adanya kesenjangan sosial di masyarakat, maka Yayasan Visi Maha Karya memiliki beberapa karya nyata untuk terwujudnya keseimbangan sosial berupa karya pendidikan, karya kesehatan, karya lingkungan, karya ekonomi dan lainnya.</string>
+    <string name="slide_1_2_desc">Dengan karya nyata yang telah kami berikan kepada sebagian masyarakat, kini Yayasan Visi Maha Karya mendapatkan dukungan yang luar biasa dari berbagai pihak dan salah satunya adalah anda. Dengan Visi ingin membangun manusia secara utuh, yaitu membangun akhlak yang sesuai ajaran Ilahi, membangun kecerdasan dan kesehatan jasmani, serta membangun sikap toleransi dan perdamaian. Maka, Yayasan Visi Maha Karya mengajak seluruh elemen masyarakat untuk bersama membangun dan peduli kepada Indonesia.</string>
+
+    <string name="slide_2_title">Program</string>
+    <string name="slide_2_1_desc">Kakiku Kini Kembali - Program ini tidak hanyak memberikan bantuan kaki palsu secara gratis namun juga melakukan pemberdayaan bagi tuna daksa atau keluarga tuna daksa, agar kelak mereka dapat mandiri secara ekonomi dan percaya diri untuk mengejar kembali impiannya.</string>
+    <string name="slide_2_2_desc">Yatim Maha Karya - Adalah program pemberdayaan anak yatim dan dhuafa yang diberikan bantuan secara rutin berupa santunan, serta memberikan mereka bimbingan dan kasih sayang yang tidak mereka dapatkan. Hal ini guna  menjadikan mereka pribadi yang mandiri,  secara ekonomi dan percaya diri untuk mengejar impiannya.</string>
+    <string name="slide_2_3_desc">Melawan Corona - Bantu kami yuk? Karena bantuan kamu dari rumah bisa menjangkau ribuan orang yang hampir menyerah kalah. Kami bergerak cepat dan tepat sasaran. Kamu tetap di rumah biar kami yang turun ke jalan.</string>
+    <string name="slide_2_4_desc">Zakat - Zakat merupakan salah satu ibadah wajib bagi umat Islam. Hal itu tertulis di dalam Al Quran dan selain itu juga Zakat merupakan salah satu dalam rukun Islam.</string>
+    <string name="slide_2_5_desc">Berdikari - Sebuah program berkesinambungan dari mulai pelatihan motivasi dan pengembangan sampai ke tahapan dimana adik-adik yatim , piatu , dhuafa dan penyandang tuna daksa mampu untuk mandiri dan meraih apa yang mereka cita – citakan.</string>
+    <string name="slide_2_6_desc">Berbagi Sarapan - Program Visi Maha Karya untuk menjembatani masyarakat, berbagi kebahagiaan dalam bentuk sekotak makanan mengapresiasi masyarakat yang memulai aktifitasnya sejak pagi hari. Misalnya penyapu jalan pengemudi ojek online dan profesi lainnya.</string>
+
+    <string name="slide_3_title">Pengurus</string>
+    <string name="slide_3_1_desc">Legalitas</string>
+    <string name="slide_3_2_desc">Struktur Organisasi</string>
+
+    <string name="slide_4_title">Donasi</string>
+    <string name="slide_4_1_desc">Alamat</string>
+    <string name="slide_4_1_desc_lev1">Jl. Gn. Raya No.26, RW.3, Cireundeu, Kec. Ciputat Tim., Kota Tangerang Selatan, Banten 15419</string>
+    <string name="slide_4_2_desc">Office Hour</string>
+    <string name="slide_4_2_desc_lev1">08:00 AM – 21.00 PM</string>
+    <string name="slide_4_3_desc">Phone</string>
+    <string name="slide_4_3_desc_lev1">(021) 7418447</string>
+    <string name="slide_4_4_desc">Mobile Phone / WhatsApp</string>
+    <string name="slide_4_4_desc_lev1">+6285697880809</string>
+
+    <string name="slide_5_title">Laporan</string>
+    <string name="slide_5_1_desc">Yayasan Visi Maha Karya adalah lembaga nirlaba yang menjembatani antara masyarakat Indonesia yang membutuhkan perhatian dengan masyarakat Indonesia yang memiliki perhatian. Menyadari adanya kesenjangan sosial di masyarakat, maka Yayasan Visi Maha Karya memiliki beberapa karya nyata untuk terwujudnya keseimbangan sosial berupa karya pendidikan, karya kesehatan, karya lingkungan, karya ekonomi dan lainnya.</string>
+    <string name="slide_5_2_desc">Dengan karya nyata yang telah kami berikan kepada sebagian masyarakat, kini Yayasan Visi Maha Karya mendapatkan dukungan yang luar biasa dari berbagai pihak dan salah satunya adalah anda. Dengan Visi ingin membangun manusia secara utuh, yaitu membangun akhlak yang sesuai ajaran Ilahi, membangun kecerdasan dan kesehatan jasmani, serta membangun sikap toleransi dan perdamaian. Maka, Yayasan Visi Maha Karya mengajak seluruh elemen masyarakat untuk bersama membangun dan peduli kepada Indonesia.</string>
+
+    <string name="slide_6_title">Detail Donasi</string>
+
+    <string name="title_activity_login">Login</string>
+
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_division">Divisi</string>
+    <string name="prompt_team">Tim</string>
+    <string name="prompt_userclass">Kelas</string>
+
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+
+    <string name="welcome">"Welcome !"</string>
+
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    <string name="type_menu">menu</string>
+    <string name="menu_beranda">menu beranda</string>
+    <string name="menu_pengurus">menu pengurus</string>
+    <string name="menu_program">menu program</string>
+    <string name="menu_donasi">menu donasi</string>
+    <string name="menu_donasi_detail">menu_donasi detail</string>
+    <string name="menu_laporan">menu laporan</string>
+    <string name="menu_login">menu login / logout</string>
+    <string name="menu_cari_donasi_pribadi">menu cari donasi pribadi</string>
+    <string name="menu_download_excel_donasi_pribadi">menu download excel donasi pribadi</string>
+
+    <string name="home">Beranda</string>
+    <string name="staff_admin">Pengurus</string>
+    <string name="pdc">PDC</string>
+    <string name="donation">Donasi</string>
+    <string name="report">Laporan</string>
+    <string name="watch">Daftar Piket</string>
+    <string name="absence">Daftar Absen</string>
+    <string name="account">Akun</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="detail">Detail</string>
+    <string name="forget_password">Lupa Password?</string>
+    <string name="lupa_password_header">Lupa Password</string>
+    <string name="forget_password_explanation">Setelah memasukkan email, kami akan mengirimkan link verifikasi lupa password ke email anda</string>
+    <string name="enter_email_hint">Masukkan email disini</string>
+    <string name="send">Kirim</string>
+    <string name="amount">Nominal</string>
+    <string name="prayer">Doa</string>
+    <string name="transaction_date">Tanggal Transaksi</string>
+    <string name="reference_number">Nomor Referensi</string>
+    <string name="transaction_status">Status Pembayaran</string>
+    <string name="program_details">Detail Program</string>
+
+    <string name="is_use_upload_donation">No</string>
+    <string name="is_use_upload_pdc">Yes</string>
+    <string name="is_use_upload_watch">Yes</string>
+    <string name="is_use_upload_absence">Yes</string>
+
+    <string name="upload_donation_evidence">Upload</string>
+    <string name="toolbar_search_donation">Cari Donasi</string>
+    <string name="toolbar_upload_donation">+ Upload</string>
+
+    <string name="upload_report_evidence">Upload</string>
+    <string name="toolbar_upload_report">+ Upload</string>
+
+    <string name="upload_watch_evidence">Upload</string>
+    <string name="toolbar_upload_watch">+ Upload</string>
+
+    <string name="upload_absence_evidence">Upload</string>
+    <string name="toolbar_upload_absence">+ Upload</string>
+
+    <string name="avatar_name">Avatar Name</string>
+    <string name="avatar_email">avatar.email@email.com</string>
+    <string name="avatar_phone_number">08xxxxxxxxxx</string>
+    <string name="address">Alamat</string>
+    <string name="address_detail">Alamat Detail</string>
+    <string name="phone_number">Mobile Phone Number</string>
+    <string name="level">Level</string>
+    <string name="account_setting">Pengaturan Akun</string>
+    <string name="change_password">Ganti Password</string>
+    <string name="change_password_explanation">Ubah dan perbarui password kamu</string>
+
+    <string name="about_vmk">Seputar Visi Maha Karya</string>
+    <string name="vmk_background">Latar Belakang</string>
+    <string name="vmk_watch">Daftar Piket</string>
+    <string name="vmk_absence">Daftar Absen</string>
+    <string name="logout">Keluar</string>
+    <string name="edit">Ubah</string>
+
+    <string name="enter_password_hint">Masukkan Password disini</string>
+    <string name="confirm_password">Konfirmasi Password disini</string>
+    <string name="enter_confirm_password_hint">Masukkan Konfirmasi Password disini</string>
+
+    <string name="gender">Jenis Kelamin</string>
+    <string name="men">Laki - Laki</string>
+    <string name="women">Perempuan</string>
+
+    <string name="name">Nama</string>
+    <string name="username">Id Relawan</string>
+    <string name="phonenumber">Nomor Handphone</string>
+    <string name="volunteer_name">Nama Relawan</string>
+    <string name="donation_date">Waktu Donasi</string>
+    <string name="total_amount">Jumlah Nominal</string>
+    <string name="total_donation_amount">Jumlah Donasi</string>
+    <string name="donation_receive_from">Telah Terima Dari</string>
+    <string name="donator_status">Status Donatur</string>
+    <string name="for_programs">Untuk Program</string>
+
+    <string name="register">Register</string>
+    <string name="transaction_detail">Detail Transaksi</string>
+    <string name="save">Simpan</string>
+    <string name="save_prompt">Apakah anda yakin ingin menyimpan \n data ini ?</string>
+    <string name="logout_prompt">Apakah anda yakin ingin keluar dari \nVisi Maha Karya ?</string>
+
+    <string name="hint_email">Masukkan Email disini</string>
+    <string name="hint_name">Masukkan Nama disini</string>
+    <string name="hint_username">Masukkan Id Relawan disini</string>
+    <string name="hint_password">Masukkan Password disini</string>
+    <string name="hint_phonenumber">Masukkan Nomor HP disini</string>
+    <string name="hint_division">Masukkan Divisi disini</string>
+    <string name="hint_team">Masukkan Tim disini</string>
+    <string name="hint_userclass">Masukkan Kelas disini</string>
+
+    <string name="total_donation_with_waiting_amount_monthly">Total Donasi Bulan Ini (Termasuk yang menunggu konfirmasi)</string>
+    <string name="total_donation_with_waiting_amount">Total Donasi Keseluruhan (Termasuk yang menunggu konfirmasi)</string>
+    <string name="total_donation_with_waiting_amount_monthly_v1">Total Donasi Bulan Ini</string>
+    <string name="total_donation_with_waiting_amount_v1">Total Donasi Keseluruhan</string>
 </resources>
