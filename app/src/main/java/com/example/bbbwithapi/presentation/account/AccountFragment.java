@@ -211,7 +211,7 @@ public class AccountFragment extends Fragment{
         View.OnClickListener bbbBackgroundClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(requireActivity(), AboutbbbActivity.class);
+                Intent intent = new Intent(requireActivity(), AboutBBBActivity.class);
                 startActivity(intent);
             }
         };

@@ -114,10 +114,10 @@
     <string name="change_password">Ganti Password</string>
     <string name="change_password_explanation">Ubah dan perbarui password kamu</string>
 
-    <string name="about_vmk">Seputar Visi Maha Karya</string>
-    <string name="vmk_background">Latar Belakang</string>
-    <string name="vmk_watch">Daftar Piket</string>
-    <string name="vmk_absence">Daftar Absen</string>
+    <string name="about_bbb">Seputar Visi Maha Karya</string>
+    <string name="bbb_background">Latar Belakang</string>
+    <string name="bbb_watch">Daftar Piket</string>
+    <string name="bbb_absence">Daftar Absen</string>
     <string name="logout">Keluar</string>
     <string name="edit">Ubah</string>
 
