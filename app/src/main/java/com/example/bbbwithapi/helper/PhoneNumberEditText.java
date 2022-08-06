@@ -16,7 +16,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 public class PhoneNumberEditText extends androidx.appcompat.widget.AppCompatEditText {
-    private static String prefix = "62";
+    private static String prefix = "+62";
     private static final int MAX_LENGTH = 20;
     private static final int MAX_DECIMAL = 0;
     private PhoneNumberTextWatcher phonenumberTextWatcher = new PhoneNumberTextWatcher(this, prefix);
@@ -102,16 +102,20 @@ public class PhoneNumberEditText extends androidx.appcompat.widget.AppCompatEdit
                 // cleanString this the string which not contain prefix and ,
                 String cleanString = str.replace(prefix, "");
 
+                if (cleanString.length() >= 1 && cleanString.substring(0, 1).equals("0"))  {
+                    cleanString = cleanString.substring(1);
+                }
+
+                if (cleanString.length() >= 2 && cleanString.substring(0, 2).equals("62"))  {
+                    cleanString = cleanString.substring(2);
+                }
+
                 // for prevent afterTextChanged recursive call
                 if (cleanString.equals(previousCleanString) || cleanString.isEmpty()) {
                     return;
                 }
 
                 previousCleanString = cleanString;
-
-                if (cleanString.substring(0, 1).equals("0"))  {
-                    cleanString = cleanString.substring(1);
-                }
 
                 String formattedString = prefix + cleanString;
 

@@ -173,11 +173,13 @@ public class AccountFragment extends Fragment{
         tvAvatarName.setText(prefManager.getName());
         tvCardUsernameDetail.setText(prefManager.getUserName());
 
-        String[] tempName = prefManager.getName().split(" ");
         ArrayList<String> tempInitials = new ArrayList<>();
+        if (prefManager.getName() != null && !prefManager.getName().equals("") && prefManager.getName().indexOf(" ") >= 0) {
+            String[] tempName = prefManager.getName().split(" ");
 
-        for (String initials : tempName) {
-            tempInitials.add(String.valueOf(initials.charAt(0)));
+            for (String initials : tempName) {
+                tempInitials.add(String.valueOf(initials.charAt(0)));
+            }
         }
 
         if (mAuth.getCurrentUser().getPhotoUrl() != null) {

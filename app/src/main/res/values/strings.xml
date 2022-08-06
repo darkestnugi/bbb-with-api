@@ -1,17 +1,10 @@
 <resources>
-    <string name="app_name">Visi Maha Karya</string>
+    <string name="app_name">Bina Bangsa Berdikari</string>
+    <string name="app_version">Version 1.0.0.0\nLast Updated: 05-08-2022</string>
 
     <string name="slide_1_title">Latar Belakang</string>
-    <string name="slide_1_1_desc">Yayasan Visi Maha Karya adalah lembaga nirlaba yang menjembatani antara masyarakat Indonesia yang membutuhkan perhatian dengan masyarakat Indonesia yang memiliki perhatian. Menyadari adanya kesenjangan sosial di masyarakat, maka Yayasan Visi Maha Karya memiliki beberapa karya nyata untuk terwujudnya keseimbangan sosial berupa karya pendidikan, karya kesehatan, karya lingkungan, karya ekonomi dan lainnya.</string>
-    <string name="slide_1_2_desc">Dengan karya nyata yang telah kami berikan kepada sebagian masyarakat, kini Yayasan Visi Maha Karya mendapatkan dukungan yang luar biasa dari berbagai pihak dan salah satunya adalah anda. Dengan Visi ingin membangun manusia secara utuh, yaitu membangun akhlak yang sesuai ajaran Ilahi, membangun kecerdasan dan kesehatan jasmani, serta membangun sikap toleransi dan perdamaian. Maka, Yayasan Visi Maha Karya mengajak seluruh elemen masyarakat untuk bersama membangun dan peduli kepada Indonesia.</string>
-
-    <string name="slide_2_title">Program</string>
-    <string name="slide_2_1_desc">Kakiku Kini Kembali - Program ini tidak hanyak memberikan bantuan kaki palsu secara gratis namun juga melakukan pemberdayaan bagi tuna daksa atau keluarga tuna daksa, agar kelak mereka dapat mandiri secara ekonomi dan percaya diri untuk mengejar kembali impiannya.</string>
-    <string name="slide_2_2_desc">Yatim Maha Karya - Adalah program pemberdayaan anak yatim dan dhuafa yang diberikan bantuan secara rutin berupa santunan, serta memberikan mereka bimbingan dan kasih sayang yang tidak mereka dapatkan. Hal ini guna  menjadikan mereka pribadi yang mandiri,  secara ekonomi dan percaya diri untuk mengejar impiannya.</string>
-    <string name="slide_2_3_desc">Melawan Corona - Bantu kami yuk? Karena bantuan kamu dari rumah bisa menjangkau ribuan orang yang hampir menyerah kalah. Kami bergerak cepat dan tepat sasaran. Kamu tetap di rumah biar kami yang turun ke jalan.</string>
-    <string name="slide_2_4_desc">Zakat - Zakat merupakan salah satu ibadah wajib bagi umat Islam. Hal itu tertulis di dalam Al Quran dan selain itu juga Zakat merupakan salah satu dalam rukun Islam.</string>
-    <string name="slide_2_5_desc">Berdikari - Sebuah program berkesinambungan dari mulai pelatihan motivasi dan pengembangan sampai ke tahapan dimana adik-adik yatim , piatu , dhuafa dan penyandang tuna daksa mampu untuk mandiri dan meraih apa yang mereka cita – citakan.</string>
-    <string name="slide_2_6_desc">Berbagi Sarapan - Program Visi Maha Karya untuk menjembatani masyarakat, berbagi kebahagiaan dalam bentuk sekotak makanan mengapresiasi masyarakat yang memulai aktifitasnya sejak pagi hari. Misalnya penyapu jalan pengemudi ojek online dan profesi lainnya.</string>
+    <string name="slide_1_1_desc">Yayasan Bina Bangsa Berdikari adalah lembaga nirlaba yang menjembatani antara masyarakat Indonesia yang membutuhkan perhatian dengan masyarakat Indonesia yang memiliki perhatian. Menyadari adanya kesenjangan sosial di masyarakat, maka Yayasan Bina Bangsa Berdikari memiliki beberapa karya nyata untuk terwujudnya keseimbangan sosial berupa karya pendidikan, karya kesehatan, karya lingkungan, karya ekonomi dan lainnya.</string>
+    <string name="slide_1_2_desc">Dengan karya nyata yang telah kami berikan kepada sebagian masyarakat, kini Yayasan Bina Bangsa Berdikari mendapatkan dukungan yang luar biasa dari berbagai pihak dan salah satunya adalah anda. Dengan Visi ingin membangun manusia secara utuh, yaitu membangun akhlak yang sesuai ajaran Ilahi, membangun kecerdasan dan kesehatan jasmani, serta membangun sikap toleransi dan perdamaian. Maka, Yayasan Bina Bangsa Berdikari mengajak seluruh elemen masyarakat untuk bersama membangun dan peduli kepada Indonesia.</string>
 
     <string name="slide_3_title">Pengurus</string>
     <string name="slide_3_1_desc">Legalitas</string>
@@ -28,8 +21,8 @@
     <string name="slide_4_4_desc_lev1">+6285697880809</string>
 
     <string name="slide_5_title">Laporan</string>
-    <string name="slide_5_1_desc">Yayasan Visi Maha Karya adalah lembaga nirlaba yang menjembatani antara masyarakat Indonesia yang membutuhkan perhatian dengan masyarakat Indonesia yang memiliki perhatian. Menyadari adanya kesenjangan sosial di masyarakat, maka Yayasan Visi Maha Karya memiliki beberapa karya nyata untuk terwujudnya keseimbangan sosial berupa karya pendidikan, karya kesehatan, karya lingkungan, karya ekonomi dan lainnya.</string>
-    <string name="slide_5_2_desc">Dengan karya nyata yang telah kami berikan kepada sebagian masyarakat, kini Yayasan Visi Maha Karya mendapatkan dukungan yang luar biasa dari berbagai pihak dan salah satunya adalah anda. Dengan Visi ingin membangun manusia secara utuh, yaitu membangun akhlak yang sesuai ajaran Ilahi, membangun kecerdasan dan kesehatan jasmani, serta membangun sikap toleransi dan perdamaian. Maka, Yayasan Visi Maha Karya mengajak seluruh elemen masyarakat untuk bersama membangun dan peduli kepada Indonesia.</string>
+    <string name="slide_5_1_desc">Yayasan Bina Bangsa Berdikari adalah lembaga nirlaba yang menjembatani antara masyarakat Indonesia yang membutuhkan perhatian dengan masyarakat Indonesia yang memiliki perhatian. Menyadari adanya kesenjangan sosial di masyarakat, maka Yayasan Bina Bangsa Berdikari memiliki beberapa karya nyata untuk terwujudnya keseimbangan sosial berupa karya pendidikan, karya kesehatan, karya lingkungan, karya ekonomi dan lainnya.</string>
+    <string name="slide_5_2_desc">Dengan karya nyata yang telah kami berikan kepada sebagian masyarakat, kini Yayasan Bina Bangsa Berdikari mendapatkan dukungan yang luar biasa dari berbagai pihak dan salah satunya adalah anda. Dengan Visi ingin membangun manusia secara utuh, yaitu membangun akhlak yang sesuai ajaran Ilahi, membangun kecerdasan dan kesehatan jasmani, serta membangun sikap toleransi dan perdamaian. Maka, Yayasan Bina Bangsa Berdikari mengajak seluruh elemen masyarakat untuk bersama membangun dan peduli kepada Indonesia.</string>
 
     <string name="slide_6_title">Detail Donasi</string>
 
@@ -114,7 +107,7 @@
     <string name="change_password">Ganti Password</string>
     <string name="change_password_explanation">Ubah dan perbarui password kamu</string>
 
-    <string name="about_bbb">Seputar Visi Maha Karya</string>
+    <string name="about_bbb">Seputar Bina Bangsa Berdikari</string>
     <string name="bbb_background">Latar Belakang</string>
     <string name="bbb_watch">Daftar Piket</string>
     <string name="bbb_absence">Daftar Absen</string>
@@ -144,7 +137,7 @@
     <string name="transaction_detail">Detail Transaksi</string>
     <string name="save">Simpan</string>
     <string name="save_prompt">Apakah anda yakin ingin menyimpan \n data ini ?</string>
-    <string name="logout_prompt">Apakah anda yakin ingin keluar dari \nVisi Maha Karya ?</string>
+    <string name="logout_prompt">Apakah anda yakin ingin keluar dari \nBina Bangsa Berdikari ?</string>
 
     <string name="hint_email">Masukkan Email disini</string>
     <string name="hint_name">Masukkan Nama disini</string>

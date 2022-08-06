@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bbbwithapi.R;
 import com.example.bbbwithapi.helper.PhoneNumberEditText;
+import com.example.bbbwithapi.model.Donation;
 import com.example.bbbwithapi.model.Class;
 import com.example.bbbwithapi.model.Division;
 import com.example.bbbwithapi.model.Team;
@@ -122,7 +123,12 @@ public class AccountDetailActivity extends AppCompatActivity{
         etUsername.setText(prefManager.getUserName());
         toolbarTitle.setText("Detail Profile");
 
-        String tempGender = prefManager.getSex().toLowerCase();
+        String tempGender = "";
+        if (prefManager.getSex() != null && !prefManager.getSex().equals("")) {
+            tempGender = prefManager.getSex().toLowerCase();
+        } else {
+            tempGender = "laki - laki";
+        }
 
         if (tempGender.equals("laki - laki") || tempGender.equals("laki-laki")) {
             rgGender.check(rbMan.getId());
@@ -310,13 +316,24 @@ public class AccountDetailActivity extends AppCompatActivity{
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     UserAccount dataAccount = dataSnapshot.getValue(UserAccount.class);
 
+                    String name = etName.getText().toString().trim();
+                    String username = etUsername.getText().toString().trim();
                     String email = etEmail.getText().toString().trim();
                     String mobilePhone = etPhoneNumber.getText().toString().trim();
+
                     if (mobilePhone != null && !mobilePhone.equals("") && mobilePhone.length() > 0 && mobilePhone.substring(0, 1).equals("0")) {
-                        mobilePhone = "62" + mobilePhone.substring(1, mobilePhone.length());
+                        mobilePhone = "+62" + mobilePhone.substring(1, mobilePhone.length());
                     }
 
-                    if (email.equals("")) {
+                    if (name.equals("")) {
+                        progressDialog.setMessage("Uploaded " + 100 + "%...");
+                        progressDialog.dismiss();
+                        Toast.makeText(mycontext, "Nama tidak boleh kosong", Toast.LENGTH_LONG).show();
+                    } else if (username.equals("")) {
+                        progressDialog.setMessage("Uploaded " + 100 + "%...");
+                        progressDialog.dismiss();
+                        Toast.makeText(mycontext, "ID Relawan tidak boleh kosong", Toast.LENGTH_LONG).show();
+                    } else if (email.equals("")) {
                         progressDialog.setMessage("Uploaded " + 100 + "%...");
                         progressDialog.dismiss();
                         Toast.makeText(mycontext, "Email tidak boleh kosong", Toast.LENGTH_LONG).show();
@@ -330,10 +347,11 @@ public class AccountDetailActivity extends AppCompatActivity{
                             Team myTeam = (Team) spinnerEdtTeam.getSelectedItem();
                             Class myClass = (Class) spinnerEdtClass.getSelectedItem();
 
-                            dataAccount.setName(etName.getText().toString());
-                            dataAccount.setEmail(etEmail.getText().toString());
-
+                            dataAccount.setName(name);
+                            dataAccount.setUserName(username);
+                            dataAccount.setEmail(email);
                             dataAccount.setMobilePhone(mobilePhone);
+
                             dataAccount.setSex(((RadioButton) findViewById(rgGender.getCheckedRadioButtonId())).getText().toString());
                             dataAccount.setDivision(myDivision.getTitle());
                             dataAccount.setTeam(myTeam.getTitle());
@@ -349,12 +367,13 @@ public class AccountDetailActivity extends AppCompatActivity{
                                 rgGender.check(rbWoman.getId());
                             }
 
-                            prefManager.setName(dataAccount.getName());
-                            prefManager.setEmail(dataAccount.getEmail());
+                            prefManager.setName(name);
+                            prefManager.setUserName(username);
+                            prefManager.setEmail(email);
                             prefManager.setMobilePhone(mobilePhone);
+
                             prefManager.setLevel(String.valueOf(dataAccount.getLevel()));
                             prefManager.setUserID(dataAccount.getUserID());
-                            prefManager.setUserName(dataAccount.getUserName());
                             prefManager.setDivision(myDivision.getTitle());
                             prefManager.setTeam(myTeam.getTitle());
                             prefManager.setUserClass(myClass.getTitle());
@@ -362,6 +381,8 @@ public class AccountDetailActivity extends AppCompatActivity{
                             dbUserUpdate
                                     .child(prefManager.getUserID())
                                     .setValue(dataAccount);
+
+                            updateDonation(username, name);
 
                             progressDialog.setMessage("Uploaded " + 100 + "%...");
                             progressDialog.dismiss();
@@ -376,6 +397,43 @@ public class AccountDetailActivity extends AppCompatActivity{
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+    }
+
+    public void updateDonation(String refNumber, String refName) {
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("donation").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(360000);
+        databaseDonation.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //clearing the previous artist list
+                long total = dataSnapshot.getChildrenCount();
+
+                if (total > 0) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        //getting artist
+                        Donation artist = postSnapshot.getValue(Donation.class);
+
+                        artist.setReferenceNumber(refNumber);
+                        artist.setReferenceName(refName);
+
+                        DatabaseReference dbDonation = FirebaseDatabase.getInstance()
+                                .getReference("donation");
+
+                        dbDonation
+                                .child(artist.getID())
+                                .setValue(artist);
+                    }
+
+                    Toast.makeText(AccountDetailActivity.this, "Berhasil mengubah data donasi", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(AccountDetailActivity.this, "Data donasi kosong", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
             }
         });
     }
