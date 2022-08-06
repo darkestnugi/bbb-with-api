@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "612816322394",
+    "firebase_url": "https://bbbwithapi-default-rtdb.firebaseio.com",
     "project_id": "bbbwithapi",
     "storage_bucket": "bbbwithapi.appspot.com"
   },

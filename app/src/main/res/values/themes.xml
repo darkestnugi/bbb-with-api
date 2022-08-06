@@ -1,12 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.VMKwithAPI" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.BBBwithAPI" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/yellowprimary</item>
+        <item name="colorPrimary">@color/greenprimary</item>
         <item name="colorPrimaryVariant">@color/grey</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/yellowprimary</item>
+        <item name="colorSecondary">@color/greenprimary</item>
         <item name="colorSecondaryVariant">@color/grey</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
@@ -30,7 +30,7 @@
     </style>
 
     <style name="NegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/yellowprimary</item>
+        <item name="android:textColor">@color/greenprimary</item>
         <item name="android:textStyle">bold</item>
     </style>
 </resources>

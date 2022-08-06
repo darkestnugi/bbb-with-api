@@ -12,7 +12,7 @@
         android:src="@drawable/ic_report"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/yellowprimary" />
+        app:tint="@color/greenprimary" />
 
     <TextView
         android:id="@+id/tvItemWatchTitle"

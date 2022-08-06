@@ -32,7 +32,7 @@
                     android:id="@+id/tvAvatar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#FCCC11"
+                    android:background="#316E4D"
                     android:gravity="center"
                     android:text="IN"
                     android:textColor="#272727"
@@ -258,7 +258,7 @@
                 app:layout_constraintTop_toBottomOf="@id/ivIconLock"/>
 
             <TextView
-                android:id="@+id/tvAboutbbb
+                android:id="@+id/tvAboutbbb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/about_bbb"
