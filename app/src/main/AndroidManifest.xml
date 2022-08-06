@@ -2,22 +2,126 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bbbwithapi">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="Bina Bangsa Berdikari"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:clearTaskOnLaunch="true"
+        android:icon="@drawable/app_logo_v1"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@drawable/app_logo_v1"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BBBwithAPI">
+        android:theme="@style/Theme.BBBwithAPI"
+        android:usesCleartextTraffic="true">
+
         <activity
-            android:name=".BBBActivity"
-            android:exported="true">
+            android:name=".presentation.watch.WatchActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
+        <activity
+            android:name=".presentation.absence.AbsenceActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
+        <activity
+            android:name=".presentation.donation.DonationInvoiceActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
+        <activity
+            android:name=".presentation.accountdetail.AccountDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
+        <activity
+            android:name=".presentation.aboutbbb.AboutBBBActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
+        <activity
+            android:name=".presentation.SplashScreenActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.homedetail.DetailHomeProgramsActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
+        <activity
+            android:name=".presentation.passwordupdate.UpdatePasswordActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
+        <activity
+            android:name=".presentation.passwordforget.ForgetPasswordActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
+        <activity
+            android:name=".BBBActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".presentation.register.RegisterActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
+        <activity
+            android:name=".presentation.donation.DonationDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
+        <activity
+            android:name=".presentation.report.ReportDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
+        <activity
+            android:name=".presentation.watch.WatchDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
+        <activity
+            android:name=".presentation.absence.AbsenceDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
+        <activity
+            android:name=".presentation.login.LoginActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.BBBwithAPI" />
     </application>
 
 </manifest>
