@@ -12,11 +12,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:clearTaskOnLaunch="true"
+        android:icon="@drawable/app_logo_v1"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@drawable/app_logo_v1"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BBBwithAPI">
+        android:theme="@style/Theme.BBBwithAPI"
+        android:usesCleartextTraffic="true">
 
         <activity
             android:name=".presentation.watch.WatchActivity"
