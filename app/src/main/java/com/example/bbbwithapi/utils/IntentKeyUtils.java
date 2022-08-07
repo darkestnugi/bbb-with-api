@@ -5,5 +5,6 @@ public class IntentKeyUtils {
     public static String keyDetailProgramTitle = "DETAIL_PROGRAM_TITLE";
     public static String keyDetailProgramDesc = "DETAIL_PROGRAM_DESC";
     public static String keyDetailDonationDetailData = "DETAIL_DONATION_DATA";
+    public static String keyDetailDonationDetailImage = "DETAIL_DONATION_IMAGE";
     public static String keyDetailDonationDetailReceipt = "DETAIL_DONATION_RECEIPT";
 }

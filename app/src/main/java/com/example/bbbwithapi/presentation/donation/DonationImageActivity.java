@@ -113,7 +113,7 @@ public class DonationImageActivity extends AppCompatActivity {
     }
 
     private void initIntent() {
-        mydonation = getIntent().getParcelableExtra(IntentKeyUtils.keyDetailDonationDetailReceipt);
+        mydonation = getIntent().getParcelableExtra(IntentKeyUtils.keyDetailDonationDetailImage);
     }
 
     @SuppressLint("DefaultLocale")

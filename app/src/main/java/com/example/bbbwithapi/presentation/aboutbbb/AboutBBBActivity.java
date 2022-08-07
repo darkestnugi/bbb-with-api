@@ -63,11 +63,8 @@ public class AboutBBBActivity extends AppCompatActivity {
     }
 
     private void initUi() {
-        String temp = getString(R.string.slide_1_1_desc) + "\n \n" + getString(R.string.slide_1_2_desc);
-
         tvToolbarTitle.setText(getString(R.string.bbb_background));
         tvTitle.setText(getString(R.string.bbb_background));
-        tvDetailDesc.setText(temp);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();

@@ -57,9 +57,11 @@ public class DonationListAdapter extends RecyclerView.Adapter<DonationListAdapte
         holder.tvTransactionDate.setText(listItems.get(position).getTransactionDate().substring(0, 10));
 
         if (listItems.get(position).getStatusPayment().equals("Menunggu Verifikasi")) {
+            holder.btnEditDonation.setText("Ubah Donasi");
             holder.btnEditDonation.setVisibility(View.VISIBLE);
         } else {
-            holder.btnEditDonation.setVisibility(View.GONE);
+            holder.btnEditDonation.setText("Lihat Invoice Donasi");
+            holder.btnEditDonation.setVisibility(View.VISIBLE);
         }
 
         if (listItems.get(position).getReferenceName() == null
@@ -114,7 +116,7 @@ public class DonationListAdapter extends RecyclerView.Adapter<DonationListAdapte
                 btnEditDonation.setOnClickListener(view -> {
                     Intent intent = new Intent(context, DonationInvoiceActivity.class);
                     intent.putExtra("donation_id", String.valueOf(listItems.get(position).getID()));
-                    intent.putExtra(IntentKeyUtils.keyDetailDonationDetailData, mydata);
+                    intent.putExtra(IntentKeyUtils.keyDetailDonationDetailReceipt, mydata);
                     context.startActivity(intent);
                 });
             }
@@ -122,7 +124,7 @@ public class DonationListAdapter extends RecyclerView.Adapter<DonationListAdapte
             cvDonationItems.setOnClickListener(view -> {
                 Intent intent = new Intent(context, DonationImageActivity.class);
                 intent.putExtra("donation_id", String.valueOf(listItems.get(position).getID()));
-                intent.putExtra(IntentKeyUtils.keyDetailDonationDetailReceipt, mydata);
+                intent.putExtra(IntentKeyUtils.keyDetailDonationDetailImage, mydata);
                 context.startActivity(intent);
             });
         }
