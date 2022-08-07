@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.bbbwithapi.R;
 import com.example.bbbwithapi.model.Donation;
 import com.example.bbbwithapi.presentation.donation.DonationDetailActivity;
+import com.example.bbbwithapi.presentation.donation.DonationImageActivity;
 import com.example.bbbwithapi.presentation.donation.DonationInvoiceActivity;
 import com.example.bbbwithapi.utils.IntentKeyUtils;
 
@@ -102,15 +103,24 @@ public class DonationListAdapter extends RecyclerView.Adapter<DonationListAdapte
         public void actionItem(int position){
             Donation mydata = listItems.get(position);
 
-            btnEditDonation.setOnClickListener(view -> {
-                Intent intent = new Intent(context, DonationDetailActivity.class);
-                intent.putExtra("donation_id", String.valueOf(listItems.get(position).getID()));
-                intent.putExtra(IntentKeyUtils.keyDetailDonationDetailData, mydata);
-                context.startActivity(intent);
-            });
+            if (mydata.getStatusPayment().equals("Menunggu Verifikasi")) {
+                btnEditDonation.setOnClickListener(view -> {
+                    Intent intent = new Intent(context, DonationDetailActivity.class);
+                    intent.putExtra("donation_id", String.valueOf(listItems.get(position).getID()));
+                    intent.putExtra(IntentKeyUtils.keyDetailDonationDetailData, mydata);
+                    context.startActivity(intent);
+                });
+            } else {
+                btnEditDonation.setOnClickListener(view -> {
+                    Intent intent = new Intent(context, DonationInvoiceActivity.class);
+                    intent.putExtra("donation_id", String.valueOf(listItems.get(position).getID()));
+                    intent.putExtra(IntentKeyUtils.keyDetailDonationDetailData, mydata);
+                    context.startActivity(intent);
+                });
+            }
 
             cvDonationItems.setOnClickListener(view -> {
-                Intent intent = new Intent(context, DonationInvoiceActivity.class);
+                Intent intent = new Intent(context, DonationImageActivity.class);
                 intent.putExtra("donation_id", String.valueOf(listItems.get(position).getID()));
                 intent.putExtra(IntentKeyUtils.keyDetailDonationDetailReceipt, mydata);
                 context.startActivity(intent);

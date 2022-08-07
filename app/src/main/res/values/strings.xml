@@ -77,6 +77,7 @@
     <string name="reference_number">Nomor Referensi</string>
     <string name="transaction_status">Status Pembayaran</string>
     <string name="program_details">Detail Program</string>
+    <string name="photo_details">Detail Foto</string>
 
     <string name="is_use_upload_donation">No</string>
     <string name="is_use_upload_pdc">Yes</string>
