@@ -4,8 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/BBBWithAPI/bbb-with-api/app/src/main/res/layout/activity_about_bbb.xml" value="0.209375" />
+        <entry key="..\:/Android/BBBWithAPI/bbb-with-api/app/src/main/res/layout/activity_absence_detail.xml" value="0.209375" />
         <entry key="..\:/Android/BBBWithAPI/bbb-with-api/app/src/main/res/layout/activity_account_detail.xml" value="0.209375" />
+        <entry key="..\:/Android/BBBWithAPI/bbb-with-api/app/src/main/res/layout/activity_report_detail.xml" value="0.209375" />
         <entry key="..\:/Android/BBBWithAPI/bbb-with-api/app/src/main/res/layout/activity_splash_screen.xml" value="0.209375" />
+        <entry key="..\:/Android/BBBWithAPI/bbb-with-api/app/src/main/res/layout/activity_watch_detail.xml" value="0.209375" />
         <entry key="..\:/Android/BBBWithAPI/bbb-with-api/app/src/main/res/layout/fragment_account.xml" value="0.209375" />
         <entry key="..\:/Users/Admin/Documents/GitHub/bbb-with-api/app/src/main/res/drawable/bg_popup_logout.xml" value="0.223" />
         <entry key="..\:/Users/Admin/Documents/GitHub/bbb-with-api/app/src/main/res/drawable/bg_separator_profile_card_top.xml" value="0.223" />

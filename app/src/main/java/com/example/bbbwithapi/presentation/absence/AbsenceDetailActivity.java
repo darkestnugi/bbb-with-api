@@ -50,7 +50,6 @@ public class AbsenceDetailActivity extends AppCompatActivity{
 
     public ImageView imageULoading, ivBackIcon;
     public TextView txtUserId, tvTitleHeader;
-    public EditText edtUReferenceNumber, edtUReferenceName;
     public DatePickerHelper edtUTransactionDate;
 
     private Context mycontext;
@@ -77,8 +76,6 @@ public class AbsenceDetailActivity extends AppCompatActivity{
 
         if (prefManager.getUserName() != null) {
             txtUserId.setText(prefManager.getUserID());
-            edtUReferenceNumber.setText(prefManager.getUserName());
-            edtUReferenceName.setText(prefManager.getName());
         }
 
         tvTitleHeader.setText(R.string.upload_donation_evidence);
@@ -94,8 +91,6 @@ public class AbsenceDetailActivity extends AppCompatActivity{
         txtUserId = (TextView) findViewById(R.id.txtUserId);
 
         edtUTransactionDate = (DatePickerHelper) findViewById(R.id.edtUTransactionDate);
-        edtUReferenceNumber = (EditText) findViewById(R.id.edtUReferenceNumber);
-        edtUReferenceName = (EditText) findViewById(R.id.edtUReferenceName);
 
         btnUsave = (Button) findViewById(R.id.btnUsave);
         tvTitleHeader = (TextView) findViewById(R.id.tvTitleToolbar);
@@ -131,153 +126,147 @@ public class AbsenceDetailActivity extends AppCompatActivity{
         if (prefManager.getUserName() == null) {
             Toast.makeText(mycontext, "Silakan Login atau Register terlebih dahulu", Toast.LENGTH_SHORT).show();
         } else {
-            if (edtUReferenceNumber == null || edtUReferenceNumber.getText() == null || edtUReferenceNumber.getText().toString().trim().equals("") || edtUReferenceNumber.getText().toString().trim().length() == 0) {
-                Toast.makeText(mycontext, "Id Relawan tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (edtUReferenceName == null || edtUReferenceName.getText() == null || edtUReferenceName.getText().toString().trim().equals("") || edtUReferenceName.getText().toString().trim().length() == 0) {
-                Toast.makeText(mycontext, "Nama Relawan tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else {
-                String mydate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+            String mydate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
-                String trDateDay = String.valueOf(edtUTransactionDate.getDayOfMonth());
-                String trDateMonth = String.valueOf(edtUTransactionDate.getMonth() + 1);
-                String trDateYear = String.valueOf(edtUTransactionDate.getYear());
+            String trDateDay = String.valueOf(edtUTransactionDate.getDayOfMonth());
+            String trDateMonth = String.valueOf(edtUTransactionDate.getMonth() + 1);
+            String trDateYear = String.valueOf(edtUTransactionDate.getYear());
 
-                int day = edtUTransactionDate.getDayOfMonth();
-                int month = edtUTransactionDate.getMonth();
-                int year = edtUTransactionDate.getYear();
+            int day = edtUTransactionDate.getDayOfMonth();
+            int month = edtUTransactionDate.getMonth();
+            int year = edtUTransactionDate.getYear();
 
-                DatabaseReference dbAbsence = FirebaseDatabase.getInstance()
-                        .getReference("absence");
+            DatabaseReference dbAbsence = FirebaseDatabase.getInstance()
+                    .getReference("absence");
 
-                String myID = dbAbsence.push().getKey();
+            String myID = dbAbsence.push().getKey();
 
-                Absence absence = new Absence();
-                absence.setID(myID);
-                absence.setUserID(prefManager.getUserID());
-                absence.setName(prefManager.getName());
-                absence.setMobilePhone(prefManager.getMobilePhone());
+            Absence absence = new Absence();
+            absence.setID(myID);
+            absence.setUserID(prefManager.getUserID());
+            absence.setName(prefManager.getName());
+            absence.setMobilePhone(prefManager.getMobilePhone());
 
-                String division = prefManager.getDivision();
-                if (prefManager.getDivision() == null || prefManager.getDivision().equals("") || prefManager.getDivision().length() == 0) {
-                    division = "Tidak Ada";
+            String division = prefManager.getDivision();
+            if (prefManager.getDivision() == null || prefManager.getDivision().equals("") || prefManager.getDivision().length() == 0) {
+                division = "Tidak Ada";
+            }
+
+            absence.setDivision(division);
+            absence.setTahunAbsen(year);
+            absence.setBulanAbsen(month);
+            absence.setTanggalAbsen(day);
+            absence.setUserID(prefManager.getUserID());
+            absence.setCreatedBy(prefManager.getUserID());
+            absence.setCreatedDate(mydate);
+            absence.setIsActive(true);
+
+            dbAbsence
+                    .child(myID)
+                    .setValue(absence);
+
+            Query databaseAbsenceYearly = FirebaseDatabase.getInstance().getReference("absenceyearly").orderByChild("tahunAbsen").equalTo(year).limitToLast(360000);
+            databaseAbsenceYearly.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    //clearing the previous artist list
+                    int found = 0;
+                    long total = dataSnapshot.getChildrenCount();
+
+                    if (total > 0) {
+                        //iterating through all the nodes
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            //getting artist
+                            AbsenceYearly artist = postSnapshot.getValue(AbsenceYearly.class);
+
+                            if (year == artist.getTahunAbsen() && month == artist.getBulanAbsen() && day == artist.getTanggalAbsen()) {
+                                ArrayList<String> listUserID = (ArrayList<String>) artist.getUserID();
+                                ArrayList<String> listName = (ArrayList<String>) artist.getName();
+                                ArrayList<String> listMobilePhone = (ArrayList<String>) artist.getMobilePhone();
+                                ArrayList<String> listDivision = (ArrayList<String>) artist.getDivision();
+
+                                listUserID.add(prefManager.getUserID());
+                                listName.add(prefManager.getName());
+                                listMobilePhone.add(prefManager.getMobilePhone());
+
+                                String division = prefManager.getDivision();
+                                if (prefManager.getDivision() == null || prefManager.getDivision().equals("") || prefManager.getDivision().length() == 0) {
+                                    division = "Tidak Ada";
+                                }
+
+                                listDivision.add(division);
+
+                                artist.setUserID(listUserID);
+                                artist.setName(listName);
+                                artist.setMobilePhone(listMobilePhone);
+                                artist.setDivision(listDivision);
+
+                                artist.setModifiedBy(prefManager.getUserID());
+                                artist.setModifiedDate(mydate);
+
+                                DatabaseReference dbAbsenceYearly = FirebaseDatabase.getInstance()
+                                        .getReference("absenceyearly");
+
+                                dbAbsenceYearly
+                                        .child(artist.getID())
+                                        .setValue(artist);
+
+                                found = 1;
+                            }
+                        }
+                    }
+
+                    if (total == 0 || found == 0){
+                        DatabaseReference dbAbsenceYearly = FirebaseDatabase.getInstance()
+                                .getReference("absenceyearly");
+
+                        String myID = dbAbsenceYearly.push().getKey();
+
+                        AbsenceYearly artist = new AbsenceYearly();
+                        ArrayList<String> listUserID = new ArrayList<>();
+                        ArrayList<String> listName = new ArrayList<>();
+                        ArrayList<String> listMobilePhone = new ArrayList<>();
+                        ArrayList<String> listDivision = new ArrayList<>();
+
+                        listUserID.add(prefManager.getUserID());
+                        listName.add(prefManager.getName());
+                        listMobilePhone.add(prefManager.getMobilePhone());
+
+                        String division = prefManager.getDivision();
+                        if (prefManager.getDivision() == null || prefManager.getDivision().equals("") || prefManager.getDivision().length() == 0) {
+                            division = "Tidak Ada";
+                        }
+
+                        listDivision.add(division);
+
+                        artist.setID(myID);
+                        artist.setUserID(listUserID);
+                        artist.setName(listName);
+                        artist.setMobilePhone(listMobilePhone);
+                        artist.setDivision(listDivision);
+                        artist.setTahunAbsen(year);
+                        artist.setBulanAbsen(month);
+                        artist.setTanggalAbsen(day);
+                        artist.setCreatedBy(prefManager.getUserID());
+                        artist.setCreatedDate(mydate);
+                        artist.setModifiedBy(prefManager.getUserID());
+                        artist.setModifiedDate(mydate);
+                        artist.setIsActive(true);
+
+                        dbAbsenceYearly
+                                .child(myID)
+                                .setValue(artist);
+                    }
                 }
 
-                absence.setDivision(division);
-                absence.setTahunAbsen(year);
-                absence.setBulanAbsen(month);
-                absence.setTanggalAbsen(day);
-                absence.setUserID(prefManager.getUserID());
-                absence.setCreatedBy(prefManager.getUserID());
-                absence.setCreatedDate(mydate);
-                absence.setIsActive(true);
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
 
-                dbAbsence
-                        .child(myID)
-                        .setValue(absence);
-
-                Query databaseAbsenceYearly = FirebaseDatabase.getInstance().getReference("absenceyearly").orderByChild("tahunAbsen").equalTo(year).limitToLast(360000);
-                databaseAbsenceYearly.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        //clearing the previous artist list
-                        int found = 0;
-                        long total = dataSnapshot.getChildrenCount();
-
-                        if (total > 0) {
-                            //iterating through all the nodes
-                            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                //getting artist
-                                AbsenceYearly artist = postSnapshot.getValue(AbsenceYearly.class);
-
-                                if (year == artist.getTahunAbsen() && month == artist.getBulanAbsen() && day == artist.getTanggalAbsen()) {
-                                    ArrayList<String> listUserID = (ArrayList<String>) artist.getUserID();
-                                    ArrayList<String> listName = (ArrayList<String>) artist.getName();
-                                    ArrayList<String> listMobilePhone = (ArrayList<String>) artist.getMobilePhone();
-                                    ArrayList<String> listDivision = (ArrayList<String>) artist.getDivision();
-
-                                    listUserID.add(prefManager.getUserID());
-                                    listName.add(prefManager.getName());
-                                    listMobilePhone.add(prefManager.getMobilePhone());
-
-                                    String division = prefManager.getDivision();
-                                    if (prefManager.getDivision() == null || prefManager.getDivision().equals("") || prefManager.getDivision().length() == 0) {
-                                        division = "Tidak Ada";
-                                    }
-
-                                    listDivision.add(division);
-
-                                    artist.setUserID(listUserID);
-                                    artist.setName(listName);
-                                    artist.setMobilePhone(listMobilePhone);
-                                    artist.setDivision(listDivision);
-
-                                    artist.setModifiedBy(prefManager.getUserID());
-                                    artist.setModifiedDate(mydate);
-
-                                    DatabaseReference dbAbsenceYearly = FirebaseDatabase.getInstance()
-                                            .getReference("absenceyearly");
-
-                                    dbAbsenceYearly
-                                            .child(artist.getID())
-                                            .setValue(artist);
-
-                                    found = 1;
-                                }
-                            }
-                        }
-
-                        if (total == 0 || found == 0){
-                            DatabaseReference dbAbsenceYearly = FirebaseDatabase.getInstance()
-                                    .getReference("absenceyearly");
-
-                            String myID = dbAbsenceYearly.push().getKey();
-
-                            AbsenceYearly artist = new AbsenceYearly();
-                            ArrayList<String> listUserID = new ArrayList<>();
-                            ArrayList<String> listName = new ArrayList<>();
-                            ArrayList<String> listMobilePhone = new ArrayList<>();
-                            ArrayList<String> listDivision = new ArrayList<>();
-
-                            listUserID.add(prefManager.getUserID());
-                            listName.add(prefManager.getName());
-                            listMobilePhone.add(prefManager.getMobilePhone());
-
-                            String division = prefManager.getDivision();
-                            if (prefManager.getDivision() == null || prefManager.getDivision().equals("") || prefManager.getDivision().length() == 0) {
-                                division = "Tidak Ada";
-                            }
-
-                            listDivision.add(division);
-
-                            artist.setID(myID);
-                            artist.setUserID(listUserID);
-                            artist.setName(listName);
-                            artist.setMobilePhone(listMobilePhone);
-                            artist.setDivision(listDivision);
-                            artist.setTahunAbsen(year);
-                            artist.setBulanAbsen(month);
-                            artist.setTanggalAbsen(day);
-                            artist.setCreatedBy(prefManager.getUserID());
-                            artist.setCreatedDate(mydate);
-                            artist.setModifiedBy(prefManager.getUserID());
-                            artist.setModifiedDate(mydate);
-                            artist.setIsActive(true);
-
-                            dbAbsenceYearly
-                                    .child(myID)
-                                    .setValue(artist);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
-
-                Toast.makeText(mycontext, "Absen Anda telah berhasil disimpan. Kami akan segera mengkonfirmasinya.", Toast.LENGTH_SHORT).show();
-                finish();
-            }
+            Toast.makeText(mycontext, "Absen Anda telah berhasil disimpan. Kami akan segera mengkonfirmasinya.", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 

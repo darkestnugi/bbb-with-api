@@ -1,13 +1,10 @@
 <resources>
     <string name="app_name">Bina Bangsa Berdikari</string>
-    <string name="app_version">Version 1.0.0.1\nLast Updated: 07-08-2022</string>
+    <string name="app_version">1.0.0.0</string>
+    <string name="app_version_desc">Version 1.0.0.0\nLast Updated: 12-08-2022\n\nPresented By\nPT. Tera Global Karya</string>
 
     <string name="slide_1_title">Latar Belakang</string>
     <string name="slide_1_1_desc">Sebagai negara berkembang, Masyarakat Indonesia masih banyak yang menghadapi berbagai permasalahan pendidikan seperti akses pendidikan, informasi, kualitas pendidik, peningkatan skill, termasuk pembiayaan Pendidikan dan Usaha.\n\nBerdasarkan laporan United Nations Development Program tahun 2012, posisi SDM Indonesia tertinggal oleh Singapura, Malaysia, Brunei, Thailand dan hanya berbeda tipis dengan Vietnam.\n\nMengingat hal tersebut, maka menjadi tanggung jawab kita bersama selaku anak Bangsa  melakukan perbaikan kualitas SDM Indonesia sehingga bisa bersaing di era global.\n\nDisisi lain, banyak generasi muda Indonesia yang terampil dan berprestasi serta memiliki minat tinggi di bidang pendidikan, namun kesulitan mencari wadah yang tepat dalam menyalurkan potensi mereka untuk berperan aktif dalam memajukan bangsa secara bersama-sama.\n\nSebelum tahun 2017, kami aktif bergerak di bidang Pendidikan dan ekonomi kemasyarakatan dalam “ Komunitas Pemerhati Peduli Pendidikan ( KP3 ) dan Hawari ( Himpunan Wirausaha Mandiri )\n\nPada Tanggal 26 Mei 2017, kami mendirikan Yayasan Bina Bangsa Berdikari ( YB3 ) berdasarkan SK Menteri Hukum Dan Hak Asasi Manusia Republik Indonesia Nomor AHU-0009407.AH.01.04.tahun 2017.\n\nYayasan ini merupakan  organisasi non-profit yang menjadi wadah  bagi seluruh anak bangsa yang berkeinginan memberikan sumbangsih sesuai potensinya untuk kemajuan Pendidikan bangsa dan mewujudkan masyarakat berdikari.</string>
-
-    <string name="slide_3_title">Pengurus</string>
-    <string name="slide_3_1_desc">Legalitas</string>
-    <string name="slide_3_2_desc">Struktur Organisasi</string>
 
     <string name="slide_4_title">Donasi</string>
     <string name="slide_4_1_desc">Alamat</string>
@@ -19,14 +16,7 @@
     <string name="slide_4_4_desc">Mobile Phone / WhatsApp</string>
     <string name="slide_4_4_desc_lev1">+6285697880809</string>
 
-    <string name="slide_5_title">Laporan</string>
-    <string name="slide_5_1_desc">Yayasan Bina Bangsa Berdikari adalah lembaga nirlaba yang menjembatani antara masyarakat Indonesia yang membutuhkan perhatian dengan masyarakat Indonesia yang memiliki perhatian. Menyadari adanya kesenjangan sosial di masyarakat, maka Yayasan Bina Bangsa Berdikari memiliki beberapa karya nyata untuk terwujudnya keseimbangan sosial berupa karya pendidikan, karya kesehatan, karya lingkungan, karya ekonomi dan lainnya.</string>
-    <string name="slide_5_2_desc">Dengan karya nyata yang telah kami berikan kepada sebagian masyarakat, kini Yayasan Bina Bangsa Berdikari mendapatkan dukungan yang luar biasa dari berbagai pihak dan salah satunya adalah anda. Dengan Visi ingin membangun manusia secara utuh, yaitu membangun akhlak yang sesuai ajaran Ilahi, membangun kecerdasan dan kesehatan jasmani, serta membangun sikap toleransi dan perdamaian. Maka, Yayasan Bina Bangsa Berdikari mengajak seluruh elemen masyarakat untuk bersama membangun dan peduli kepada Indonesia.</string>
-
-    <string name="slide_6_title">Detail Donasi</string>
-
     <string name="title_activity_login">Login</string>
-
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_division">Divisi</string>

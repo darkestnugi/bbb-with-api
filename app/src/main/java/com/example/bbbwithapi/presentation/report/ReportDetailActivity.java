@@ -53,8 +53,7 @@ public class ReportDetailActivity extends AppCompatActivity{
     public ImageView imageULoading, ivBackIcon;
     public TextView txtUserId, tvTitleHeader;
     public EditText edtUIntroduce, edtUFollowUp,
-            edtUSuccess, edtUSuccess1Million,
-            edtUReferenceNumber, edtUReferenceName;
+            edtUSuccess, edtUSuccess1Million;
     public CurrencyEditText edtUNominal;
     public Spinner spinnerEdtProgram;
     public DatePickerHelper edtUTransactionDate;
@@ -91,8 +90,6 @@ public class ReportDetailActivity extends AppCompatActivity{
 
         if (prefManager.getUserName() != null) {
             txtUserId.setText(prefManager.getUserID());
-            edtUReferenceNumber.setText(prefManager.getUserName());
-            edtUReferenceName.setText(prefManager.getName());
         }
 
         tvTitleHeader.setText(R.string.upload_donation_evidence);
@@ -123,9 +120,6 @@ public class ReportDetailActivity extends AppCompatActivity{
 
         edtUSuccess1Million = (EditText) findViewById(R.id.edtUSuccess1Million);
         edtUSuccess1Million.setFilters(new InputFilter[] {new NumericFormatInputFilter()});
-
-        edtUReferenceNumber = (EditText) findViewById(R.id.edtUReferenceNumber);
-        edtUReferenceName = (EditText) findViewById(R.id.edtUReferenceName);
 
         edtUTransactionDate = (DatePickerHelper) findViewById(R.id.edtUTransactionDate);
         spinnerEdtProgram = (Spinner) findViewById(R.id.spinnerEdtProgram);
@@ -216,10 +210,6 @@ public class ReportDetailActivity extends AppCompatActivity{
 
             if (myProgram == null || myProgram.getTitle() == null || myProgram.getTitle().trim().equals("") || myProgram.getTitle().trim().length() == 0) {
                 Toast.makeText(mycontext, "Jenis Program tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (edtUReferenceNumber == null || edtUReferenceNumber.getText() == null || edtUReferenceNumber.getText().toString().trim().equals("") || edtUReferenceNumber.getText().toString().trim().length() == 0) {
-                Toast.makeText(mycontext, "Id Relawan tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (edtUReferenceName == null || edtUReferenceName.getText() == null || edtUReferenceName.getText().toString().trim().equals("") || edtUReferenceName.getText().toString().trim().length() == 0) {
-                Toast.makeText(mycontext, "Nama Relawan tidak boleh kosong", Toast.LENGTH_SHORT).show();
             } else if (edtUSuccess == null || edtUSuccess.getText() == null || edtUSuccess.getText().toString().trim().equals("") || edtUSuccess.getText().toString().trim().length() == 0) {
                 Toast.makeText(mycontext, "Jumlah Yang Berdonasi tidak boleh kosong. Minimal isi '0'", Toast.LENGTH_SHORT).show();
             } else if (edtUSuccess1Million == null || edtUSuccess1Million.getText() == null || edtUSuccess1Million.getText().toString().trim().equals("") || edtUSuccess1Million.getText().toString().trim().length() == 0) {
@@ -268,8 +258,8 @@ public class ReportDetailActivity extends AppCompatActivity{
                 pdc.setSuccess(Integer.parseInt(edtUSuccess.getText().toString().trim()));
                 pdc.setSuccessDonorMoreThan1Million(Integer.parseInt(edtUSuccess1Million.getText().toString().trim()));
 
-                pdc.setReferenceNumber(edtUReferenceNumber.getText().toString().trim());
-                pdc.setReferenceName(edtUReferenceName.getText().toString().trim());
+                pdc.setReferenceNumber(prefManager.getUserName());
+                pdc.setReferenceName(prefManager.getName());
                 pdc.setCreatedBy(prefManager.getUserID());
                 pdc.setCreatedDate(mydate);
                 pdc.setIsActive(true);

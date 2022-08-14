@@ -44,7 +44,6 @@ public class WatchDetailActivity extends AppCompatActivity{
 
     public ImageView imageULoading, ivBackIcon;
     public TextView txtUserId, tvTitleHeader;
-    public EditText edtUReferenceNumber, edtUReferenceName;
     public DatePickerHelper edtUTransactionDate;
 
     public static final int WRITE_EXTERNAL_STORAGE_CODE = 100;
@@ -77,8 +76,6 @@ public class WatchDetailActivity extends AppCompatActivity{
 
         if (prefManager.getUserName() != null) {
             txtUserId.setText(prefManager.getUserID());
-            edtUReferenceNumber.setText(prefManager.getUserName());
-            edtUReferenceName.setText(prefManager.getName());
         }
 
         tvTitleHeader.setText(R.string.upload_donation_evidence);
@@ -94,8 +91,6 @@ public class WatchDetailActivity extends AppCompatActivity{
         txtUserId = (TextView) findViewById(R.id.txtUserId);
 
         edtUTransactionDate = (DatePickerHelper) findViewById(R.id.edtUTransactionDate);
-        edtUReferenceNumber = (EditText) findViewById(R.id.edtUReferenceNumber);
-        edtUReferenceName = (EditText) findViewById(R.id.edtUReferenceName);
 
         btnUsave = (Button) findViewById(R.id.btnUsave);
         tvTitleHeader = (TextView) findViewById(R.id.tvTitleToolbar);
@@ -131,154 +126,148 @@ public class WatchDetailActivity extends AppCompatActivity{
         if (prefManager.getUserName() == null) {
             Toast.makeText(mycontext, "Silakan Login atau Register terlebih dahulu", Toast.LENGTH_SHORT).show();
         } else {
-            if (edtUReferenceNumber == null || edtUReferenceNumber.getText() == null || edtUReferenceNumber.getText().toString().trim().equals("") || edtUReferenceNumber.getText().toString().trim().length() == 0) {
-                Toast.makeText(mycontext, "Id Relawan tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (edtUReferenceName == null || edtUReferenceName.getText() == null || edtUReferenceName.getText().toString().trim().equals("") || edtUReferenceName.getText().toString().trim().length() == 0) {
-                Toast.makeText(mycontext, "Nama Relawan tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else {
-                String mydate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+            String mydate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
-                String trDateDay = String.valueOf(edtUTransactionDate.getDayOfMonth());
-                String trDateMonth = String.valueOf(edtUTransactionDate.getMonth() + 1);
-                String trDateYear = String.valueOf(edtUTransactionDate.getYear());
+            String trDateDay = String.valueOf(edtUTransactionDate.getDayOfMonth());
+            String trDateMonth = String.valueOf(edtUTransactionDate.getMonth() + 1);
+            String trDateYear = String.valueOf(edtUTransactionDate.getYear());
 
-                int day = edtUTransactionDate.getDayOfMonth();
-                int month = edtUTransactionDate.getMonth();
-                int year = edtUTransactionDate.getYear();
+            int day = edtUTransactionDate.getDayOfMonth();
+            int month = edtUTransactionDate.getMonth();
+            int year = edtUTransactionDate.getYear();
 
-                DatabaseReference dbWatch = FirebaseDatabase.getInstance()
-                        .getReference("watch");
+            DatabaseReference dbWatch = FirebaseDatabase.getInstance()
+                    .getReference("watch");
 
-                String myID = dbWatch.push().getKey();
+            String myID = dbWatch.push().getKey();
 
-                Watch watch = new Watch();
-                watch.setID(myID);
-                watch.setUserID(prefManager.getUserID());
-                watch.setName(prefManager.getName());
-                watch.setMobilePhone(prefManager.getMobilePhone());
+            Watch watch = new Watch();
+            watch.setID(myID);
+            watch.setUserID(prefManager.getUserID());
+            watch.setName(prefManager.getName());
+            watch.setMobilePhone(prefManager.getMobilePhone());
 
-                String division = prefManager.getDivision();
-                if (prefManager.getDivision() == null || prefManager.getDivision().equals("") || prefManager.getDivision().length() == 0) {
-                    division = "Tidak Ada";
+            String division = prefManager.getDivision();
+            if (prefManager.getDivision() == null || prefManager.getDivision().equals("") || prefManager.getDivision().length() == 0) {
+                division = "Tidak Ada";
+            }
+
+            watch.setDivision(division);
+
+            watch.setTahunPiket(year);
+            watch.setBulanPiket(month);
+            watch.setTanggalPiket(day);
+            watch.setUserID(prefManager.getUserID());
+            watch.setCreatedBy(prefManager.getUserID());
+            watch.setCreatedDate(mydate);
+            watch.setIsActive(true);
+
+            dbWatch
+                    .child(myID)
+                    .setValue(watch);
+
+            Query databaseWatchYearly = FirebaseDatabase.getInstance().getReference("watchyearly").orderByChild("tahunPiket").equalTo(year).limitToLast(360000);
+            databaseWatchYearly.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    //clearing the previous artist list
+                    int found = 0;
+                    long total = dataSnapshot.getChildrenCount();
+
+                    if (total > 0) {
+                        //iterating through all the nodes
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            //getting artist
+                            WatchYearly artist = postSnapshot.getValue(WatchYearly.class);
+
+                            if (year == artist.getTahunPiket() && month == artist.getBulanPiket() && day == artist.getTanggalPiket()) {
+                                ArrayList<String> listUserID = (ArrayList<String>) artist.getUserID();
+                                ArrayList<String> listName = (ArrayList<String>) artist.getName();
+                                ArrayList<String> listMobilePhone = (ArrayList<String>) artist.getMobilePhone();
+                                ArrayList<String> listDivision = (ArrayList<String>) artist.getDivision();
+
+                                listUserID.add(prefManager.getUserID());
+                                listName.add(prefManager.getName());
+                                listMobilePhone.add(prefManager.getMobilePhone());
+
+                                String division = prefManager.getDivision();
+                                if (prefManager.getDivision() == null || prefManager.getDivision().equals("") || prefManager.getDivision().length() == 0) {
+                                    division = "Tidak Ada";
+                                }
+
+                                listDivision.add(division);
+
+                                artist.setUserID(listUserID);
+                                artist.setName(listName);
+                                artist.setMobilePhone(listMobilePhone);
+                                artist.setDivision(listDivision);
+
+                                artist.setModifiedBy(prefManager.getUserID());
+                                artist.setModifiedDate(mydate);
+
+                                DatabaseReference dbWatchYearly = FirebaseDatabase.getInstance()
+                                        .getReference("watchyearly");
+
+                                dbWatchYearly
+                                        .child(artist.getID())
+                                        .setValue(artist);
+
+                                found = 1;
+                            }
+                        }
+                    }
+
+                    if (total == 0 || found == 0){
+                        DatabaseReference dbWatchYearly = FirebaseDatabase.getInstance()
+                                .getReference("watchyearly");
+
+                        String myID = dbWatchYearly.push().getKey();
+
+                        WatchYearly artist = new WatchYearly();
+                        ArrayList<String> listUserID = new ArrayList<>();
+                        ArrayList<String> listName = new ArrayList<>();
+                        ArrayList<String> listMobilePhone = new ArrayList<>();
+                        ArrayList<String> listDivision = new ArrayList<>();
+
+                        listUserID.add(prefManager.getUserID());
+                        listName.add(prefManager.getName());
+                        listMobilePhone.add(prefManager.getMobilePhone());
+
+                        String division = prefManager.getDivision();
+                        if (prefManager.getDivision() == null || prefManager.getDivision().equals("") || prefManager.getDivision().length() == 0) {
+                            division = "Tidak Ada";
+                        }
+
+                        listDivision.add(division);
+
+                        artist.setID(myID);
+                        artist.setUserID(listUserID);
+                        artist.setName(listName);
+                        artist.setMobilePhone(listMobilePhone);
+                        artist.setDivision(listDivision);
+                        artist.setTahunPiket(year);
+                        artist.setBulanPiket(month);
+                        artist.setTanggalPiket(day);
+                        artist.setCreatedBy(prefManager.getUserID());
+                        artist.setCreatedDate(mydate);
+                        artist.setModifiedBy(prefManager.getUserID());
+                        artist.setModifiedDate(mydate);
+                        artist.setIsActive(true);
+
+                        dbWatchYearly
+                                .child(myID)
+                                .setValue(artist);
+                    }
                 }
 
-                watch.setDivision(division);
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
 
-                watch.setTahunPiket(year);
-                watch.setBulanPiket(month);
-                watch.setTanggalPiket(day);
-                watch.setUserID(prefManager.getUserID());
-                watch.setCreatedBy(prefManager.getUserID());
-                watch.setCreatedDate(mydate);
-                watch.setIsActive(true);
-
-                dbWatch
-                        .child(myID)
-                        .setValue(watch);
-
-                Query databaseWatchYearly = FirebaseDatabase.getInstance().getReference("watchyearly").orderByChild("tahunPiket").equalTo(year).limitToLast(360000);
-                databaseWatchYearly.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        //clearing the previous artist list
-                        int found = 0;
-                        long total = dataSnapshot.getChildrenCount();
-
-                        if (total > 0) {
-                            //iterating through all the nodes
-                            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                //getting artist
-                                WatchYearly artist = postSnapshot.getValue(WatchYearly.class);
-
-                                if (year == artist.getTahunPiket() && month == artist.getBulanPiket() && day == artist.getTanggalPiket()) {
-                                    ArrayList<String> listUserID = (ArrayList<String>) artist.getUserID();
-                                    ArrayList<String> listName = (ArrayList<String>) artist.getName();
-                                    ArrayList<String> listMobilePhone = (ArrayList<String>) artist.getMobilePhone();
-                                    ArrayList<String> listDivision = (ArrayList<String>) artist.getDivision();
-
-                                    listUserID.add(prefManager.getUserID());
-                                    listName.add(prefManager.getName());
-                                    listMobilePhone.add(prefManager.getMobilePhone());
-
-                                    String division = prefManager.getDivision();
-                                    if (prefManager.getDivision() == null || prefManager.getDivision().equals("") || prefManager.getDivision().length() == 0) {
-                                        division = "Tidak Ada";
-                                    }
-
-                                    listDivision.add(division);
-
-                                    artist.setUserID(listUserID);
-                                    artist.setName(listName);
-                                    artist.setMobilePhone(listMobilePhone);
-                                    artist.setDivision(listDivision);
-
-                                    artist.setModifiedBy(prefManager.getUserID());
-                                    artist.setModifiedDate(mydate);
-
-                                    DatabaseReference dbWatchYearly = FirebaseDatabase.getInstance()
-                                            .getReference("watchyearly");
-
-                                    dbWatchYearly
-                                            .child(artist.getID())
-                                            .setValue(artist);
-
-                                    found = 1;
-                                }
-                            }
-                        }
-
-                        if (total == 0 || found == 0){
-                            DatabaseReference dbWatchYearly = FirebaseDatabase.getInstance()
-                                    .getReference("watchyearly");
-
-                            String myID = dbWatchYearly.push().getKey();
-
-                            WatchYearly artist = new WatchYearly();
-                            ArrayList<String> listUserID = new ArrayList<>();
-                            ArrayList<String> listName = new ArrayList<>();
-                            ArrayList<String> listMobilePhone = new ArrayList<>();
-                            ArrayList<String> listDivision = new ArrayList<>();
-
-                            listUserID.add(prefManager.getUserID());
-                            listName.add(prefManager.getName());
-                            listMobilePhone.add(prefManager.getMobilePhone());
-
-                            String division = prefManager.getDivision();
-                            if (prefManager.getDivision() == null || prefManager.getDivision().equals("") || prefManager.getDivision().length() == 0) {
-                                division = "Tidak Ada";
-                            }
-
-                            listDivision.add(division);
-
-                            artist.setID(myID);
-                            artist.setUserID(listUserID);
-                            artist.setName(listName);
-                            artist.setMobilePhone(listMobilePhone);
-                            artist.setDivision(listDivision);
-                            artist.setTahunPiket(year);
-                            artist.setBulanPiket(month);
-                            artist.setTanggalPiket(day);
-                            artist.setCreatedBy(prefManager.getUserID());
-                            artist.setCreatedDate(mydate);
-                            artist.setModifiedBy(prefManager.getUserID());
-                            artist.setModifiedDate(mydate);
-                            artist.setIsActive(true);
-
-                            dbWatchYearly
-                                    .child(myID)
-                                    .setValue(artist);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
-
-                Toast.makeText(mycontext, "Piket Anda telah berhasil disimpan. Kami akan segera mengkonfirmasinya.", Toast.LENGTH_SHORT).show();
-                finish();
-            }
+            Toast.makeText(mycontext, "Piket Anda telah berhasil disimpan. Kami akan segera mengkonfirmasinya.", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 

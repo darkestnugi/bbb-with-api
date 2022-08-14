@@ -1083,6 +1083,8 @@ public class DonationDetailActivity extends AppCompatActivity{
                         public void onCancelled(DatabaseError databaseError) {
                         }
                     });
+                } else {
+                    //Do Something?
                 }
 
                 Toast.makeText(mycontext, "Donasi Anda telah berhasil disimpan. Kami akan segera mengkonfirmasinya.", Toast.LENGTH_SHORT).show();
