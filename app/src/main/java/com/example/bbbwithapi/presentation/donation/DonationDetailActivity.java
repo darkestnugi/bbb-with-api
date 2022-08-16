@@ -80,7 +80,7 @@ public class DonationDetailActivity extends AppCompatActivity{
 
     public ImageView imageULoading, imageUDownload, ivBackIcon;
     public TextView txtDonationId, txtUserId, txtPhoto, txtPhotoURL, tvTitleHeader;
-    public EditText edtUEmail, edtUName, edtUPrayer, edtUReferenceNumber, edtUReferenceName;
+    public EditText edtUEmail, edtUName, edtUPrayer;
     public PhoneNumberEditText edtUMobilePhone;
     public CurrencyEditText edtUNominal;
     public Spinner spinnerEdtProgram, spinnerEdtReligion, spinnerEdtJob, spinnerEdtAge, spinnerEdtDomicile, spinnerEdtCategory;
@@ -148,8 +148,6 @@ public class DonationDetailActivity extends AppCompatActivity{
 
         if (prefManager.getUserName() != null) {
             txtUserId.setText(prefManager.getUserID());
-            edtUReferenceNumber.setText(prefManager.getUserName());
-            edtUReferenceName.setText(prefManager.getName());
         }
 
         myotherpicasso = new Picasso.Builder(mycontext)
@@ -177,10 +175,7 @@ public class DonationDetailActivity extends AppCompatActivity{
 
             //format nilai rupiah
             edtUNominal.setText(String.format("Rp %,.0f", mydonation.getNominal()).replace(".", ","));
-
             edtUPrayer.setText(mydonation.getPrayer());
-            edtUReferenceNumber.setText(mydonation.getReferenceNumber());
-            edtUReferenceName.setText(mydonation.getReferenceName());
 
             txtPhoto.setText(mydonation.getPhoto());
             txtPhotoURL.setText(mydonation.getPhotoURL());
@@ -215,8 +210,6 @@ public class DonationDetailActivity extends AppCompatActivity{
 
         edtUNominal = (CurrencyEditText) findViewById(R.id.edtUNominal);
         edtUPrayer = (EditText) findViewById(R.id.edtUPrayer);
-        edtUReferenceNumber = (EditText) findViewById(R.id.edtUReferenceNumber);
-        edtUReferenceName = (EditText) findViewById(R.id.edtUReferenceName);
 
         edtUTransactionDate = (DatePickerHelper) findViewById(R.id.edtUTransactionDate);
         spinnerEdtProgram = (Spinner) findViewById(R.id.spinnerEdtProgram);
@@ -851,10 +844,6 @@ public class DonationDetailActivity extends AppCompatActivity{
                 Toast.makeText(mycontext, "Domisili Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
             } else if (myCategory == null || myCategory.getTitle() == null || myCategory.getTitle().trim().equals("") || myCategory.getTitle().trim().length() == 0) {
                 Toast.makeText(mycontext, "Jenis Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (edtUReferenceNumber == null || edtUReferenceNumber.getText() == null || edtUReferenceNumber.getText().toString().trim().equals("") || edtUReferenceNumber.getText().toString().trim().length() == 0) {
-                Toast.makeText(mycontext, "Id Relawan tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (edtUReferenceName == null || edtUReferenceName.getText() == null || edtUReferenceName.getText().toString().trim().equals("") || edtUReferenceName.getText().toString().trim().length() == 0) {
-                Toast.makeText(mycontext, "Nama Relawan tidak boleh kosong", Toast.LENGTH_SHORT).show();
             } else if (edtUNominal == null || edtUNominal.getText() == null || edtUNominal.getText().toString().trim().equals("") || edtUNominal.getText().toString().trim().length() == 0) {
                 Toast.makeText(mycontext, "Nominal tidak boleh kosong", Toast.LENGTH_SHORT).show();
             } else if (Double.parseDouble(edtUNominal.getText().toString().replace("Rp", "").replace(",","").replace(".","").trim()) <= 0) {
@@ -895,8 +884,8 @@ public class DonationDetailActivity extends AppCompatActivity{
                 donation.setNominal(Double.parseDouble(edtUNominal.getText().toString().replace("Rp", "").replace(",","").replace(".","").trim()));
                 donation.setPrayer(edtUPrayer.getText().toString().trim());
 
-                donation.setReferenceNumber(edtUReferenceNumber.getText().toString().trim());
-                donation.setReferenceName(edtUReferenceName.getText().toString().trim());
+                donation.setReferenceNumber(prefManager.getUserName());
+                donation.setReferenceName(prefManager.getName());
 
                 donation.setStatusPayment("Menunggu Verifikasi");
 

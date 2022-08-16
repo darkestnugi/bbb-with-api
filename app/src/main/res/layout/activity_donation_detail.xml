@@ -363,58 +363,6 @@
                 />
 
             <TextView
-                android:id="@+id/txtUReferenceNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Id Relawan"
-                android:textSize="14sp"
-                android:maxLength="255"
-                android:singleLine="true"
-                android:layout_marginTop="20dp"
-                android:textColor="#272727"
-                />
-
-            <EditText
-                android:id="@+id/edtUReferenceNumber"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:padding="14dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/et_custom_login"
-                android:hint="Masukkan Id Relawan disini"
-                android:textSize="14sp"
-                android:maxLength="1000"
-                android:inputType="text"
-                android:singleLine="false"
-                />
-
-            <TextView
-                android:id="@+id/txtUReferenceName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/volunteer_name"
-                android:textSize="14sp"
-                android:maxLength="255"
-                android:singleLine="true"
-                android:layout_marginTop="20dp"
-                android:textColor="#272727"
-                />
-
-            <EditText
-                android:id="@+id/edtUReferenceName"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:padding="14dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/et_custom_login"
-                android:hint="Masukkan Nama Relawan disini"
-                android:textSize="14sp"
-                android:maxLength="1000"
-                android:inputType="text"
-                android:singleLine="false"
-                />
-
-            <TextView
                 android:id="@+id/tvUploadEvidenceHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
