@@ -820,6 +820,8 @@ public class DonationDetailActivity extends AppCompatActivity{
 
         if (prefManager.getUserName() == null) {
             Toast.makeText(mycontext, "Silakan Login atau Register terlebih dahulu", Toast.LENGTH_SHORT).show();
+        } else if (prefManager.getUserName() != null && !prefManager.getUserName().equals("") && prefManager.getUserName().length() < 10) {
+            Toast.makeText(mycontext, "ID Relawan harus sama dengan atau lebih dari 10 karakter", Toast.LENGTH_SHORT).show();
         } else {
             Program myProgram = (Program) spinnerEdtProgram.getSelectedItem();
             Religion myReligion = (Religion) spinnerEdtReligion.getSelectedItem();
