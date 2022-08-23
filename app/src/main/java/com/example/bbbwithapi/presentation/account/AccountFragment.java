@@ -32,8 +32,12 @@ import com.example.bbbwithapi.presentation.accountdetail.AccountDetailActivity;
 import com.example.bbbwithapi.presentation.login.LoginActivity;
 import com.example.bbbwithapi.presentation.passwordupdate.UpdatePasswordActivity;
 import com.example.bbbwithapi.presentation.watch.WatchActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,6 +52,7 @@ import java.util.Date;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AccountFragment#newInstance} factory method to
@@ -76,9 +81,10 @@ public class AccountFragment extends Fragment{
             tvCardUsernameDetail, tvCardTotalDonationMonthlyDetail, tvCardTotalDonationDetail;
     private ImageView ivPassword, ivbbbBackground, ivbbbWatch, ivbbbAbsence, ivAvatar, ivEditProfile;
 
-    private Context context;
+    private Context mycontext;
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
 
@@ -151,10 +157,34 @@ public class AccountFragment extends Fragment{
         ivAvatar = (ImageView) viewContainer.findViewById(R.id.ivAvatar);
         ivEditProfile = (ImageView) viewContainer.findViewById(R.id.ivEditProfile);
 
-        context = requireActivity();
+        mycontext = requireActivity();
         prefManager = new PrefManager(requireContext());
-
         mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            prefManager.removeAllPreference();
+            mAuth.signOut();
+
+            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(mycontext, LoginActivity.class));
+        }
+
+        mUser = mAuth.getCurrentUser();
+        mUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            // Send token to your backend via HTTPS
+                        } else {
+                            prefManager.removeAllPreference();
+                            mAuth.signOut();
+
+                            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(mycontext, LoginActivity.class));
+                        }
+                    }
+                });
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());

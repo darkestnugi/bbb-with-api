@@ -2,6 +2,7 @@ package com.example.bbbwithapi.presentation.passwordforget;
 
 import android.Manifest;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bbbwithapi.R;
@@ -19,11 +21,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
-
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class ForgetPasswordActivity extends AppCompatActivity{
     public static final int WRITE_EXTERNAL_STORAGE_CODE = 100;
     public static final int READ_EXTERNAL_STORAGE_CODE = 200;
@@ -34,6 +37,7 @@ public class ForgetPasswordActivity extends AppCompatActivity{
     private Context mycontext;
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
 
@@ -54,16 +58,16 @@ public class ForgetPasswordActivity extends AppCompatActivity{
     }
 
     private void defineIds() {
-        mAuth = FirebaseAuth.getInstance();
         etEmailForgetPassword = (EditText) findViewById(R.id.etEmailForgetPassword);
         btnSendEmail = (Button) findViewById(R.id.btnSendForgetPassword);
         toolbarBackButton = (ImageView) findViewById(R.id.ivBackButtonToolbar);
         toolbarTitle = (TextView) findViewById(R.id.tvTitleToolbar);
 
-        prefManager = new PrefManager(this);
-        mAuth = FirebaseAuth.getInstance();
-
         mycontext = this;
+        prefManager = new PrefManager(mycontext);
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(mycontext);
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());

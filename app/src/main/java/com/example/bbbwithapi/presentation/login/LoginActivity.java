@@ -37,6 +37,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -69,6 +70,7 @@ public class LoginActivity extends AppCompatActivity{
     private Context mycontext;
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
 
@@ -107,10 +109,11 @@ public class LoginActivity extends AppCompatActivity{
         tvForgetPassword = (TextView) findViewById(R.id.tvForgetPassword);
         tvRegister = (TextView) findViewById(R.id.tvRegisterNow);
 
-        prefManager = new PrefManager(this);
-        mAuth = FirebaseAuth.getInstance();
-
         mycontext = this;
+        prefManager = new PrefManager(mycontext);
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(mycontext);
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());

@@ -214,6 +214,18 @@
                 />
 
             <com.example.bbbwithapi.helper.CurrencyEditText
+                android:id="@+id/edtUNominalOld"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:padding="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
+                android:hint="Masukkan Nominal Donasi disini"
+                android:textSize="14sp"
+                android:visibility="gone"
+                />
+
+            <com.example.bbbwithapi.helper.CurrencyEditText
                 android:id="@+id/edtUNominal"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -221,6 +233,28 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/et_custom_login"
                 android:hint="Masukkan Nominal Donasi disini"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:id="@+id/txtUBank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ditransfer ke Rekening VMK di Bank"
+                android:textSize="14sp"
+                android:maxLength="255"
+                android:singleLine="true"
+                android:layout_marginTop="20dp"
+                android:textColor="#272727"
+                />
+
+            <Spinner
+                android:id="@+id/spinnerEdtBank"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:padding="14dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/et_custom_login"
                 android:textSize="14sp"
                 />
 

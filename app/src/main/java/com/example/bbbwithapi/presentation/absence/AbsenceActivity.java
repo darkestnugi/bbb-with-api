@@ -8,7 +8,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,8 +23,13 @@ import com.example.bbbwithapi.model.AbsenceYearly;
 import com.example.bbbwithapi.preference.PrefManager;
 import com.example.bbbwithapi.presentation.absence.adapter.AbsenceListAdapter;
 import com.example.bbbwithapi.presentation.absence.adapter.AbsenceYearlyListAdapter;
+import com.example.bbbwithapi.presentation.login.LoginActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,9 +50,10 @@ public class AbsenceActivity extends AppCompatActivity{
     private static final int ACCESS_FINE_LOCATION_CODE = 400;
     private static final int ACCESS_COARSE_LOCATION_CODE = 500;
 
-    private Context context;
+    private Context mycontext;
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
 
@@ -74,11 +82,35 @@ public class AbsenceActivity extends AppCompatActivity{
         tvUploadAbsence = (TextView) findViewById(R.id.tvToolbarUploadAbsence);
         ivBackIcon = (ImageView) findViewById(R.id.ivBackButtonToolbar);
 
-        context = AbsenceActivity.this;
-        prefManager = new PrefManager(context);
-
+        mycontext = this;
+        prefManager = new PrefManager(mycontext);
         mAuth = FirebaseAuth.getInstance();
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+        if (mAuth.getCurrentUser() == null) {
+            prefManager.removeAllPreference();
+            mAuth.signOut();
+
+            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(mycontext, LoginActivity.class));
+        }
+
+        mUser = mAuth.getCurrentUser();
+        mUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            // Send token to your backend via HTTPS
+                        } else {
+                            prefManager.removeAllPreference();
+                            mAuth.signOut();
+
+                            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(mycontext, LoginActivity.class));
+                        }
+                    }
+                });
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(mycontext);
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());
 
@@ -110,7 +142,7 @@ public class AbsenceActivity extends AppCompatActivity{
     }
 
     private void getDaftarAbsen() {
-        final ProgressDialog progressDialog = new ProgressDialog(context);
+        final ProgressDialog progressDialog = new ProgressDialog(mycontext);
         progressDialog.setTitle("Downloading");
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
@@ -141,8 +173,8 @@ public class AbsenceActivity extends AppCompatActivity{
                 Collections.sort(listAbsence);
 
                 progressDialog.dismiss();
-                rvList.setAdapter(new AbsenceListAdapter(listAbsence, context));
-                rvList.setLayoutManager(new LinearLayoutManager(context));
+                rvList.setAdapter(new AbsenceListAdapter(listAbsence, mycontext));
+                rvList.setLayoutManager(new LinearLayoutManager(mycontext));
             }
 
             @Override
@@ -155,7 +187,7 @@ public class AbsenceActivity extends AppCompatActivity{
     }
 
     private void getDaftarAbsenTahunan() {
-        final ProgressDialog progressDialog = new ProgressDialog(context);
+        final ProgressDialog progressDialog = new ProgressDialog(mycontext);
         progressDialog.setTitle("Downloading");
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
@@ -186,8 +218,8 @@ public class AbsenceActivity extends AppCompatActivity{
                 Collections.sort(listAbsenceYearly);
 
                 progressDialog.dismiss();
-                rvList.setAdapter(new AbsenceYearlyListAdapter(listAbsenceYearly, context));
-                rvList.setLayoutManager(new LinearLayoutManager(context));
+                rvList.setAdapter(new AbsenceYearlyListAdapter(listAbsenceYearly, mycontext));
+                rvList.setLayoutManager(new LinearLayoutManager(mycontext));
             }
 
             @Override

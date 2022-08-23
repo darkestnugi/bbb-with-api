@@ -2,12 +2,16 @@ package com.example.bbbwithapi.presentation.home;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,8 +20,13 @@ import com.example.bbbwithapi.R;
 import com.example.bbbwithapi.model.Program;
 import com.example.bbbwithapi.preference.PrefManager;
 import com.example.bbbwithapi.presentation.home.adapter.HomeListAdapter;
+import com.example.bbbwithapi.presentation.login.LoginActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
@@ -45,9 +55,10 @@ public class HomeFragment extends Fragment{
     private RecyclerView rvHome;
     private View viewContainer;
 
-    private Context context;
+    private Context mycontext;
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
 
@@ -97,10 +108,34 @@ public class HomeFragment extends Fragment{
         viewContainer = inflater.inflate(R.layout.fragment_home, viewGroup, false);
         rvHome = (RecyclerView) viewContainer.findViewById(R.id.rvHome);
 
-        context = requireActivity();
+        mycontext = requireActivity();
         prefManager = new PrefManager(requireContext());
-
         mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            prefManager.removeAllPreference();
+            mAuth.signOut();
+
+            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(mycontext, LoginActivity.class));
+        }
+
+        mUser = mAuth.getCurrentUser();
+        mUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            // Send token to your backend via HTTPS
+                        } else {
+                            prefManager.removeAllPreference();
+                            mAuth.signOut();
+
+                            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(mycontext, LoginActivity.class));
+                        }
+                    }
+                });
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());
@@ -137,8 +172,8 @@ public class HomeFragment extends Fragment{
                 }
 
                 progressDialog.dismiss();
-                rvHome.setAdapter(new HomeListAdapter(listProgram, context));
-                rvHome.setLayoutManager(new LinearLayoutManager(context));
+                rvHome.setAdapter(new HomeListAdapter(listProgram, mycontext));
+                rvHome.setLayoutManager(new LinearLayoutManager(mycontext));
             }
 
             @Override

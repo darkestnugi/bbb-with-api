@@ -16,12 +16,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.bbbwithapi.R;
 import com.example.bbbwithapi.model.Donation;
 import com.example.bbbwithapi.preference.PrefManager;
 import com.example.bbbwithapi.presentation.donation.adapter.DonationListAdapter;
+import com.example.bbbwithapi.presentation.login.LoginActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,9 +54,10 @@ public class DonationListFragment extends Fragment{
     private TextView tvUploadEvidence;
     private View viewContainer;
 
-    private Context context;
+    private Context mycontext;
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
 
@@ -102,11 +110,35 @@ public class DonationListFragment extends Fragment{
         rvListDonation = (RecyclerView) viewContainer.findViewById(R.id.rvDonationList);
         tvUploadEvidence = (TextView) viewContainer.findViewById(R.id.tvToolbarUploadEvidence);
 
-        context = requireActivity();
+        mycontext = requireActivity();
         prefManager = new PrefManager(requireContext());
-
         mAuth = FirebaseAuth.getInstance();
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+        if (mAuth.getCurrentUser() == null) {
+            prefManager.removeAllPreference();
+            mAuth.signOut();
+
+            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(mycontext, LoginActivity.class));
+        }
+
+        mUser = mAuth.getCurrentUser();
+        mUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            // Send token to your backend via HTTPS
+                        } else {
+                            prefManager.removeAllPreference();
+                            mAuth.signOut();
+
+                            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(mycontext, LoginActivity.class));
+                        }
+                    }
+                });
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(mycontext);
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());
 
@@ -144,8 +176,8 @@ public class DonationListFragment extends Fragment{
                 Collections.sort(listDonation);
 
                 progressDialog.dismiss();
-                rvListDonation.setAdapter(new DonationListAdapter(listDonation, context));
-                rvListDonation.setLayoutManager(new LinearLayoutManager(context));
+                rvListDonation.setAdapter(new DonationListAdapter(listDonation, mycontext));
+                rvListDonation.setLayoutManager(new LinearLayoutManager(mycontext));
             }
 
             @Override

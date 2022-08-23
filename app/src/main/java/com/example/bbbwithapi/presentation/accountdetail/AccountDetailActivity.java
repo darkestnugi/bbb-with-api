@@ -4,6 +4,8 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bbbwithapi.R;
@@ -26,8 +29,13 @@ import com.example.bbbwithapi.model.Division;
 import com.example.bbbwithapi.model.Team;
 import com.example.bbbwithapi.model.UserAccount;
 import com.example.bbbwithapi.preference.PrefManager;
+import com.example.bbbwithapi.presentation.login.LoginActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,6 +51,7 @@ import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class AccountDetailActivity extends AppCompatActivity{
     public static final int WRITE_EXTERNAL_STORAGE_CODE = 100;
     public static final int READ_EXTERNAL_STORAGE_CODE = 200;
@@ -62,6 +71,7 @@ public class AccountDetailActivity extends AppCompatActivity{
     private Context mycontext;
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
 
@@ -96,10 +106,34 @@ public class AccountDetailActivity extends AppCompatActivity{
         spinnerEdtTeam = (Spinner) findViewById(R.id.spinnerEdtTeam);
         spinnerEdtClass = (Spinner) findViewById(R.id.spinnerEdtClass);
 
-        prefManager = new PrefManager(this);
+        mycontext = this;
+        prefManager = new PrefManager(mycontext);
         mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            prefManager.removeAllPreference();
+            mAuth.signOut();
 
-        mycontext = AccountDetailActivity.this;
+            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(mycontext, LoginActivity.class));
+        }
+
+        mUser = mAuth.getCurrentUser();
+        mUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            // Send token to your backend via HTTPS
+                        } else {
+                            prefManager.removeAllPreference();
+                            mAuth.signOut();
+
+                            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(mycontext, LoginActivity.class));
+                        }
+                    }
+                });
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(mycontext);
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());

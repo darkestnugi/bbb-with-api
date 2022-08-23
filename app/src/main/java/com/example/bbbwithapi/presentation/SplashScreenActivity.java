@@ -17,8 +17,12 @@ import com.example.bbbwithapi.presentation.login.LoginActivity;
 import com.example.bbbwithapi.R;
 import com.example.bbbwithapi.BBBActivity;
 import com.example.bbbwithapi.preference.PrefManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,12 +30,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-@RequiresApi(api = Build.VERSION_CODES.N)
 @SuppressLint("CustomSplashScreen")
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class SplashScreenActivity extends AppCompatActivity{
-    private Context context;
+    private Context mycontext;
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
 
@@ -40,11 +45,35 @@ public class SplashScreenActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        prefManager = new PrefManager(this);
+        mycontext = this;
+        prefManager = new PrefManager(mycontext);
         mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            prefManager.removeAllPreference();
+            mAuth.signOut();
 
-        context = this;
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(mycontext, LoginActivity.class));
+        }
+
+        mUser = mAuth.getCurrentUser();
+        mUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            // Send token to your backend via HTTPS
+                        } else {
+                            prefManager.removeAllPreference();
+                            mAuth.signOut();
+
+                            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(mycontext, LoginActivity.class));
+                        }
+                    }
+                });
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(mycontext);
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());
 
@@ -87,9 +116,9 @@ public class SplashScreenActivity extends AppCompatActivity{
                             @Override
                             public void run() {
                                 if (mAuth.getCurrentUser() == null) {
-                                    startActivity(new Intent(context, LoginActivity.class));
+                                    startActivity(new Intent(mycontext, LoginActivity.class));
                                 } else {
-                                    startActivity(new Intent(context, BBBActivity.class));
+                                    startActivity(new Intent(mycontext, BBBActivity.class));
                                 }
                                 finish();
                             }
@@ -98,8 +127,8 @@ public class SplashScreenActivity extends AppCompatActivity{
                         mAuth.signOut();
                         prefManager.removeAllPreference();
 
-                        Toast.makeText(context, "Silakan download versi terbaru " + currAppVer + ". Versi yang Anda gunakan " + thisAppVer, Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(context, LoginActivity.class));
+                        Toast.makeText(mycontext, "Silakan download versi terbaru " + currAppVer + ". Versi yang Anda gunakan " + thisAppVer, Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(mycontext, LoginActivity.class));
                     }
                 }
             }

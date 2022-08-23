@@ -1,21 +1,32 @@
 package com.example.bbbwithapi.presentation.aboutbbb;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bbbwithapi.R;
 import com.example.bbbwithapi.preference.PrefManager;
+import com.example.bbbwithapi.presentation.login.LoginActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class AboutBBBActivity extends AppCompatActivity {
     public static final int WRITE_EXTERNAL_STORAGE_CODE = 100;
     public static final int READ_EXTERNAL_STORAGE_CODE = 200;
@@ -25,6 +36,7 @@ public class AboutBBBActivity extends AppCompatActivity {
 
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private Context mycontext;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
@@ -49,10 +61,34 @@ public class AboutBBBActivity extends AppCompatActivity {
         tvToolbarTitle = (TextView) findViewById(R.id.tvTitleToolbar);
         ivBackButton = (ImageView) findViewById(R.id.ivBackButtonToolbar);
 
-        prefManager = new PrefManager(this);
-        mAuth = FirebaseAuth.getInstance();
-
         mycontext = this;
+        prefManager = new PrefManager(mycontext);
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            prefManager.removeAllPreference();
+            mAuth.signOut();
+
+            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(mycontext, LoginActivity.class));
+        }
+
+        mUser = mAuth.getCurrentUser();
+        mUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            // Send token to your backend via HTTPS
+                        } else {
+                            prefManager.removeAllPreference();
+                            mAuth.signOut();
+
+                            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(mycontext, LoginActivity.class));
+                        }
+                    }
+                });
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(mycontext);
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());

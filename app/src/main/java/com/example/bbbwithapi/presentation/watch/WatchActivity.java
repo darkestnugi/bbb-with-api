@@ -23,6 +23,7 @@ import com.example.bbbwithapi.presentation.watch.adapter.WatchListAdapter;
 import com.example.bbbwithapi.presentation.watch.adapter.WatchYearlyListAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,9 +44,10 @@ public class WatchActivity extends AppCompatActivity{
     private static final int ACCESS_FINE_LOCATION_CODE = 400;
     private static final int ACCESS_COARSE_LOCATION_CODE = 500;
 
-    private Context context;
+    private Context mycontext;
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
 
@@ -74,11 +76,11 @@ public class WatchActivity extends AppCompatActivity{
         tvUploadWatch = (TextView) findViewById(R.id.tvToolbarUploadWatch);
         ivBackIcon = (ImageView) findViewById(R.id.ivBackButtonToolbar);
 
-        context = WatchActivity.this;
-        prefManager = new PrefManager(context);
-
+        mycontext = WatchActivity.this;
+        prefManager = new PrefManager(mycontext);
         mAuth = FirebaseAuth.getInstance();
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+        
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(mycontext);
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());
 
@@ -110,7 +112,7 @@ public class WatchActivity extends AppCompatActivity{
     }
 
     private void getDaftarPiket() {
-        final ProgressDialog progressDialog = new ProgressDialog(context);
+        final ProgressDialog progressDialog = new ProgressDialog(mycontext);
         progressDialog.setTitle("Downloading");
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
@@ -141,8 +143,8 @@ public class WatchActivity extends AppCompatActivity{
                 Collections.sort(listWatch);
 
                 progressDialog.dismiss();
-                rvList.setAdapter(new WatchListAdapter(listWatch, context));
-                rvList.setLayoutManager(new LinearLayoutManager(context));
+                rvList.setAdapter(new WatchListAdapter(listWatch, mycontext));
+                rvList.setLayoutManager(new LinearLayoutManager(mycontext));
             }
 
             @Override
@@ -155,7 +157,7 @@ public class WatchActivity extends AppCompatActivity{
     }
 
     private void getDaftarPiketTahunan() {
-        final ProgressDialog progressDialog = new ProgressDialog(context);
+        final ProgressDialog progressDialog = new ProgressDialog(mycontext);
         progressDialog.setTitle("Downloading");
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
@@ -186,8 +188,8 @@ public class WatchActivity extends AppCompatActivity{
                 Collections.sort(listWatchYearly);
 
                 progressDialog.dismiss();
-                rvList.setAdapter(new WatchYearlyListAdapter(listWatchYearly, context));
-                rvList.setLayoutManager(new LinearLayoutManager(context));
+                rvList.setAdapter(new WatchYearlyListAdapter(listWatchYearly, mycontext));
+                rvList.setLayoutManager(new LinearLayoutManager(mycontext));
             }
 
             @Override

@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -22,12 +24,17 @@ import com.example.bbbwithapi.model.ReportPDC;
 import com.example.bbbwithapi.model.ReportPDCPersonal;
 import com.example.bbbwithapi.model.ReportPersonal;
 import com.example.bbbwithapi.preference.PrefManager;
+import com.example.bbbwithapi.presentation.login.LoginActivity;
 import com.example.bbbwithapi.presentation.report.adapter.ReportListAdapter;
 import com.example.bbbwithapi.presentation.report.adapter.ReportPDCListAdapter;
 import com.example.bbbwithapi.presentation.report.adapter.ReportPDCPersonalListAdapter;
 import com.example.bbbwithapi.presentation.report.adapter.ReportPersonalListAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,6 +45,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ReportFragment#newInstance} factory method to
@@ -53,9 +61,10 @@ public class ReportFragment extends Fragment{
     private String mParam1;
     private String mParam2;
 
-    private Context context;
+    private Context mycontext;
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
 
@@ -116,10 +125,34 @@ public class ReportFragment extends Fragment{
         rvList = (RecyclerView) viewContainer.findViewById(R.id.rvTotalDonation);
         tvUploadReport = (TextView) viewContainer.findViewById(R.id.tvToolbarUploadReport);
 
-        context = requireActivity();
+        mycontext = requireActivity();
         prefManager = new PrefManager(requireContext());
-
         mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            prefManager.removeAllPreference();
+            mAuth.signOut();
+
+            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(mycontext, LoginActivity.class));
+        }
+
+        mUser = mAuth.getCurrentUser();
+        mUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            // Send token to your backend via HTTPS
+                        } else {
+                            prefManager.removeAllPreference();
+                            mAuth.signOut();
+
+                            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(mycontext, LoginActivity.class));
+                        }
+                    }
+                });
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());
@@ -180,8 +213,8 @@ public class ReportFragment extends Fragment{
                 Collections.sort(listReport);
 
                 progressDialog.dismiss();
-                rvList.setAdapter(new ReportListAdapter(listReport, context));
-                rvList.setLayoutManager(new LinearLayoutManager(context));
+                rvList.setAdapter(new ReportListAdapter(listReport, mycontext));
+                rvList.setLayoutManager(new LinearLayoutManager(mycontext));
             }
 
             @Override
@@ -224,8 +257,8 @@ public class ReportFragment extends Fragment{
                 Collections.sort(listReportPersonal);
 
                 progressDialog.dismiss();
-                rvList.setAdapter(new ReportPersonalListAdapter(listReportPersonal, context));
-                rvList.setLayoutManager(new LinearLayoutManager(context));
+                rvList.setAdapter(new ReportPersonalListAdapter(listReportPersonal, mycontext));
+                rvList.setLayoutManager(new LinearLayoutManager(mycontext));
             }
 
             @Override
@@ -268,8 +301,8 @@ public class ReportFragment extends Fragment{
                 Collections.sort(listReportPDC);
 
                 progressDialog.dismiss();
-                rvList.setAdapter(new ReportPDCListAdapter(listReportPDC, context));
-                rvList.setLayoutManager(new LinearLayoutManager(context));
+                rvList.setAdapter(new ReportPDCListAdapter(listReportPDC, mycontext));
+                rvList.setLayoutManager(new LinearLayoutManager(mycontext));
             }
 
             @Override
@@ -312,8 +345,8 @@ public class ReportFragment extends Fragment{
                 Collections.sort(listReportPDCPersonal);
 
                 progressDialog.dismiss();
-                rvList.setAdapter(new ReportPDCPersonalListAdapter(listReportPDCPersonal, context));
-                rvList.setLayoutManager(new LinearLayoutManager(context));
+                rvList.setAdapter(new ReportPDCPersonalListAdapter(listReportPDCPersonal, mycontext));
+                rvList.setLayoutManager(new LinearLayoutManager(mycontext));
             }
 
             @Override

@@ -33,6 +33,7 @@ import com.example.bbbwithapi.helper.CurrencyEditText;
 import com.example.bbbwithapi.helper.DatePickerHelper;
 import com.example.bbbwithapi.helper.PhoneNumberEditText;
 import com.example.bbbwithapi.model.Age;
+import com.example.bbbwithapi.model.Bank;
 import com.example.bbbwithapi.model.Category;
 import com.example.bbbwithapi.model.Domicile;
 import com.example.bbbwithapi.model.Donation;
@@ -44,13 +45,18 @@ import com.example.bbbwithapi.model.Report;
 import com.example.bbbwithapi.model.ReportPersonal;
 import com.example.bbbwithapi.model.UserAccount;
 import com.example.bbbwithapi.preference.PrefManager;
+import com.example.bbbwithapi.presentation.login.LoginActivity;
 import com.example.bbbwithapi.remote.BitMapTransform;
 import com.example.bbbwithapi.remote.FileUtils;
 import com.example.bbbwithapi.utils.IntentKeyUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -82,8 +88,8 @@ public class DonationDetailActivity extends AppCompatActivity{
     public TextView txtDonationId, txtUserId, txtPhoto, txtPhotoURL, tvTitleHeader;
     public EditText edtUEmail, edtUName, edtUPrayer;
     public PhoneNumberEditText edtUMobilePhone;
-    public CurrencyEditText edtUNominal;
-    public Spinner spinnerEdtProgram, spinnerEdtReligion, spinnerEdtJob, spinnerEdtAge, spinnerEdtDomicile, spinnerEdtCategory;
+    public CurrencyEditText edtUNominalOld, edtUNominal;
+    public Spinner spinnerEdtBank, spinnerEdtProgram, spinnerEdtReligion, spinnerEdtJob, spinnerEdtAge, spinnerEdtDomicile, spinnerEdtCategory;
     public DatePickerHelper edtUTransactionDate;
 
     public static final int WRITE_EXTERNAL_STORAGE_CODE = 100;
@@ -95,6 +101,7 @@ public class DonationDetailActivity extends AppCompatActivity{
     private Context mycontext;
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
     private Picasso myotherpicasso;
@@ -114,8 +121,12 @@ public class DonationDetailActivity extends AppCompatActivity{
     private String filePath;
 
     private Donation mydonation;
-    private boolean isInsert = true;
 
+    //1 -> insert
+    //2 -> update
+    private Integer processType = 0;
+
+    List<Bank> list_bank = new ArrayList<Bank>();
     List<Program> list_program = new ArrayList<Program>();
     List<Religion> list_religion = new ArrayList<Religion>();
     List<Job> list_job = new ArrayList<Job>();
@@ -165,7 +176,7 @@ public class DonationDetailActivity extends AppCompatActivity{
         edtUTransactionDate.setMaxDate(myCalendar.getTimeInMillis());
 
         if (mydonation != null) {
-            isInsert = false;
+            processType = 2;
             txtDonationId.setText(mydonation.getID());
             txtUserId.setText(mydonation.getUserID());
 
@@ -174,6 +185,7 @@ public class DonationDetailActivity extends AppCompatActivity{
             edtUMobilePhone.setText(mydonation.getDonorMobilePhone());
 
             //format nilai rupiah
+            edtUNominalOld.setText(String.format("Rp %,.0f", mydonation.getNominal()).replace(".", ","));
             edtUNominal.setText(String.format("Rp %,.0f", mydonation.getNominal()).replace(".", ","));
             edtUPrayer.setText(mydonation.getPrayer());
 
@@ -181,6 +193,7 @@ public class DonationDetailActivity extends AppCompatActivity{
             txtPhotoURL.setText(mydonation.getPhotoURL());
             Glide.with(mycontext).load(mydonation.getPhotoURL()).into(imageUDownload);
 
+            initSpinnerBank(mydonation.getBankTitle());
             initSpinnerProgram(mydonation.getProgramTitle());
             initSpinnerReligion(mydonation.getReligionTitle());
             initSpinnerJob(mydonation.getJobTitle());
@@ -188,6 +201,8 @@ public class DonationDetailActivity extends AppCompatActivity{
             initSpinnerDomicile(mydonation.getDomicileTitle());
             initSpinnerCategory(mydonation.getCategoryTitle());
         } else {
+            processType = 1;
+            initSpinnerBank("");
             initSpinnerProgram("");
             initSpinnerReligion("");
             initSpinnerJob("");
@@ -208,10 +223,12 @@ public class DonationDetailActivity extends AppCompatActivity{
         edtUMobilePhone = (PhoneNumberEditText) findViewById(R.id.edtUMobilePhone);
         edtUName = (EditText) findViewById(R.id.edtUName);
 
+        edtUNominalOld = (CurrencyEditText) findViewById(R.id.edtUNominalOld);
         edtUNominal = (CurrencyEditText) findViewById(R.id.edtUNominal);
         edtUPrayer = (EditText) findViewById(R.id.edtUPrayer);
 
         edtUTransactionDate = (DatePickerHelper) findViewById(R.id.edtUTransactionDate);
+        spinnerEdtBank = (Spinner) findViewById(R.id.spinnerEdtBank);
         spinnerEdtProgram = (Spinner) findViewById(R.id.spinnerEdtProgram);
         spinnerEdtReligion = (Spinner) findViewById(R.id.spinnerEdtReligion);
         spinnerEdtJob = (Spinner) findViewById(R.id.spinnerEdtJob);
@@ -225,10 +242,34 @@ public class DonationDetailActivity extends AppCompatActivity{
         tvTitleHeader = (TextView) findViewById(R.id.tvTitleToolbar);
         ivBackIcon = (ImageView) findViewById(R.id.ivBackButtonToolbar);
 
-        prefManager = new PrefManager(this);
-        mAuth = FirebaseAuth.getInstance();
-
         mycontext = this;
+        prefManager = new PrefManager(mycontext);
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            prefManager.removeAllPreference();
+            mAuth.signOut();
+
+            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(mycontext, LoginActivity.class));
+        }
+
+        mUser = mAuth.getCurrentUser();
+        mUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            // Send token to your backend via HTTPS
+                        } else {
+                            prefManager.removeAllPreference();
+                            mAuth.signOut();
+
+                            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(mycontext, LoginActivity.class));
+                        }
+                    }
+                });
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(mycontext);
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());
@@ -267,6 +308,54 @@ public class DonationDetailActivity extends AppCompatActivity{
                 intent.setDataAndType(uri, "image/*");
 
                 startActivityForResult(intent, SELECT_PICK);
+            }
+        });
+    }
+
+    private void initSpinnerBank(String myTitle) {
+        Query databaseScreen = FirebaseDatabase.getInstance().getReference("bank").limitToLast(1000);
+        databaseScreen.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //clearing the previous artist list
+                list_bank.clear();
+
+                Bank temp_bank_init = new Bank();
+                Bank curr_bank = new Bank();
+
+                //temp_bank_init.setID("");
+                //temp_bank_init.setTitle("- Pilih Jenis Bank -");
+                //list_bank.add(temp_bank_init);
+
+                //iterating through all the nodes
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting artist
+                    Bank artist = postSnapshot.getValue(Bank.class);
+
+                    if (myTitle != null && !myTitle.equals("")){
+                        if (artist.getTitle().equals(myTitle)){
+                            curr_bank = artist;
+                        }
+                    }
+
+                    if (artist.getIsActive()) {
+                        //adding artist to the list
+                        list_bank.add(artist);
+                    }
+                }
+
+                ArrayAdapter<Bank> adapter = new ArrayAdapter<Bank>(mycontext, android.R.layout.simple_spinner_dropdown_item, list_bank);
+                spinnerEdtBank.setAdapter(adapter);
+
+                if (curr_bank.getID() != null && !curr_bank.getID().equals("")) {
+                    int spinnerPosition = adapter.getPosition(curr_bank);
+                    spinnerEdtBank.setSelection(spinnerPosition);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(mycontext, "Error: " + databaseError.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -597,21 +686,65 @@ public class DonationDetailActivity extends AppCompatActivity{
     public boolean uploadFile(String fileId, String filename, String extension, Uri fileUri) {
         boolean result = true;
 
+        Bank myBank = (Bank) spinnerEdtBank.getSelectedItem();
+        Program myProgram = (Program) spinnerEdtProgram.getSelectedItem();
+        Religion myReligion = (Religion) spinnerEdtReligion.getSelectedItem();
+        Job myJob = (Job) spinnerEdtJob.getSelectedItem();
+        Age myAge = (Age) spinnerEdtAge.getSelectedItem();
+        Domicile myDomicile = (Domicile) spinnerEdtDomicile.getSelectedItem();
+        Category myCategory = (Category) spinnerEdtCategory.getSelectedItem();
+
         if (prefManager.getUserName() == null) {
             Toast.makeText(mycontext, "Silakan Login atau Register terlebih dahulu", Toast.LENGTH_SHORT).show();
+            result = false;
+        } else if (prefManager.getUserName() != null && !prefManager.getUserName().equals("") && prefManager.getUserName().length() < 10) {
+            Toast.makeText(mycontext, "ID Relawan harus sama dengan atau lebih dari 10 karakter", Toast.LENGTH_SHORT).show();
+            result = false;
+        }else if (edtUName == null || edtUName.getText() == null || edtUName.getText().toString().trim().equals("") || edtUName.getText().toString().trim().length() == 0) {
+            Toast.makeText(mycontext, "Nama Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            result = false;
+        } else if (edtUMobilePhone == null || edtUMobilePhone.getText() == null || edtUMobilePhone.getText().toString().trim().equals("") || edtUMobilePhone.getText().toString().trim().length() == 0) {
+            Toast.makeText(mycontext, "Nomor Telepon Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            result = false;
+        } else if (myBank == null || myBank.getTitle() == null || myBank.getTitle().trim().equals("") || myBank.getTitle().trim().length() == 0) {
+            Toast.makeText(mycontext, "Bank tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            result = false;
+        } else if (myProgram == null || myProgram.getTitle() == null || myProgram.getTitle().trim().equals("") || myProgram.getTitle().trim().length() == 0) {
+            Toast.makeText(mycontext, "Jenis Program tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            result = false;
+        } else if (myReligion == null || myReligion.getTitle() == null || myReligion.getTitle().trim().equals("") || myReligion.getTitle().trim().length() == 0) {
+            Toast.makeText(mycontext, "Agama Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            result = false;
+        } else if (myJob == null || myJob.getTitle() == null || myJob.getTitle().trim().equals("") || myJob.getTitle().trim().length() == 0) {
+            Toast.makeText(mycontext, "Pekerjaan Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            result = false;
+        } else if (myAge == null || myAge.getTitle() == null || myAge.getTitle().trim().equals("") || myAge.getTitle().trim().length() == 0) {
+            Toast.makeText(mycontext, "Umur Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            result = false;
+        } else if (myDomicile == null || myDomicile.getTitle() == null || myDomicile.getTitle().trim().equals("") || myDomicile.getTitle().trim().length() == 0) {
+            Toast.makeText(mycontext, "Domisili Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            result = false;
+        } else if (myCategory == null || myCategory.getTitle() == null || myCategory.getTitle().trim().equals("") || myCategory.getTitle().trim().length() == 0) {
+            Toast.makeText(mycontext, "Jenis Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            result = false;
+        } else if (edtUNominal == null || edtUNominal.getText() == null || edtUNominal.getText().toString().trim().equals("") || edtUNominal.getText().toString().trim().length() == 0) {
+            Toast.makeText(mycontext, "Nominal tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            result = false;
+        } else if (Double.parseDouble(edtUNominal.getText().toString().replace("Rp", "").replace(",","").replace(".","").trim()) <= 0) {
+            Toast.makeText(mycontext, "Nominal tidak boleh kecil atau sama dengan nol", Toast.LENGTH_SHORT).show();
             result = false;
         } else {
             File file = FileUtils.getFile(this, fileUri);
 
-            if ((file.length() / 1024) >= 2048) {
-                Toast.makeText(mycontext, "Error: maximum file size is 2048 Kb. Current size " + (file.length() / 1024) + " Kb", Toast.LENGTH_SHORT).show();
+            if ((file.length() / 1024) >= 25600) {
+                Toast.makeText(mycontext, "Error: maximum file size is 25600 Kb. Current size " + (file.length() / 1024) + " Kb", Toast.LENGTH_SHORT).show();
                 result = false;
             } else {
                 final ProgressDialog progressDialog = new ProgressDialog(this);
                 progressDialog.setTitle("Uploading");
                 progressDialog.show();
 
-                Query databaseDonation = FirebaseDatabase.getInstance().getReference("donation").limitToLast(360000);
+                Query databaseDonation = FirebaseDatabase.getInstance().getReference("donation").limitToLast(1000);
                 databaseDonation.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -637,6 +770,7 @@ public class DonationDetailActivity extends AppCompatActivity{
                             }
                         }
 
+                        String myTrxId = txtDonationId.getText().toString().trim();
                         String myUserId = txtUserId.getText().toString().trim();
 
                         String trDateDay = String.valueOf(edtUTransactionDate.getDayOfMonth());
@@ -650,22 +784,24 @@ public class DonationDetailActivity extends AppCompatActivity{
                             for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                                 //getting artist
                                 Donation artist = postSnapshot.getValue(Donation.class);
+                                String temp0 = artist.getID();
                                 String temp1 = artist.getDonor().getMobilePhone();
                                 Double temp2 = artist.getNominal();
                                 String temp3 = artist.getTransactionDate().substring(0, 10);
                                 String temp4 = artist.getCreatedBy();
 
+                                Boolean v0 = myTrxId.equals(temp0);
                                 Boolean v1 = myphone.equals(temp1);
                                 Boolean v2 = mynominal.equals(temp2);
                                 Boolean v3 = selectedDate.equals(temp3);
                                 Boolean v4 = myUserId.equals(temp4);
 
-                                if (v1 && v2 && v3 && v4) {
+                                if (!v0 && v1 && v2 && v3 && v4) {
                                     isSaved = false;
                                     Toast.makeText(mycontext, "Donasi donatur ini sudah pernah diupload oleh Anda pada tanggal " + selectedDate, Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
                                     break;
-                                } else if (v1 && v2 && v3 && !v4) {
+                                } else if (!v0 && v1 && v2 && v3 && !v4) {
                                     isSaved = false;
                                     Toast.makeText(mycontext, "Donasi donatur ini sudah pernah diupload oleh relawan lain pada tanggal " + selectedDate, Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
@@ -818,270 +954,370 @@ public class DonationDetailActivity extends AppCompatActivity{
     public void saveDonation() {
         String mydate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
-        if (prefManager.getUserName() == null) {
-            Toast.makeText(mycontext, "Silakan Login atau Register terlebih dahulu", Toast.LENGTH_SHORT).show();
-        } else if (prefManager.getUserName() != null && !prefManager.getUserName().equals("") && prefManager.getUserName().length() < 10) {
-            Toast.makeText(mycontext, "ID Relawan harus sama dengan atau lebih dari 10 karakter", Toast.LENGTH_SHORT).show();
-        } else {
-            Program myProgram = (Program) spinnerEdtProgram.getSelectedItem();
-            Religion myReligion = (Religion) spinnerEdtReligion.getSelectedItem();
-            Job myJob = (Job) spinnerEdtJob.getSelectedItem();
-            Age myAge = (Age) spinnerEdtAge.getSelectedItem();
-            Domicile myDomicile = (Domicile) spinnerEdtDomicile.getSelectedItem();
-            Category myCategory = (Category) spinnerEdtCategory.getSelectedItem();
+        Bank myBank = (Bank) spinnerEdtBank.getSelectedItem();
+        Program myProgram = (Program) spinnerEdtProgram.getSelectedItem();
+        Religion myReligion = (Religion) spinnerEdtReligion.getSelectedItem();
+        Job myJob = (Job) spinnerEdtJob.getSelectedItem();
+        Age myAge = (Age) spinnerEdtAge.getSelectedItem();
+        Domicile myDomicile = (Domicile) spinnerEdtDomicile.getSelectedItem();
+        Category myCategory = (Category) spinnerEdtCategory.getSelectedItem();
 
-            if (edtUName == null || edtUName.getText() == null || edtUName.getText().toString().trim().equals("") || edtUName.getText().toString().trim().length() == 0) {
-                Toast.makeText(mycontext, "Nama Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (edtUMobilePhone == null || edtUMobilePhone.getText() == null || edtUMobilePhone.getText().toString().trim().equals("") || edtUMobilePhone.getText().toString().trim().length() == 0) {
-                Toast.makeText(mycontext, "Nomor Telepon Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (myProgram == null || myProgram.getTitle() == null || myProgram.getTitle().trim().equals("") || myProgram.getTitle().trim().length() == 0) {
-                Toast.makeText(mycontext, "Jenis Program tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (myReligion == null || myReligion.getTitle() == null || myReligion.getTitle().trim().equals("") || myReligion.getTitle().trim().length() == 0) {
-                Toast.makeText(mycontext, "Agama Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (myJob == null || myJob.getTitle() == null || myJob.getTitle().trim().equals("") || myJob.getTitle().trim().length() == 0) {
-                Toast.makeText(mycontext, "Pekerjaan Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (myAge == null || myAge.getTitle() == null || myAge.getTitle().trim().equals("") || myAge.getTitle().trim().length() == 0) {
-                Toast.makeText(mycontext, "Umur Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (myDomicile == null || myDomicile.getTitle() == null || myDomicile.getTitle().trim().equals("") || myDomicile.getTitle().trim().length() == 0) {
-                Toast.makeText(mycontext, "Domisili Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (myCategory == null || myCategory.getTitle() == null || myCategory.getTitle().trim().equals("") || myCategory.getTitle().trim().length() == 0) {
-                Toast.makeText(mycontext, "Jenis Donatur tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (edtUNominal == null || edtUNominal.getText() == null || edtUNominal.getText().toString().trim().equals("") || edtUNominal.getText().toString().trim().length() == 0) {
-                Toast.makeText(mycontext, "Nominal tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (Double.parseDouble(edtUNominal.getText().toString().replace("Rp", "").replace(",","").replace(".","").trim()) <= 0) {
-                Toast.makeText(mycontext, "Nominal tidak boleh kecil atau sama dengan nol", Toast.LENGTH_SHORT).show();
-            } else {
-                DatabaseReference dbDonation = FirebaseDatabase.getInstance()
-                        .getReference("donation");
+        DatabaseReference dbDonation = FirebaseDatabase.getInstance()
+                .getReference("donation");
 
-                String myID = dbDonation.push().getKey();
-                if (!isInsert) {
-                    myID = mydonation.getID();
-                }
+        String myID = dbDonation.push().getKey();
+        if (processType == 2) {
+            myID = mydonation.getID();
+        }
 
-                String trDateDay = String.valueOf(edtUTransactionDate.getDayOfMonth());
-                String trDateMonth = String.valueOf(edtUTransactionDate.getMonth() + 1);
-                String trDateYear = String.valueOf(edtUTransactionDate.getYear());
+        String trDateDay = String.valueOf(edtUTransactionDate.getDayOfMonth());
+        String trDateMonth = String.valueOf(edtUTransactionDate.getMonth() + 1);
+        String trDateYear = String.valueOf(edtUTransactionDate.getYear());
 
-                int day = edtUTransactionDate.getDayOfMonth();
-                int month = edtUTransactionDate.getMonth();
-                int year = edtUTransactionDate.getYear();
+        int day = edtUTransactionDate.getDayOfMonth();
+        int month = edtUTransactionDate.getMonth();
+        int year = edtUTransactionDate.getYear();
 
-                Donation donation = new Donation();
-                donation.setID(myID);
-                donation.setUserID(prefManager.getUserID());
-                donation.setTransactionDate(checkLength(trDateYear, 4) + "-" + checkLength(trDateMonth, 2) + "-" + checkLength(trDateDay, 2) + " 23:59:59");
+        Donation donation = new Donation();
+        donation.setID(myID);
+        donation.setUserID(prefManager.getUserID());
+        donation.setTransactionDate(checkLength(trDateYear, 4) + "-" + checkLength(trDateMonth, 2) + "-" + checkLength(trDateDay, 2) + " 23:59:59");
 
-                donation.setDonorName(edtUName.getText().toString());
-                donation.setDonorEmail(edtUEmail.getText().toString());
-                donation.setDonorMobilePhone(edtUMobilePhone.getText().toString());
+        donation.setDonorName(edtUName.getText().toString());
+        donation.setDonorEmail(edtUEmail.getText().toString());
+        donation.setDonorMobilePhone(edtUMobilePhone.getText().toString());
 
-                donation.setProgramTitle(spinnerEdtProgram.getSelectedItem().toString());
-                donation.setReligionTitle(spinnerEdtReligion.getSelectedItem().toString());
-                donation.setJobTitle(spinnerEdtJob.getSelectedItem().toString());
-                donation.setAgeTitle(spinnerEdtAge.getSelectedItem().toString());
-                donation.setDomicileTitle(spinnerEdtDomicile.getSelectedItem().toString());
-                donation.setCategoryTitle(spinnerEdtCategory.getSelectedItem().toString());
+        donation.setBankTitle(spinnerEdtBank.getSelectedItem().toString());
+        donation.setProgramTitle(spinnerEdtProgram.getSelectedItem().toString());
+        donation.setReligionTitle(spinnerEdtReligion.getSelectedItem().toString());
+        donation.setJobTitle(spinnerEdtJob.getSelectedItem().toString());
+        donation.setAgeTitle(spinnerEdtAge.getSelectedItem().toString());
+        donation.setDomicileTitle(spinnerEdtDomicile.getSelectedItem().toString());
+        donation.setCategoryTitle(spinnerEdtCategory.getSelectedItem().toString());
 
-                donation.setNominal(Double.parseDouble(edtUNominal.getText().toString().replace("Rp", "").replace(",","").replace(".","").trim()));
-                donation.setPrayer(edtUPrayer.getText().toString().trim());
+        donation.setNominal(Double.parseDouble(edtUNominal.getText().toString().replace("Rp", "").replace(",","").replace(".","").trim()));
+        donation.setPrayer(edtUPrayer.getText().toString().trim());
 
-                donation.setReferenceNumber(prefManager.getUserName());
-                donation.setReferenceName(prefManager.getName());
+        donation.setReferenceNumber(prefManager.getUserName());
+        donation.setReferenceName(prefManager.getName());
+        donation.setReferenceDivision(prefManager.getDivision());
+        donation.setReferenceTeam(prefManager.getTeam());
+        donation.setReferenceClass(prefManager.getUserClass());
 
-                donation.setStatusPayment("Menunggu Verifikasi");
+        donation.setStatusPayment("Menunggu Verifikasi");
 
-                donation.setPhoto(txtPhoto.getText().toString().trim());
-                donation.setPhotoURL(txtPhotoURL.getText().toString().trim());
+        donation.setPhoto(txtPhoto.getText().toString().trim());
+        donation.setPhotoURL(txtPhotoURL.getText().toString().trim());
 
-                donation.setCreatedBy(prefManager.getUserID());
-                donation.setCreatedDate(mydate);
+        donation.setCreatedBy(prefManager.getUserID());
+        donation.setCreatedDate(mydate);
 
-                if (!isInsert) {
-                    donation.setModifiedBy(prefManager.getUserID());
-                    donation.setModifiedDate(mydate);
-                }
+        if (processType == 2) {
+            donation.setModifiedBy(prefManager.getUserID());
+            donation.setModifiedDate(mydate);
+        }
 
-                donation.setIsActive(true);
+        donation.setIsActive(true);
 
-                UserAccount user = new UserAccount();
-                user.setID(prefManager.getUserID());
-                user.setUserName(prefManager.getUserName());
-                user.setName(prefManager.getName());
-                user.setEmail(prefManager.getEmail());
-                user.setMobilePhone(prefManager.getMobilePhone());
-                user.setSex(prefManager.getSex());
-                user.setLevel(Integer.parseInt(prefManager.getLevel()));
-                user.setCreatedBy(prefManager.getUserID());
-                user.setCreatedDate(mydate);
-                user.setModifiedBy(prefManager.getUserID());
-                user.setModifiedDate(mydate);
-                user.setIsActive(true);
+        UserAccount user = new UserAccount();
+        user.setID(prefManager.getUserID());
+        user.setUserName(prefManager.getUserName());
+        user.setName(prefManager.getName());
+        user.setEmail(prefManager.getEmail());
+        user.setMobilePhone(prefManager.getMobilePhone());
+        user.setSex(prefManager.getSex());
+        user.setLevel(Integer.parseInt(prefManager.getLevel()));
+        user.setCreatedBy(prefManager.getUserID());
+        user.setCreatedDate(mydate);
+        user.setModifiedBy(prefManager.getUserID());
+        user.setModifiedDate(mydate);
+        user.setIsActive(true);
 
-                Donor donor = new Donor();
-                donor.setID("");
-                donor.setUserName("");
-                donor.setName(edtUName.getText().toString().trim());
-                donor.setEmail(edtUEmail.getText().toString().trim());
+        Donor donor = new Donor();
+        donor.setID("");
+        donor.setUserName("");
+        donor.setName(edtUName.getText().toString().trim());
+        donor.setEmail(edtUEmail.getText().toString().trim());
 
-                String mobilePhone = edtUMobilePhone.getText().toString().trim();
-                if (mobilePhone != null && !mobilePhone.equals("") && mobilePhone.length() > 0 && mobilePhone.substring(0, 1).equals("0")) {
-                    mobilePhone = "62" + mobilePhone.substring(1, mobilePhone.length());
-                }
+        String mobilePhone = edtUMobilePhone.getText().toString().trim();
+        if (mobilePhone != null && !mobilePhone.equals("") && mobilePhone.length() > 0 && mobilePhone.substring(0, 1).equals("0")) {
+            mobilePhone = "+62" + mobilePhone.substring(1, mobilePhone.length());
+        }
 
-                donor.setMobilePhone(mobilePhone);
-                donor.setSex("");
-                donor.setLevel(5);
-                donor.setCreatedBy(prefManager.getUserID());
-                donor.setCreatedDate(mydate);
-                donor.setModifiedBy(prefManager.getUserID());
-                donor.setModifiedDate(mydate);
-                donor.setIsActive(true);
+        donor.setMobilePhone(mobilePhone);
+        donor.setSex("");
+        donor.setLevel(5);
+        donor.setCreatedBy(prefManager.getUserID());
+        donor.setCreatedDate(mydate);
+        donor.setModifiedBy(prefManager.getUserID());
+        donor.setModifiedDate(mydate);
+        donor.setIsActive(true);
 
-                donation.setProgram(myProgram);
-                donation.setUser(user);
-                donation.setDonor(donor);
+        donation.setUser(user);
+        donation.setDonor(donor);
 
-                donation.setReligion(myReligion);
-                donation.setJob(myJob);
-                donation.setAge(myAge);
-                donation.setDomicile(myDomicile);
-                donation.setCategory(myCategory);
+        donation.setBank(myBank);
+        donation.setProgram(myProgram);
+        donation.setReligion(myReligion);
+        donation.setJob(myJob);
+        donation.setAge(myAge);
+        donation.setDomicile(myDomicile);
+        donation.setCategory(myCategory);
 
-                txtPhoto.setText(fileName + fileExtension);
-                dbDonation
-                        .child(myID)
-                        .setValue(donation);
+        txtPhoto.setText(fileName + fileExtension);
+        dbDonation
+                .child(myID)
+                .setValue(donation);
 
-                if (isInsert) {
-                    Query databaseDonationYearly = FirebaseDatabase.getInstance().getReference("donationyearly").orderByChild("tahunTransaksi").equalTo(year).limitToLast(360000);
-                    databaseDonationYearly.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
+        if (processType == 1) {
+            Query databaseDonationYearly = FirebaseDatabase.getInstance().getReference("donationyearly").orderByChild("tahunTransaksi").equalTo(year).limitToLast(1000);
+            databaseDonationYearly.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            //clearing the previous artist list
-                            int found = 0;
-                            long total = dataSnapshot.getChildrenCount();
+                    //clearing the previous artist list
+                    int found = 0;
+                    long total = dataSnapshot.getChildrenCount();
 
-                            if (total > 0) {
-                                //iterating through all the nodes
-                                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                    //getting artist
-                                    Report artist = postSnapshot.getValue(Report.class);
+                    if (total > 0) {
+                        //iterating through all the nodes
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            //getting artist
+                            Report artist = postSnapshot.getValue(Report.class);
 
-                                    if (year == artist.getTahunTransaksi() && month == artist.getBulanTransaksi()) {
-                                        artist.setJumlahTransaksi(artist.getJumlahTransaksi() + donation.getNominal());
-                                        artist.setModifiedBy(prefManager.getUserID());
-                                        artist.setModifiedDate(mydate);
+                            if (year == artist.getTahunTransaksi() && month == artist.getBulanTransaksi()) {
+                                artist.setJumlahTransaksi(artist.getJumlahTransaksi() + donation.getNominal());
+                                artist.setModifiedBy(prefManager.getUserID());
+                                artist.setModifiedDate(mydate);
 
-                                        DatabaseReference dbDonationYearly = FirebaseDatabase.getInstance()
-                                                .getReference("donationyearly");
-
-                                        dbDonationYearly
-                                                .child(artist.getID())
-                                                .setValue(artist);
-
-                                        found = 1;
-                                    }
-                                }
-                            }
-
-                            if (total == 0 || found == 0) {
                                 DatabaseReference dbDonationYearly = FirebaseDatabase.getInstance()
                                         .getReference("donationyearly");
 
-                                String myID = dbDonationYearly.push().getKey();
+                                dbDonationYearly
+                                        .child(artist.getID())
+                                        .setValue(artist);
 
-                                Report artist = new Report();
-                                artist.setID(myID);
-                                artist.setTahunTransaksi(year);
-                                artist.setBulanTransaksi(month);
-                                artist.setJumlahTransaksi(donation.getNominal());
-                                artist.setCreatedBy(prefManager.getUserID());
-                                artist.setCreatedDate(mydate);
+                                found = 1;
+                            }
+                        }
+                    }
+
+                    if (total == 0 || found == 0) {
+                        DatabaseReference dbDonationYearly = FirebaseDatabase.getInstance()
+                                .getReference("donationyearly");
+
+                        String myID = dbDonationYearly.push().getKey();
+
+                        Report artist = new Report();
+                        artist.setID(myID);
+                        artist.setTahunTransaksi(year);
+                        artist.setBulanTransaksi(month);
+                        artist.setJumlahTransaksi(donation.getNominal());
+                        artist.setCreatedBy(prefManager.getUserID());
+                        artist.setCreatedDate(mydate);
+                        artist.setModifiedBy(prefManager.getUserID());
+                        artist.setModifiedDate(mydate);
+                        artist.setIsActive(true);
+
+                        dbDonationYearly
+                                .child(myID)
+                                .setValue(artist);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
+            Query databaseDonationYearlyPersonal = FirebaseDatabase.getInstance().getReference("donationyearlypersonal").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(1000);
+            databaseDonationYearlyPersonal.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    //clearing the previous artist list
+                    int found = 0;
+                    long total = dataSnapshot.getChildrenCount();
+
+                    if (total > 0) {
+                        //iterating through all the nodes
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            //getting artist
+                            ReportPersonal artist = postSnapshot.getValue(ReportPersonal.class);
+
+                            if (year == artist.getTahunTransaksi() && month == artist.getBulanTransaksi()) {
+                                artist.setJumlahTransaksi(artist.getJumlahTransaksi() + donation.getNominal());
                                 artist.setModifiedBy(prefManager.getUserID());
                                 artist.setModifiedDate(mydate);
-                                artist.setIsActive(true);
 
-                                dbDonationYearly
-                                        .child(myID)
-                                        .setValue(artist);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
-
-                    Query databaseDonationYearlyPersonal = FirebaseDatabase.getInstance().getReference("donationyearlypersonal").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(360000);
-                    databaseDonationYearlyPersonal.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-
-                            //clearing the previous artist list
-                            int found = 0;
-                            long total = dataSnapshot.getChildrenCount();
-
-                            if (total > 0) {
-                                //iterating through all the nodes
-                                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                    //getting artist
-                                    ReportPersonal artist = postSnapshot.getValue(ReportPersonal.class);
-
-                                    if (year == artist.getTahunTransaksi() && month == artist.getBulanTransaksi()) {
-                                        artist.setJumlahTransaksi(artist.getJumlahTransaksi() + donation.getNominal());
-                                        artist.setModifiedBy(prefManager.getUserID());
-                                        artist.setModifiedDate(mydate);
-
-                                        DatabaseReference dbDonationYearlyPersonal = FirebaseDatabase.getInstance()
-                                                .getReference("donationyearlypersonal");
-
-                                        dbDonationYearlyPersonal
-                                                .child(artist.getID())
-                                                .setValue(artist);
-
-                                        found = 1;
-                                    }
-                                }
-                            }
-
-                            if (total == 0 || found == 0) {
                                 DatabaseReference dbDonationYearlyPersonal = FirebaseDatabase.getInstance()
                                         .getReference("donationyearlypersonal");
 
-                                String myID = dbDonationYearlyPersonal.push().getKey();
-
-                                ReportPersonal artist = new ReportPersonal();
-                                artist.setID(myID);
-                                artist.setUserID(prefManager.getUserID());
-                                artist.setTahunTransaksi(year);
-                                artist.setBulanTransaksi(month);
-                                artist.setJumlahTransaksi(donation.getNominal());
-                                artist.setCreatedBy(prefManager.getUserID());
-                                artist.setCreatedDate(mydate);
-                                artist.setModifiedBy(prefManager.getUserID());
-                                artist.setModifiedDate(mydate);
-                                artist.setIsActive(true);
-
                                 dbDonationYearlyPersonal
-                                        .child(myID)
+                                        .child(artist.getID())
                                         .setValue(artist);
+
+                                found = 1;
                             }
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
-                } else {
-                    //Do Something?
+                    if (total == 0 || found == 0) {
+                        DatabaseReference dbDonationYearlyPersonal = FirebaseDatabase.getInstance()
+                                .getReference("donationyearlypersonal");
+
+                        String myID = dbDonationYearlyPersonal.push().getKey();
+
+                        ReportPersonal artist = new ReportPersonal();
+                        artist.setID(myID);
+                        artist.setUserID(prefManager.getUserID());
+                        artist.setTahunTransaksi(year);
+                        artist.setBulanTransaksi(month);
+                        artist.setJumlahTransaksi(donation.getNominal());
+                        artist.setCreatedBy(prefManager.getUserID());
+                        artist.setCreatedDate(mydate);
+                        artist.setModifiedBy(prefManager.getUserID());
+                        artist.setModifiedDate(mydate);
+                        artist.setIsActive(true);
+
+                        dbDonationYearlyPersonal
+                                .child(myID)
+                                .setValue(artist);
+                    }
                 }
 
-                Toast.makeText(mycontext, "Donasi Anda telah berhasil disimpan. Kami akan segera mengkonfirmasinya.", Toast.LENGTH_SHORT).show();
-                finish();
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        } else {
+            Double oldNominal = Double.parseDouble(edtUNominalOld.getText().toString().replace("Rp", "").replace(",","").replace(".","").trim());
+            Double newNominal = Double.parseDouble(edtUNominal.getText().toString().replace("Rp", "").replace(",","").replace(".","").trim());
+
+            Query databaseDonationYearly = FirebaseDatabase.getInstance().getReference("donationyearly").orderByChild("tahunTransaksi").equalTo(year).limitToLast(1000);
+            databaseDonationYearly.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    //clearing the previous artist list
+                    int found = 0;
+                    long total = dataSnapshot.getChildrenCount();
+
+                    if (total > 0) {
+                        //iterating through all the nodes
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            //getting artist
+                            Report artist = postSnapshot.getValue(Report.class);
+
+                            if (year == artist.getTahunTransaksi() && month == artist.getBulanTransaksi()) {
+                                artist.setJumlahTransaksi(artist.getJumlahTransaksi() - oldNominal + newNominal);
+                                artist.setModifiedBy(prefManager.getUserID());
+                                artist.setModifiedDate(mydate);
+
+                                DatabaseReference dbDonationYearly = FirebaseDatabase.getInstance()
+                                        .getReference("donationyearly");
+
+                                dbDonationYearly
+                                        .child(artist.getID())
+                                        .setValue(artist);
+
+                                found = 1;
+                            }
+                        }
+                    }
+
+                    if (total == 0 || found == 0) {
+                        DatabaseReference dbDonationYearly = FirebaseDatabase.getInstance()
+                                .getReference("donationyearly");
+
+                        String myID = dbDonationYearly.push().getKey();
+
+                        Report artist = new Report();
+                        artist.setID(myID);
+                        artist.setTahunTransaksi(year);
+                        artist.setBulanTransaksi(month);
+                        artist.setJumlahTransaksi(newNominal);
+                        artist.setCreatedBy(prefManager.getUserID());
+                        artist.setCreatedDate(mydate);
+                        artist.setModifiedBy(prefManager.getUserID());
+                        artist.setModifiedDate(mydate);
+                        artist.setIsActive(true);
+
+                        dbDonationYearly
+                                .child(myID)
+                                .setValue(artist);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
+            Query databaseDonationYearlyPersonal = FirebaseDatabase.getInstance().getReference("donationyearlypersonal").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(1000);
+            databaseDonationYearlyPersonal.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    //clearing the previous artist list
+                    int found = 0;
+                    long total = dataSnapshot.getChildrenCount();
+
+                    if (total > 0) {
+                        //iterating through all the nodes
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            //getting artist
+                            ReportPersonal artist = postSnapshot.getValue(ReportPersonal.class);
+
+                            if (year == artist.getTahunTransaksi() && month == artist.getBulanTransaksi()) {
+                                artist.setJumlahTransaksi(artist.getJumlahTransaksi() - oldNominal + newNominal);
+                                artist.setModifiedBy(prefManager.getUserID());
+                                artist.setModifiedDate(mydate);
+
+                                DatabaseReference dbDonationYearlyPersonal = FirebaseDatabase.getInstance()
+                                        .getReference("donationyearlypersonal");
+
+                                dbDonationYearlyPersonal
+                                        .child(artist.getID())
+                                        .setValue(artist);
+
+                                found = 1;
+                            }
+                        }
+                    }
+
+                    if (total == 0 || found == 0) {
+                        DatabaseReference dbDonationYearlyPersonal = FirebaseDatabase.getInstance()
+                                .getReference("donationyearlypersonal");
+
+                        String myID = dbDonationYearlyPersonal.push().getKey();
+
+                        ReportPersonal artist = new ReportPersonal();
+                        artist.setID(myID);
+                        artist.setUserID(prefManager.getUserID());
+                        artist.setTahunTransaksi(year);
+                        artist.setBulanTransaksi(month);
+                        artist.setJumlahTransaksi(newNominal);
+                        artist.setCreatedBy(prefManager.getUserID());
+                        artist.setCreatedDate(mydate);
+                        artist.setModifiedBy(prefManager.getUserID());
+                        artist.setModifiedDate(mydate);
+                        artist.setIsActive(true);
+
+                        dbDonationYearlyPersonal
+                                .child(myID)
+                                .setValue(artist);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
         }
+
+        Toast.makeText(mycontext, "Donasi Anda telah berhasil disimpan. Kami akan segera mengkonfirmasinya.", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     private void askPermission() {

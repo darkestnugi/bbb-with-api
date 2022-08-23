@@ -42,6 +42,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -79,6 +80,7 @@ public class RegisterActivity extends AppCompatActivity{
     private Context mycontext;
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
 
@@ -122,10 +124,10 @@ public class RegisterActivity extends AppCompatActivity{
         rgGender = (RadioGroup) findViewById(R.id.rgSex);
         tvTitle = (TextView) findViewById(R.id.tvTitleToolbar);
 
-        prefManager = new PrefManager(this);
+        mycontext = this;
+        prefManager = new PrefManager(mycontext);
         mAuth = FirebaseAuth.getInstance();
 
-        mycontext = this;
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(mycontext);
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());

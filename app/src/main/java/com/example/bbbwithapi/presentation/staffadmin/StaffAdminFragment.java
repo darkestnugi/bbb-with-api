@@ -2,10 +2,13 @@ package com.example.bbbwithapi.presentation.staffadmin;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
@@ -17,14 +20,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bbbwithapi.R;
 import com.example.bbbwithapi.BBBActivity;
 import com.example.bbbwithapi.model.Management;
 import com.example.bbbwithapi.preference.PrefManager;
+import com.example.bbbwithapi.presentation.login.LoginActivity;
 import com.example.bbbwithapi.presentation.staffadmin.adapter.StaffAdminAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,6 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link StaffAdminFragment#newInstance} factory method to
@@ -57,9 +67,10 @@ public class StaffAdminFragment extends Fragment {
     private Group groupDetail;
     private ImageView ivDetail;
 
-    private Context context;
+    private Context mycontext;
     private PrefManager prefManager;
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
 
@@ -134,10 +145,34 @@ public class StaffAdminFragment extends Fragment {
         groupDetail = (Group) viewContainer.findViewById(R.id.groupDetails);
         ivDetail = (ImageView) viewContainer.findViewById(R.id.ivDetailImageStaffAdmin);
 
-        context = requireActivity();
+        mycontext = requireActivity();
         prefManager = new PrefManager(requireContext());
-
         mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            prefManager.removeAllPreference();
+            mAuth.signOut();
+
+            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(mycontext, LoginActivity.class));
+        }
+
+        mUser = mAuth.getCurrentUser();
+        mUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            // Send token to your backend via HTTPS
+                        } else {
+                            prefManager.removeAllPreference();
+                            mAuth.signOut();
+
+                            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(mycontext, LoginActivity.class));
+                        }
+                    }
+                });
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
         mFirebaseAnalytics.setUserProperty("userEmail", prefManager.getEmail());
@@ -175,7 +210,7 @@ public class StaffAdminFragment extends Fragment {
 
                 progressDialog.dismiss();
                 rvStaffAdmin.setAdapter(new StaffAdminAdapter(listManagement, groupDetail, ivDetail, (BBBActivity)getActivity(), rvStaffAdmin));
-                rvStaffAdmin.setLayoutManager(new LinearLayoutManager(context));
+                rvStaffAdmin.setLayoutManager(new LinearLayoutManager(mycontext));
             }
 
             @Override

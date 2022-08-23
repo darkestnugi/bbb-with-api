@@ -35,6 +35,10 @@ public class Donation implements Parcelable, Comparable<Donation> {
     @Expose
     private String DonorMobilePhone;
 
+    @SerializedName("Bank Name")
+    @Expose
+    private String BankTitle;
+
     @SerializedName("Program Name")
     @Expose
     private String ProgramTitle;
@@ -62,7 +66,7 @@ public class Donation implements Parcelable, Comparable<Donation> {
     @SerializedName("Nominal")
     @Expose
     private Double Nominal;
-    
+
     @SerializedName("Prayer")
     @Expose
     private String Prayer;
@@ -86,6 +90,18 @@ public class Donation implements Parcelable, Comparable<Donation> {
     @SerializedName("Reference Name")
     @Expose
     private String ReferenceName;
+
+    @SerializedName("Reference Division")
+    @Expose
+    private String ReferenceDivision;
+
+    @SerializedName("Reference Team")
+    @Expose
+    private String ReferenceTeam;
+
+    @SerializedName("Reference Class")
+    @Expose
+    private String ReferenceClass;
 
     @SerializedName("CreatedBy")
     @Expose
@@ -131,6 +147,10 @@ public class Donation implements Parcelable, Comparable<Donation> {
     @Expose
     private Donor Donor;
 
+    @SerializedName("Bank")
+    @Expose
+    private Bank Bank;
+
     @SerializedName("Program")
     @Expose
     private Program Program;
@@ -165,6 +185,7 @@ public class Donation implements Parcelable, Comparable<Donation> {
         this.DonorEmail = parcel.readString();
         this.DonorMobilePhone = parcel.readString();
         this.TransactionDate = parcel.readString();
+        this.BankTitle = parcel.readString();
         this.ProgramTitle = parcel.readString();
         this.ReligionTitle = parcel.readString();
         this.JobTitle = parcel.readString();
@@ -178,6 +199,9 @@ public class Donation implements Parcelable, Comparable<Donation> {
         this.PhotoURL = parcel.readString();
         this.ReferenceNumber = parcel.readString();
         this.ReferenceName = parcel.readString();
+        this.ReferenceDivision = parcel.readString();
+        this.ReferenceTeam = parcel.readString();
+        this.ReferenceClass = parcel.readString();
         this.CreatedDate = parcel.readString();
         this.CreatedBy = parcel.readString();
         this.CreatedIP = parcel.readString();
@@ -188,17 +212,17 @@ public class Donation implements Parcelable, Comparable<Donation> {
         this.ModifiedDate = parcel.readString();
     }
 
-    public Donation(String ID, String UserID, String TransactionDate, Program Program, UserAccount User, Donor Donor, 
+    public Donation(String ID, String UserID, String TransactionDate, UserAccount User, Donor Donor,
                     Double Nominal, String Prayer, String StatusPayment, String Photo, String PhotoURL,
-                    String ReferenceNumber, String ReferenceName,
-                    Religion Religion, Job Job, Age Age, Domicile Domicile, Category Category,
+                    String ReferenceNumber, String ReferenceName, String ReferenceDivision, String ReferenceTeam, String ReferenceClass,
+                    String BankTitle, String ProgramTitle, String ReligionTitle, String JobTitle, String AgeTitle, String DomicileTitle, String CategoryTitle,
+                    Bank Bank, Program Program, Religion Religion, Job Job, Age Age, Domicile Domicile, Category Category,
                     String CreatedBy, String CreatedIP, String CreatedPosition, String CreatedDate,
                     String ModifiedBy, String ModifiedIP, String ModifiedPosition, String ModifiedDate,
                     boolean IsActive) {
         this.ID = ID;
         this.UserID = UserID;
         this.TransactionDate = TransactionDate;
-        this.Program = Program;
         this.User = User;
         this.Donor = Donor;
         this.Nominal = Nominal;
@@ -206,10 +230,23 @@ public class Donation implements Parcelable, Comparable<Donation> {
         this.StatusPayment = StatusPayment;
         this.Photo = Photo;
         this.PhotoURL = PhotoURL;
-        
+
         this.ReferenceNumber = ReferenceNumber;
         this.ReferenceName = ReferenceName;
-        
+        this.ReferenceDivision = ReferenceDivision;
+        this.ReferenceTeam = ReferenceTeam;
+        this.ReferenceClass = ReferenceClass;
+
+        this.BankTitle = BankTitle;
+        this.ProgramTitle = ProgramTitle;
+        this.ReligionTitle = ReligionTitle;
+        this.JobTitle = JobTitle;
+        this.AgeTitle = AgeTitle;
+        this.DomicileTitle = DomicileTitle;
+        this.CategoryTitle = CategoryTitle;
+
+        this.Bank = Bank;
+        this.Program = Program;
         this.Religion = Religion;
         this.Job = Job;
         this.Age = Age;
@@ -251,6 +288,14 @@ public class Donation implements Parcelable, Comparable<Donation> {
 
     public void setDonorMobilePhone(String donorPhoneNumber) {
         this.DonorMobilePhone = donorPhoneNumber;
+    }
+
+    public String getBankTitle() {
+        return BankTitle;
+    }
+
+    public void setBankTitle(String theName) {
+        this.BankTitle = theName;
     }
 
     public String getProgramTitle() {
@@ -300,7 +345,7 @@ public class Donation implements Parcelable, Comparable<Donation> {
     public void setCategoryTitle(String theName) {
         this.CategoryTitle = theName;
     }
-    
+
     public String getID() {
         return ID;
     }
@@ -323,14 +368,6 @@ public class Donation implements Parcelable, Comparable<Donation> {
 
     public void setTransactionDate(String TransactionDate) {
         this.TransactionDate = TransactionDate;
-    }
-
-    public Program getProgram() {
-        return Program;
-    }
-
-    public void setProgram(Program Program) {
-        this.Program = Program;
     }
 
     public UserAccount getUser() {
@@ -405,6 +442,46 @@ public class Donation implements Parcelable, Comparable<Donation> {
         this.ReferenceName = ReferenceName;
     }
 
+    public String getReferenceDivision() {
+        return ReferenceDivision;
+    }
+
+    public void setReferenceDivision(String ReferenceDivision) {
+        this.ReferenceDivision = ReferenceDivision;
+    }
+
+    public String getReferenceTeam() {
+        return ReferenceTeam;
+    }
+
+    public void setReferenceTeam(String ReferenceTeam) {
+        this.ReferenceTeam = ReferenceTeam;
+    }
+
+    public String getReferenceClass() {
+        return ReferenceClass;
+    }
+
+    public void setReferenceClass(String ReferenceClass) {
+        this.ReferenceClass = ReferenceClass;
+    }
+
+    public Bank getBank() {
+        return Bank;
+    }
+
+    public void setBank(Bank Bank) {
+        this.Bank = Bank;
+    }
+
+    public Program getProgram() {
+        return Program;
+    }
+
+    public void setProgram(Program Program) {
+        this.Program = Program;
+    }
+
     public Religion getReligion() {
         return Religion;
     }
@@ -444,7 +521,7 @@ public class Donation implements Parcelable, Comparable<Donation> {
     public void setCategory(Category Category) {
         this.Category = Category;
     }
-    
+
     public String getCreatedBy() {
         return CreatedBy;
     }
@@ -530,6 +607,7 @@ public class Donation implements Parcelable, Comparable<Donation> {
         parcel.writeString(getDonorEmail());
         parcel.writeString(getDonorMobilePhone());
         parcel.writeString(getTransactionDate());
+        parcel.writeString(getBankTitle());
         parcel.writeString(getProgramTitle());
         parcel.writeString(getReligionTitle());
         parcel.writeString(getJobTitle());
