@@ -127,6 +127,7 @@ public class RegisterActivity extends AppCompatActivity{
         mycontext = this;
         prefManager = new PrefManager(mycontext);
         mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(mycontext);
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());

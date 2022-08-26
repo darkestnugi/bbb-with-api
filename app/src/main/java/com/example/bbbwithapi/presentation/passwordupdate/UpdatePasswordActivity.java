@@ -82,26 +82,28 @@ public class UpdatePasswordActivity extends AppCompatActivity{
             prefManager.removeAllPreference();
             mAuth.signOut();
 
-            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali (1)", Toast.LENGTH_LONG).show();
             startActivity(new Intent(mycontext, LoginActivity.class));
-        }
+            finish();
+        } else {
+            mUser = mAuth.getCurrentUser();
+            mUser.getIdToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String idToken = task.getResult().getToken();
+                                // Send token to your backend via HTTPS
+                            } else {
+                                prefManager.removeAllPreference();
+                                mAuth.signOut();
 
-        mUser = mAuth.getCurrentUser();
-        mUser.getIdToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            String idToken = task.getResult().getToken();
-                            // Send token to your backend via HTTPS
-                        } else {
-                            prefManager.removeAllPreference();
-                            mAuth.signOut();
-
-                            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(mycontext, LoginActivity.class));
+                                Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali (2)", Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(mycontext, LoginActivity.class));
+                                finish();
+                            }
                         }
-                    }
-                });
+                    });
+        }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(mycontext);
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());

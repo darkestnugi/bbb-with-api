@@ -164,26 +164,28 @@ public class AccountFragment extends Fragment{
             prefManager.removeAllPreference();
             mAuth.signOut();
 
-            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
+            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali (1)", Toast.LENGTH_LONG).show();
             startActivity(new Intent(mycontext, LoginActivity.class));
-        }
+            requireActivity().finish();
+        } else {
+            mUser = mAuth.getCurrentUser();
+            mUser.getIdToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String idToken = task.getResult().getToken();
+                                // Send token to your backend via HTTPS
+                            } else {
+                                prefManager.removeAllPreference();
+                                mAuth.signOut();
 
-        mUser = mAuth.getCurrentUser();
-        mUser.getIdToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            String idToken = task.getResult().getToken();
-                            // Send token to your backend via HTTPS
-                        } else {
-                            prefManager.removeAllPreference();
-                            mAuth.signOut();
-
-                            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(mycontext, LoginActivity.class));
+                                Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali (1)", Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(mycontext, LoginActivity.class));
+                                requireActivity().finish();
+                            }
                         }
-                    }
-                });
+                    });
+        }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(requireContext());
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
@@ -294,8 +296,8 @@ public class AccountFragment extends Fragment{
             });
 
             logoutView.findViewById(R.id.btnPositiveLogout).setOnClickListener(view1 -> {
-                mAuth.signOut();
                 prefManager.removeAllPreference();
+                mAuth.signOut();
 
                 Intent intent = new Intent(requireActivity(), LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -48,30 +48,6 @@ public class SplashScreenActivity extends AppCompatActivity{
         mycontext = this;
         prefManager = new PrefManager(mycontext);
         mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() == null) {
-            prefManager.removeAllPreference();
-            mAuth.signOut();
-
-            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(mycontext, LoginActivity.class));
-        }
-
-        mUser = mAuth.getCurrentUser();
-        mUser.getIdToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            String idToken = task.getResult().getToken();
-                            // Send token to your backend via HTTPS
-                        } else {
-                            prefManager.removeAllPreference();
-                            mAuth.signOut();
-
-                            Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(mycontext, LoginActivity.class));
-                        }
-                    }
-                });
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(mycontext);
         mFirebaseAnalytics.setUserProperty("userID", prefManager.getUserID());
@@ -116,19 +92,43 @@ public class SplashScreenActivity extends AppCompatActivity{
                             @Override
                             public void run() {
                                 if (mAuth.getCurrentUser() == null) {
+                                    prefManager.removeAllPreference();
+                                    mAuth.signOut();
+
+                                    Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali (1)", Toast.LENGTH_LONG).show();
                                     startActivity(new Intent(mycontext, LoginActivity.class));
+                                    finish();
                                 } else {
-                                    startActivity(new Intent(mycontext, BBBActivity.class));
+                                    mUser = mAuth.getCurrentUser();
+                                    mUser.getIdToken(true)
+                                            .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                                                public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                                    if (task.isSuccessful()) {
+                                                        String idToken = task.getResult().getToken();
+                                                        // Send token to your backend via HTTPS
+
+                                                        startActivity(new Intent(mycontext, BBBActivity.class));
+                                                        finish();
+                                                    } else {
+                                                        prefManager.removeAllPreference();
+                                                        mAuth.signOut();
+
+                                                        Toast.makeText(mycontext, "Waktu login Anda habis. Silakan Login kembali (2)", Toast.LENGTH_LONG).show();
+                                                        startActivity(new Intent(mycontext, LoginActivity.class));
+                                                        finish();
+                                                    }
+                                                }
+                                            });
                                 }
-                                finish();
                             }
                         }, 3000);
                     } else {
-                        mAuth.signOut();
                         prefManager.removeAllPreference();
+                        mAuth.signOut();
 
                         Toast.makeText(mycontext, "Silakan download versi terbaru " + currAppVer + ". Versi yang Anda gunakan " + thisAppVer, Toast.LENGTH_LONG).show();
                         startActivity(new Intent(mycontext, LoginActivity.class));
+                        finish();
                     }
                 }
             }
