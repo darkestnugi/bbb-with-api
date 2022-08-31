@@ -59,22 +59,25 @@ public class DonationListAdapter extends RecyclerView.Adapter<DonationListAdapte
         if (listItems.get(position).getStatusPayment().equals("Menunggu Verifikasi")) {
             holder.btnEditDonation.setText("Ubah Donasi");
             holder.btnEditDonation.setVisibility(View.VISIBLE);
-        } else {
+        } else if (listItems.get(position).getStatusPayment().equals("Gagal Diverifikasi")) {
+            holder.btnEditDonation.setText("Ubah Donasi Yang Gagal");
+            holder.btnEditDonation.setVisibility(View.VISIBLE);
+        } else if (listItems.get(position).getStatusPayment().equals("Berhasil Diverifikasi")) {
             holder.btnEditDonation.setText("Lihat Invoice Donasi");
             holder.btnEditDonation.setVisibility(View.VISIBLE);
         }
 
-        if (listItems.get(position).getReferenceName() == null
-                || listItems.get(position).getReferenceName().equals("")
-                || listItems.get(position).getReferenceName().length() == 0
+        if (listItems.get(position).getDonorName() == null
+                || listItems.get(position).getDonorName().equals("")
+                || listItems.get(position).getDonorName().length() == 0
         ) {
-            if (listItems.get(position).getReferenceNumber().length() > 0) {
-                holder.tvItemReferenceNumber.setText(listItems.get(position).getReferenceNumber());
+            if (listItems.get(position).getDonorMobilePhone().length() > 0) {
+                holder.tvItemReferenceNumber.setText(listItems.get(position).getDonorMobilePhone());
             } else {
                 holder.tvItemReferenceNumber.setText("-");
             }
         } else {
-            holder.tvItemReferenceNumber.setText(listItems.get(position).getReferenceName());
+            holder.tvItemReferenceNumber.setText(listItems.get(position).getDonorName());
         }
 
         holder.actionItem(position);
@@ -112,7 +115,14 @@ public class DonationListAdapter extends RecyclerView.Adapter<DonationListAdapte
                     intent.putExtra(IntentKeyUtils.keyDetailDonationDetailData, mydata);
                     context.startActivity(intent);
                 });
-            } else {
+            } else if (mydata.getStatusPayment().equals("Gagal Diverifikasi")) {
+                btnEditDonation.setOnClickListener(view -> {
+                    Intent intent = new Intent(context, DonationDetailActivity.class);
+                    intent.putExtra("donation_id", String.valueOf(listItems.get(position).getID()));
+                    intent.putExtra(IntentKeyUtils.keyDetailDonationDetailData, mydata);
+                    context.startActivity(intent);
+                });
+            } else if (mydata.getStatusPayment().equals("Berhasil Diverifikasi")) {
                 btnEditDonation.setOnClickListener(view -> {
                     Intent intent = new Intent(context, DonationInvoiceActivity.class);
                     intent.putExtra("donation_id", String.valueOf(listItems.get(position).getID()));

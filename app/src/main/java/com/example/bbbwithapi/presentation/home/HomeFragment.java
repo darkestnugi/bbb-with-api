@@ -153,7 +153,7 @@ public class HomeFragment extends Fragment{
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
 
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("program").limitToLast(360000);
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("program").limitToLast(1000);
         databaseDonation.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

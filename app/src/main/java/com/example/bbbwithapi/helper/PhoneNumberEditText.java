@@ -19,7 +19,7 @@ public class PhoneNumberEditText extends androidx.appcompat.widget.AppCompatEdit
     private static String prefix = "+62";
     private static final int MAX_LENGTH = 20;
     private static final int MAX_DECIMAL = 0;
-    private PhoneNumberTextWatcher phonenumberTextWatcher = new PhoneNumberTextWatcher(this, prefix);
+    private PhoneNumberTextWatcher phone_numberTextWatcher = new PhoneNumberTextWatcher(this, prefix);
 
     public PhoneNumberEditText(Context context) {
         this(context, null);
@@ -40,15 +40,15 @@ public class PhoneNumberEditText extends androidx.appcompat.widget.AppCompatEdit
     protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
         super.onFocusChanged(focused, direction, previouslyFocusedRect);
         if (focused) {
-            this.addTextChangedListener(phonenumberTextWatcher);
+            this.addTextChangedListener(phone_numberTextWatcher);
         } else {
-            this.removeTextChangedListener(phonenumberTextWatcher);
+            this.removeTextChangedListener(phone_numberTextWatcher);
         }
         handleCasePhoneNumberEmpty(focused);
     }
 
     /**
-     * When phonenumber empty <br/>
+     * When phone_number empty <br/>
      * + When focus EditText, set the default text = prefix (ex: VND) <br/>
      * + When EditText lose focus, set the default text = "", EditText will display hint (ex:VND)
      */

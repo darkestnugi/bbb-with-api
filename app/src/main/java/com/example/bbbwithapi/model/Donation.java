@@ -15,6 +15,10 @@ public class Donation implements Parcelable, Comparable<Donation> {
     @Expose
     private String ID;
 
+    @SerializedName("App Version")
+    @Expose
+    private String AppVersion;
+
     @SerializedName("User ID")
     @Expose
     private String UserID;
@@ -180,6 +184,7 @@ public class Donation implements Parcelable, Comparable<Donation> {
 
     protected Donation(Parcel parcel) {
         this.ID = parcel.readString();
+        this.AppVersion = parcel.readString();
         this.UserID = parcel.readString();
         this.DonorName = parcel.readString();
         this.DonorEmail = parcel.readString();
@@ -212,7 +217,7 @@ public class Donation implements Parcelable, Comparable<Donation> {
         this.ModifiedDate = parcel.readString();
     }
 
-    public Donation(String ID, String UserID, String TransactionDate, UserAccount User, Donor Donor,
+    public Donation(String ID, String AppVersion, String UserID, String TransactionDate, UserAccount User, Donor Donor,
                     Double Nominal, String Prayer, String StatusPayment, String Photo, String PhotoURL,
                     String ReferenceNumber, String ReferenceName, String ReferenceDivision, String ReferenceTeam, String ReferenceClass,
                     String BankTitle, String ProgramTitle, String ReligionTitle, String JobTitle, String AgeTitle, String DomicileTitle, String CategoryTitle,
@@ -221,6 +226,7 @@ public class Donation implements Parcelable, Comparable<Donation> {
                     String ModifiedBy, String ModifiedIP, String ModifiedPosition, String ModifiedDate,
                     boolean IsActive) {
         this.ID = ID;
+        this.AppVersion = AppVersion;
         this.UserID = UserID;
         this.TransactionDate = TransactionDate;
         this.User = User;
@@ -352,6 +358,14 @@ public class Donation implements Parcelable, Comparable<Donation> {
 
     public void setID(String ID) {
         this.ID = ID;
+    }
+
+    public String getAppVersion() {
+        return AppVersion;
+    }
+
+    public void setAppVersion(String AppVersion) {
+        this.AppVersion = AppVersion;
     }
 
     public String getUserID() {
@@ -602,6 +616,7 @@ public class Donation implements Parcelable, Comparable<Donation> {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(getID());
+        parcel.writeString(getAppVersion());
         parcel.writeString(getUserID());
         parcel.writeString(getDonorName());
         parcel.writeString(getDonorEmail());

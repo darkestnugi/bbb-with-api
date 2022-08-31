@@ -190,7 +190,7 @@ public class StaffAdminFragment extends Fragment {
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
 
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("management").limitToLast(360000);
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("management").limitToLast(1000);
         databaseDonation.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

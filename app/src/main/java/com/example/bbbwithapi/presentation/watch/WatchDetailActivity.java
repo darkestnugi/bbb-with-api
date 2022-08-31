@@ -168,7 +168,7 @@ public class WatchDetailActivity extends AppCompatActivity{
                     .child(myID)
                     .setValue(watch);
 
-            Query databaseWatchYearly = FirebaseDatabase.getInstance().getReference("watchyearly").orderByChild("tahunPiket").equalTo(year).limitToLast(360000);
+            Query databaseWatchYearly = FirebaseDatabase.getInstance().getReference("watchyearly").orderByChild("tahunPiket").equalTo(year).limitToLast(1000);
             databaseWatchYearly.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

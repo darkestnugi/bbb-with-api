@@ -190,7 +190,7 @@ public class ReportFragment extends Fragment{
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
 
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("donationyearly").orderByChild("jumlahTransaksi").limitToLast(360000);
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("donationyearly").orderByChild("jumlahTransaksi").limitToLast(1000);
         databaseDonation.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -234,7 +234,7 @@ public class ReportFragment extends Fragment{
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
 
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("donationyearlypersonal").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(360000);
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("donationyearlypersonal").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(1000);
         databaseDonation.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -278,7 +278,7 @@ public class ReportFragment extends Fragment{
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
 
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("pdcyearly").orderByChild("jumlahTransaksi").limitToLast(360000);
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("pdcyearly").orderByChild("jumlahTransaksi").limitToLast(1000);
         databaseDonation.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -322,7 +322,7 @@ public class ReportFragment extends Fragment{
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
 
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("pdcyearlypersonal").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(360000);
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("pdcyearlypersonal").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(1000);
         databaseDonation.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -188,7 +188,7 @@ public class RegisterActivity extends AppCompatActivity{
     }
 
     private void initSpinnerDivision(String myTitle) {
-        Query databaseScreen = FirebaseDatabase.getInstance().getReference("division").limitToLast(360000);
+        Query databaseScreen = FirebaseDatabase.getInstance().getReference("division").limitToLast(1000);
         databaseScreen.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -236,7 +236,7 @@ public class RegisterActivity extends AppCompatActivity{
     }
 
     private void initSpinnerTeam(String myTitle) {
-        Query databaseScreen = FirebaseDatabase.getInstance().getReference("team").limitToLast(360000);
+        Query databaseScreen = FirebaseDatabase.getInstance().getReference("team").limitToLast(1000);
         databaseScreen.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -284,7 +284,7 @@ public class RegisterActivity extends AppCompatActivity{
     }
 
     private void initSpinnerClass(String myTitle) {
-        Query databaseScreen = FirebaseDatabase.getInstance().getReference("class").limitToLast(360000);
+        Query databaseScreen = FirebaseDatabase.getInstance().getReference("class").limitToLast(1000);
         databaseScreen.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

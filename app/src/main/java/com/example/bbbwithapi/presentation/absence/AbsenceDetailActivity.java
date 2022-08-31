@@ -199,7 +199,7 @@ public class AbsenceDetailActivity extends AppCompatActivity{
                     .child(myID)
                     .setValue(absence);
 
-            Query databaseAbsenceYearly = FirebaseDatabase.getInstance().getReference("absenceyearly").orderByChild("tahunAbsen").equalTo(year).limitToLast(360000);
+            Query databaseAbsenceYearly = FirebaseDatabase.getInstance().getReference("absenceyearly").orderByChild("tahunAbsen").equalTo(year).limitToLast(1000);
             databaseAbsenceYearly.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

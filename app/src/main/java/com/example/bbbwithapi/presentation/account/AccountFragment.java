@@ -335,7 +335,7 @@ public class AccountFragment extends Fragment{
         int year = Calendar.getInstance().get(Calendar.YEAR);
         int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
 
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("donation").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(360000);
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("donation").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(1000);
         databaseDonation.addValueEventListener(new ValueEventListener() {
             @SuppressLint("DefaultLocale")
             @Override

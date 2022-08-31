@@ -149,7 +149,7 @@ public class AbsenceActivity extends AppCompatActivity{
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
 
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("absence").limitToLast(360000);
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("absence").limitToLast(1000);
         databaseDonation.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -194,7 +194,7 @@ public class AbsenceActivity extends AppCompatActivity{
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
 
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("absenceyearly").limitToLast(360000);
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("absenceyearly").limitToLast(1000);
         databaseDonation.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

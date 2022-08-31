@@ -192,7 +192,7 @@ public class AccountDetailActivity extends AppCompatActivity{
     }
 
     private void initSpinnerDivision(String myTitle) {
-        Query databaseScreen = FirebaseDatabase.getInstance().getReference("division").limitToLast(360000);
+        Query databaseScreen = FirebaseDatabase.getInstance().getReference("division").limitToLast(1000);
         databaseScreen.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -240,7 +240,7 @@ public class AccountDetailActivity extends AppCompatActivity{
     }
 
     private void initSpinnerTeam(String myTitle) {
-        Query databaseScreen = FirebaseDatabase.getInstance().getReference("team").limitToLast(360000);
+        Query databaseScreen = FirebaseDatabase.getInstance().getReference("team").limitToLast(1000);
         databaseScreen.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -288,7 +288,7 @@ public class AccountDetailActivity extends AppCompatActivity{
     }
 
     private void initSpinnerClass(String myTitle) {
-        Query databaseScreen = FirebaseDatabase.getInstance().getReference("class").limitToLast(360000);
+        Query databaseScreen = FirebaseDatabase.getInstance().getReference("class").limitToLast(1000);
         databaseScreen.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -418,7 +418,7 @@ public class AccountDetailActivity extends AppCompatActivity{
                                     .child(prefManager.getUserID())
                                     .setValue(dataAccount);
 
-                            updateDonation(username, name);
+                            updateDonation(username, name, myDivision.getTitle(), myTeam.getTitle(), myClass.getTitle());
 
                             progressDialog.setMessage("Uploaded " + 100 + "%...");
                             progressDialog.dismiss();
@@ -437,7 +437,7 @@ public class AccountDetailActivity extends AppCompatActivity{
         });
     }
 
-    public void updateDonation(String refNumber, String refName) {
+    public void updateDonation(String refNumber, String refName, String refDivision, String refTeam, String refClass) {
         Query databaseDonation = FirebaseDatabase.getInstance().getReference("donation").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(360000);
         databaseDonation.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -453,6 +453,9 @@ public class AccountDetailActivity extends AppCompatActivity{
 
                         artist.setReferenceNumber(refNumber);
                         artist.setReferenceName(refName);
+                        artist.setReferenceDivision(refDivision);
+                        artist.setReferenceTeam(refTeam);
+                        artist.setReferenceClass(refClass);
 
                         DatabaseReference dbDonation = FirebaseDatabase.getInstance()
                                 .getReference("donation");

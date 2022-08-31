@@ -263,7 +263,7 @@ public class LoginActivity extends AppCompatActivity{
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 if (email != null && email.length() > 0) {
-                                    Query databaseUser = FirebaseDatabase.getInstance().getReference("user").orderByChild("userID").equalTo(mAuth.getUid()).limitToLast(360000);
+                                    Query databaseUser = FirebaseDatabase.getInstance().getReference("user").orderByChild("userID").equalTo(mAuth.getUid()).limitToLast(1000);
                                     databaseUser.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {

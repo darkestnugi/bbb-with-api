@@ -155,7 +155,7 @@ public class DonationListFragment extends Fragment{
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
 
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("donation").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(360000);
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("donation").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(1000);
         databaseDonation.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

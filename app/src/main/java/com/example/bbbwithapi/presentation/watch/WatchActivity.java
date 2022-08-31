@@ -117,7 +117,7 @@ public class WatchActivity extends AppCompatActivity{
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
 
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("watch").limitToLast(360000);
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("watch").limitToLast(1000);
         databaseDonation.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -162,7 +162,7 @@ public class WatchActivity extends AppCompatActivity{
         progressDialog.show();
         progressDialog.setMessage("Downloaded " + 50 + "%...");
 
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("watchyearly").limitToLast(360000);
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("watchyearly").limitToLast(1000);
         databaseDonation.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -2,12 +2,14 @@ package com.example.bbbwithapi.presentation.report.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bbbwithapi.R;
@@ -16,6 +18,7 @@ import com.example.bbbwithapi.model.ReportPDC;
 
 import java.util.ArrayList;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class ReportPDCListAdapter extends RecyclerView.Adapter<ReportPDCListAdapter.ViewHolder> {
     private ArrayList<ReportPDC> listReport;
     private Context context;

@@ -363,7 +363,7 @@ public class DonationDetailActivity extends AppCompatActivity{
     }
 
     private void initSpinnerProgram(String myTitle) {
-        Query databaseScreen = FirebaseDatabase.getInstance().getReference("program").limitToLast(360000);
+        Query databaseScreen = FirebaseDatabase.getInstance().getReference("program").limitToLast(1000);
         databaseScreen.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -411,7 +411,7 @@ public class DonationDetailActivity extends AppCompatActivity{
     }
 
     private void initSpinnerReligion(String myTitle) {
-        Query databaseScreen = FirebaseDatabase.getInstance().getReference("religion").limitToLast(360000);
+        Query databaseScreen = FirebaseDatabase.getInstance().getReference("religion").limitToLast(1000);
         databaseScreen.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -459,7 +459,7 @@ public class DonationDetailActivity extends AppCompatActivity{
     }
 
     private void initSpinnerJob(String myTitle) {
-        Query databaseScreen = FirebaseDatabase.getInstance().getReference("job").limitToLast(360000);
+        Query databaseScreen = FirebaseDatabase.getInstance().getReference("job").limitToLast(1000);
         databaseScreen.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -507,7 +507,7 @@ public class DonationDetailActivity extends AppCompatActivity{
     }
 
     private void initSpinnerAge(String myTitle) {
-        Query databaseScreen = FirebaseDatabase.getInstance().getReference("age").limitToLast(360000);
+        Query databaseScreen = FirebaseDatabase.getInstance().getReference("age").limitToLast(1000);
         databaseScreen.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -555,7 +555,7 @@ public class DonationDetailActivity extends AppCompatActivity{
     }
 
     private void initSpinnerDomicile(String myTitle) {
-        Query databaseScreen = FirebaseDatabase.getInstance().getReference("domicile").limitToLast(360000);
+        Query databaseScreen = FirebaseDatabase.getInstance().getReference("domicile").limitToLast(1000);
         databaseScreen.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -603,7 +603,7 @@ public class DonationDetailActivity extends AppCompatActivity{
     }
 
     private void initSpinnerCategory(String myTitle) {
-        Query databaseScreen = FirebaseDatabase.getInstance().getReference("category").limitToLast(360000);
+        Query databaseScreen = FirebaseDatabase.getInstance().getReference("category").limitToLast(1000);
         databaseScreen.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -982,6 +982,7 @@ public class DonationDetailActivity extends AppCompatActivity{
 
         Donation donation = new Donation();
         donation.setID(myID);
+        donation.setAppVersion(getString(R.string.app_version));
         donation.setUserID(prefManager.getUserID());
         donation.setTransactionDate(checkLength(trDateYear, 4) + "-" + checkLength(trDateMonth, 2) + "-" + checkLength(trDateDay, 2) + " 23:59:59");
 

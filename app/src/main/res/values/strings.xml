@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Bina Bangsa Berdikari</string>
-    <string name="app_version">1.0.0.0</string>
-    <string name="app_version_desc">Version 1.0.0.0\nLast Updated: 25-08-2022\n\nPresented By\nPT. Tera Global Karya</string>
+    <string name="app_version">1.0.0.4</string>
+    <string name="app_version_desc">Version 1.0.0.4\nLast Updated: 31-08-2022\n\nPresented By\nPT. Tera Global Karya</string>
 
     <string name="slide_1_title">Latar Belakang</string>
     <string name="slide_1_1_desc">Sebagai negara berkembang, Masyarakat Indonesia masih banyak yang menghadapi berbagai permasalahan pendidikan seperti akses pendidikan, informasi, kualitas pendidik, peningkatan skill, termasuk pembiayaan Pendidikan dan Usaha.\n\nBerdasarkan laporan United Nations Development Program tahun 2012, posisi SDM Indonesia tertinggal oleh Singapura, Malaysia, Brunei, Thailand dan hanya berbeda tipis dengan Vietnam.\n\nMengingat hal tersebut, maka menjadi tanggung jawab kita bersama selaku anak Bangsa  melakukan perbaikan kualitas SDM Indonesia sehingga bisa bersaing di era global.\n\nDisisi lain, banyak generasi muda Indonesia yang terampil dan berprestasi serta memiliki minat tinggi di bidang pendidikan, namun kesulitan mencari wadah yang tepat dalam menyalurkan potensi mereka untuk berperan aktif dalam memajukan bangsa secara bersama-sama.\n\nSebelum tahun 2017, kami aktif bergerak di bidang Pendidikan dan ekonomi kemasyarakatan dalam “ Komunitas Pemerhati Peduli Pendidikan ( KP3 ) dan Hawari ( Himpunan Wirausaha Mandiri )\n\nPada Tanggal 26 Mei 2017, kami mendirikan Yayasan Bina Bangsa Berdikari ( YB3 ) berdasarkan SK Menteri Hukum Dan Hak Asasi Manusia Republik Indonesia Nomor AHU-0009407.AH.01.04.tahun 2017.\n\nYayasan ini merupakan  organisasi non-profit yang menjadi wadah  bagi seluruh anak bangsa yang berkeinginan memberikan sumbangsih sesuai potensinya untuk kemajuan Pendidikan bangsa dan mewujudkan masyarakat berdikari.</string>
@@ -91,7 +91,7 @@
     <string name="avatar_phone_number">08xxxxxxxxxx</string>
     <string name="address">Alamat</string>
     <string name="address_detail">Alamat Detail</string>
-    <string name="phone_number">Mobile Phone Number</string>
+    <string name="phone_number">Nomor Handphone</string>
     <string name="level">Level</string>
     <string name="account_setting">Pengaturan Akun</string>
     <string name="change_password">Ganti Password</string>
@@ -114,8 +114,8 @@
 
     <string name="name">Nama</string>
     <string name="username">Id Relawan</string>
-    <string name="phonenumber">Nomor Handphone</string>
     <string name="volunteer_name">Nama Relawan</string>
+    <string name="donor_name">Nama Donatur</string>
     <string name="donation_date">Waktu Donasi</string>
     <string name="total_amount">Jumlah Nominal</string>
     <string name="total_donation_amount">Jumlah Donasi</string>
@@ -133,7 +133,7 @@
     <string name="hint_name">Masukkan Nama disini</string>
     <string name="hint_username">Masukkan Id Relawan disini</string>
     <string name="hint_password">Masukkan Password disini</string>
-    <string name="hint_phonenumber">Masukkan Nomor HP disini</string>
+    <string name="hint_phone_number">Masukkan Nomor HP disini</string>
     <string name="hint_division">Masukkan Divisi disini</string>
     <string name="hint_team">Masukkan Tim disini</string>
     <string name="hint_userclass">Masukkan Kelas disini</string>

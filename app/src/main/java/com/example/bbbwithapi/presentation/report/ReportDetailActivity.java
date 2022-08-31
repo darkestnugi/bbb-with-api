@@ -304,7 +304,7 @@ public class ReportDetailActivity extends AppCompatActivity{
                         .child(myID)
                         .setValue(pdc);
 
-                Query databasePDCYearly = FirebaseDatabase.getInstance().getReference("pdcyearly").orderByChild("tahunTransaksi").equalTo(year).limitToLast(360000);
+                Query databasePDCYearly = FirebaseDatabase.getInstance().getReference("pdcyearly").orderByChild("tahunTransaksi").equalTo(year).limitToLast(1000);
                 databasePDCYearly.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -372,7 +372,7 @@ public class ReportDetailActivity extends AppCompatActivity{
                     }
                 });
 
-                Query databasePDCYearlyPersonal = FirebaseDatabase.getInstance().getReference("pdcyearlypersonal").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(360000);
+                Query databasePDCYearlyPersonal = FirebaseDatabase.getInstance().getReference("pdcyearlypersonal").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(1000);
                 databasePDCYearlyPersonal.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
