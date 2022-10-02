@@ -290,7 +290,99 @@ public class DonationDetailActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 if (fileUri == null && txtPhotoURL.getText() != null && txtPhotoURL.getText().length() > 0 && !txtPhotoURL.getText().equals("")) {
-                    saveDonation();
+                    final ProgressDialog progressDialog = new ProgressDialog(mycontext);
+                    progressDialog.setTitle("Checking");
+                    progressDialog.show();
+
+                    Query databaseDonation = FirebaseDatabase.getInstance().getReference("donation").limitToLast(1000);
+                    databaseDonation.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            //clearing the previous artist list
+                            long total = dataSnapshot.getChildrenCount();
+
+                            Program myProgram = (Program) spinnerEdtProgram.getSelectedItem();
+                            String myphone = edtUMobilePhone.getText().toString().trim();
+
+                            if (myphone != null && !myphone.equals("") && myphone.length() > 0 && myphone.substring(0, 1).equals("0")) {
+                                myphone = "62" + myphone.substring(1, myphone.length());
+                            }
+
+                            Double mynominal = 0.00;
+
+                            try {
+                                mynominal = Double.parseDouble(edtUNominal.getText().toString().trim());
+                            } catch (Exception errV1) {
+                                try {
+                                    mynominal = Double.parseDouble(edtUNominal.getText().toString().trim().replace("Rp ", "").replace(",", "").replace(".", ""));
+                                } catch (Exception errV2) {
+                                    mynominal = 0.00;
+                                }
+                            }
+
+                            String myTrxId = txtDonationId.getText().toString().trim();
+                            String myUserId = txtUserId.getText().toString().trim();
+
+                            String trDateDay = String.valueOf(edtUTransactionDate.getDayOfMonth());
+                            String trDateMonth = String.valueOf(edtUTransactionDate.getMonth() + 1);
+                            String trDateYear = String.valueOf(edtUTransactionDate.getYear());
+
+                            String selectedDate = checkLength(trDateYear, 4) + "-" + checkLength(trDateMonth, 2) + "-" + checkLength(trDateDay, 2);
+                            Boolean isSaved = true;
+
+                            if (total > 0) {
+                                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                    //getting artist
+                                    Donation artist = postSnapshot.getValue(Donation.class);
+                                    String temp0 = artist.getID();
+                                    String temp1 = artist.getDonor().getMobilePhone();
+                                    Double temp2 = artist.getNominal();
+                                    String temp3 = artist.getTransactionDate().substring(0, 10);
+                                    String temp4 = artist.getCreatedBy();
+                                    String temp5 = "";
+
+                                    if (artist.getProgram() != null && artist.getProgram().getTitle() != null && !artist.getProgram().getTitle().equals("")) {
+                                        temp5 = artist.getProgram().getTitle();
+                                    } else {
+                                        temp5 = artist.getProgramTitle();
+                                    }
+
+                                    Boolean v0 = myTrxId.equals(temp0);
+                                    Boolean v1 = myphone.equals(temp1);
+                                    Boolean v2 = mynominal.equals(temp2);
+                                    Boolean v3 = selectedDate.equals(temp3);
+                                    Boolean v4 = myUserId.equals(temp4);
+                                    Boolean v5 = myProgram.getTitle().equals(temp5);
+
+                                    if (!v0 && v1 && v2 && v3 && v4 && v5) {
+                                        isSaved = false;
+                                        Toast.makeText(mycontext, "Donasi donatur ini sudah pernah diupload oleh Anda pada tanggal " + selectedDate, Toast.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
+                                        break;
+                                    } else if (!v0 && v1 && v2 && v3 && !v4 && v5) {
+                                        isSaved = false;
+                                        Toast.makeText(mycontext, "Donasi donatur ini sudah pernah diupload oleh relawan lain pada tanggal " + selectedDate, Toast.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
+                                        break;
+                                    }
+                                }
+
+                                if (isSaved) {
+                                    progressDialog.dismiss();
+                                    saveDonation();
+                                }
+                            } else {
+                                progressDialog.dismiss();
+                                saveDonation();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            progressDialog.dismiss();
+                        }
+                    });
                 } else if (fileUri != null) {
                     uploadFile(fileId, fileName, fileExtension, fileUri);
                 } else {
@@ -791,19 +883,27 @@ public class DonationDetailActivity extends AppCompatActivity{
                                 Double temp2 = artist.getNominal();
                                 String temp3 = artist.getTransactionDate().substring(0, 10);
                                 String temp4 = artist.getCreatedBy();
+                                String temp5 = "";
+
+                                if (artist.getProgram() != null && artist.getProgram().getTitle() != null && !artist.getProgram().getTitle().equals("")) {
+                                    temp5 = artist.getProgram().getTitle();
+                                } else {
+                                    temp5 = artist.getProgramTitle();
+                                }
 
                                 Boolean v0 = myTrxId.equals(temp0);
                                 Boolean v1 = myphone.equals(temp1);
                                 Boolean v2 = mynominal.equals(temp2);
                                 Boolean v3 = selectedDate.equals(temp3);
                                 Boolean v4 = myUserId.equals(temp4);
+                                Boolean v5 = myProgram.getTitle().equals(temp5);
 
-                                if (!v0 && v1 && v2 && v3 && v4) {
+                                if (!v0 && v1 && v2 && v3 && v4 && v5) {
                                     isSaved = false;
                                     Toast.makeText(mycontext, "Donasi donatur ini sudah pernah diupload oleh Anda pada tanggal " + selectedDate, Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
                                     break;
-                                } else if (!v0 && v1 && v2 && v3 && !v4) {
+                                } else if (!v0 && v1 && v2 && v3 && !v4 && v5) {
                                     isSaved = false;
                                     Toast.makeText(mycontext, "Donasi donatur ini sudah pernah diupload oleh relawan lain pada tanggal " + selectedDate, Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
