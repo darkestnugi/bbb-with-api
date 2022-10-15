@@ -76,18 +76,18 @@
             app:layout_constraintTop_toBottomOf="@id/tvTransactionDateTitle" />
 
         <TextView
-            android:id="@+id/tvReferenceNumberTitle"
+            android:id="@+id/tvTransactionNoteTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/donor_name"
+            android:text="@string/transaction_note"
             android:textColor="#272727"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@id/tvAmountTitle"
             app:layout_constraintTop_toBottomOf="@id/tvTotalAmount" />
 
         <TextView
-            android:id="@+id/tvReferenceNumber"
+            android:id="@+id/tvTransactionNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -95,8 +95,8 @@
             android:textColor="#272727"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/tvReferenceNumberTitle"
-            app:layout_constraintTop_toBottomOf="@id/tvReferenceNumberTitle" />
+            app:layout_constraintStart_toStartOf="@id/tvTransactionNoteTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvTransactionNoteTitle" />
 
         <TextView
             android:id="@+id/tvTransactionStatusTitle"
@@ -119,7 +119,7 @@
             android:paddingHorizontal="22dp"
             android:paddingVertical="8dp"
             android:text="Menunggu Verifikasi"
-            android:textColor="#316E4D"
+            android:textColor="#FCCC11"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/tvTransactionStatusTitle"

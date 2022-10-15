@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class DonationListAdapter extends RecyclerView.Adapter<DonationListAdapter.ViewHolder> {
+
     private ArrayList<Donation> listItems;
     private Context context;
 
@@ -67,17 +68,13 @@ public class DonationListAdapter extends RecyclerView.Adapter<DonationListAdapte
             holder.btnEditDonation.setVisibility(View.VISIBLE);
         }
 
-        if (listItems.get(position).getDonorName() == null
-                || listItems.get(position).getDonorName().equals("")
-                || listItems.get(position).getDonorName().length() == 0
+        if (listItems.get(position).getNotePayment() == null
+                || listItems.get(position).getNotePayment().equals("")
+                || listItems.get(position).getNotePayment().length() == 0
         ) {
-            if (listItems.get(position).getDonorMobilePhone().length() > 0) {
-                holder.tvItemReferenceNumber.setText(listItems.get(position).getDonorMobilePhone());
-            } else {
-                holder.tvItemReferenceNumber.setText("-");
-            }
+            holder.tvTransactionNote.setText("-");
         } else {
-            holder.tvItemReferenceNumber.setText(listItems.get(position).getDonorName());
+            holder.tvTransactionNote.setText(listItems.get(position).getNotePayment());
         }
 
         holder.actionItem(position);
@@ -90,7 +87,7 @@ public class DonationListAdapter extends RecyclerView.Adapter<DonationListAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivItemImgDonation;
-        TextView tvItemAmount, tvItemReferenceNumber, tvTransactionDate, tvTransactionStatus;
+        TextView tvItemAmount, tvTransactionNote, tvTransactionDate, tvTransactionStatus;
         Button btnEditDonation;
         CardView cvDonationItems;
 
@@ -98,7 +95,7 @@ public class DonationListAdapter extends RecyclerView.Adapter<DonationListAdapte
             super(itemView);
             ivItemImgDonation = (ImageView) itemView.findViewById(R.id.ivImageListDonation);
             tvItemAmount = (TextView) itemView.findViewById(R.id.tvTotalAmount);
-            tvItemReferenceNumber = (TextView) itemView.findViewById(R.id.tvReferenceNumber);
+            tvTransactionNote = (TextView) itemView.findViewById(R.id.tvTransactionNote);
             tvTransactionDate = (TextView) itemView.findViewById(R.id.tvTransactionDate);
             tvTransactionStatus = (TextView) itemView.findViewById(R.id.tvTransactionStatus);
             btnEditDonation = (Button) itemView.findViewById(R.id.btnEditDonation);

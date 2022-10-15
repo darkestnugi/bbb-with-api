@@ -79,6 +79,10 @@ public class Donation implements Parcelable, Comparable<Donation> {
     @Expose
     private String StatusPayment;
 
+    @SerializedName("Note Payment")
+    @Expose
+    private String NotePayment;
+
     @SerializedName("Photo")
     @Expose
     private String Photo;
@@ -200,6 +204,7 @@ public class Donation implements Parcelable, Comparable<Donation> {
         this.Nominal = parcel.readDouble();
         this.Prayer = parcel.readString();
         this.StatusPayment = parcel.readString();
+        this.NotePayment = parcel.readString();
         this.Photo = parcel.readString();
         this.PhotoURL = parcel.readString();
         this.ReferenceNumber = parcel.readString();
@@ -218,7 +223,7 @@ public class Donation implements Parcelable, Comparable<Donation> {
     }
 
     public Donation(String ID, String AppVersion, String UserID, String TransactionDate, UserAccount User, Donor Donor,
-                    Double Nominal, String Prayer, String StatusPayment, String Photo, String PhotoURL,
+                    Double Nominal, String Prayer, String StatusPayment, String NotePayment, String Photo, String PhotoURL,
                     String ReferenceNumber, String ReferenceName, String ReferenceDivision, String ReferenceTeam, String ReferenceClass,
                     String BankTitle, String ProgramTitle, String ReligionTitle, String JobTitle, String AgeTitle, String DomicileTitle, String CategoryTitle,
                     Bank Bank, Program Program, Religion Religion, Job Job, Age Age, Domicile Domicile, Category Category,
@@ -234,6 +239,7 @@ public class Donation implements Parcelable, Comparable<Donation> {
         this.Nominal = Nominal;
         this.Prayer = Prayer;
         this.StatusPayment = StatusPayment;
+        this.NotePayment = NotePayment;
         this.Photo = Photo;
         this.PhotoURL = PhotoURL;
 
@@ -422,6 +428,14 @@ public class Donation implements Parcelable, Comparable<Donation> {
 
     public void setStatusPayment(String StatusPayment) {
         this.StatusPayment = StatusPayment;
+    }
+
+    public String getNotePayment() {
+        return NotePayment;
+    }
+
+    public void setNotePayment(String NotePayment) {
+        this.NotePayment = NotePayment;
     }
 
     public String getPhoto() {
@@ -632,6 +646,7 @@ public class Donation implements Parcelable, Comparable<Donation> {
         parcel.writeDouble(getNominal());
         parcel.writeString(getPrayer());
         parcel.writeString(getStatusPayment());
+        parcel.writeString(getNotePayment());
         parcel.writeString(getPhoto());
         parcel.writeString(getPhotoURL());
         parcel.writeString(getReferenceNumber());
