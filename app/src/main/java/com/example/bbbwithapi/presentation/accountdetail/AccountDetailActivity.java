@@ -423,7 +423,7 @@ public class AccountDetailActivity extends AppCompatActivity{
                             progressDialog.setMessage("Uploaded " + 100 + "%...");
                             progressDialog.dismiss();
 
-                            Toast.makeText(AccountDetailActivity.this, "Berhasil mengubah data pribadi", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mycontext, "Berhasil mengubah data pribadi", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     }
@@ -432,7 +432,8 @@ public class AccountDetailActivity extends AppCompatActivity{
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(mycontext, "Internet tidak stabil. Mohon periksa kembali jaringan internet Anda", Toast.LENGTH_LONG).show();
+                finish();
             }
         });
     }

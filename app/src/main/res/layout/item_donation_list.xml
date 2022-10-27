@@ -68,12 +68,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Semoga Bermanfaat"
+            android:text="2022-10-31"
             android:textColor="#272727"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/tvTransactionDateTitle"
             app:layout_constraintTop_toBottomOf="@id/tvTransactionDateTitle" />
+
+        <TextView
+            android:id="@+id/tvDonorNameTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/donor_name"
+            android:textColor="#272727"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tvAmountTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvTotalAmount" />
+
+        <TextView
+            android:id="@+id/tvDonorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Nugraha Utama"
+            android:textColor="#272727"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tvDonorNameTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvDonorNameTitle" />
 
         <TextView
             android:id="@+id/tvTransactionNoteTitle"
@@ -84,19 +107,42 @@
             android:textColor="#272727"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@id/tvAmountTitle"
-            app:layout_constraintTop_toBottomOf="@id/tvTotalAmount" />
+            app:layout_constraintTop_toBottomOf="@id/tvDonorName" />
 
         <TextView
             android:id="@+id/tvTransactionNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="2222222"
+            android:text="Sayangnya Anda Ditolak"
             android:textColor="#272727"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/tvTransactionNoteTitle"
             app:layout_constraintTop_toBottomOf="@id/tvTransactionNoteTitle" />
+
+        <TextView
+            android:id="@+id/tvDonorPhoneTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/phone_number"
+            android:textColor="#272727"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tvTransactionDateTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvTransactionDate" />
+
+        <TextView
+            android:id="@+id/tvDonorPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="081081081081"
+            android:textColor="#272727"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tvDonorPhoneTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvDonorPhoneTitle" />
 
         <TextView
             android:id="@+id/tvTransactionStatusTitle"
@@ -107,7 +153,7 @@
             android:textColor="#272727"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@id/tvTransactionDateTitle"
-            app:layout_constraintTop_toBottomOf="@id/tvTransactionDate" />
+            app:layout_constraintTop_toBottomOf="@id/tvDonorPhone" />
 
         <TextView
             android:id="@+id/tvTransactionStatus"

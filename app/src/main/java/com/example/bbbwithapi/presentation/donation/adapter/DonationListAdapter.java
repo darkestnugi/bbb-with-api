@@ -68,6 +68,24 @@ public class DonationListAdapter extends RecyclerView.Adapter<DonationListAdapte
             holder.btnEditDonation.setVisibility(View.VISIBLE);
         }
 
+        if (listItems.get(position).getDonorName() == null
+                || listItems.get(position).getDonorName().equals("")
+                || listItems.get(position).getDonorName().length() == 0
+        ) {
+            holder.tvDonorName.setText("-");
+        } else {
+            holder.tvDonorName.setText(listItems.get(position).getDonorName());
+        }
+
+        if (listItems.get(position).getDonorMobilePhone() == null
+                || listItems.get(position).getDonorMobilePhone().equals("")
+                || listItems.get(position).getDonorMobilePhone().length() == 0
+        ) {
+            holder.tvDonorPhone.setText("-");
+        } else {
+            holder.tvDonorPhone.setText(listItems.get(position).getDonorMobilePhone());
+        }
+
         if (listItems.get(position).getNotePayment() == null
                 || listItems.get(position).getNotePayment().equals("")
                 || listItems.get(position).getNotePayment().length() == 0
@@ -87,7 +105,7 @@ public class DonationListAdapter extends RecyclerView.Adapter<DonationListAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivItemImgDonation;
-        TextView tvItemAmount, tvTransactionNote, tvTransactionDate, tvTransactionStatus;
+        TextView tvItemAmount, tvDonorName, tvDonorPhone, tvTransactionNote, tvTransactionDate, tvTransactionStatus;
         Button btnEditDonation;
         CardView cvDonationItems;
 
@@ -95,9 +113,14 @@ public class DonationListAdapter extends RecyclerView.Adapter<DonationListAdapte
             super(itemView);
             ivItemImgDonation = (ImageView) itemView.findViewById(R.id.ivImageListDonation);
             tvItemAmount = (TextView) itemView.findViewById(R.id.tvTotalAmount);
+
+            tvDonorName = (TextView) itemView.findViewById(R.id.tvDonorName);
+            tvDonorPhone = (TextView) itemView.findViewById(R.id.tvDonorPhone);
+
             tvTransactionNote = (TextView) itemView.findViewById(R.id.tvTransactionNote);
             tvTransactionDate = (TextView) itemView.findViewById(R.id.tvTransactionDate);
             tvTransactionStatus = (TextView) itemView.findViewById(R.id.tvTransactionStatus);
+
             btnEditDonation = (Button) itemView.findViewById(R.id.btnEditDonation);
             cvDonationItems = (CardView) itemView.findViewById(R.id.cvDonationItems);
         }

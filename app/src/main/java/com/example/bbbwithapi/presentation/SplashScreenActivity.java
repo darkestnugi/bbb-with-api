@@ -135,7 +135,9 @@ public class SplashScreenActivity extends AppCompatActivity{
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(mycontext, "Internet tidak stabil. Mohon periksa kembali jaringan internet Anda", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(mycontext, LoginActivity.class));
+                finish();
             }
         });
     }

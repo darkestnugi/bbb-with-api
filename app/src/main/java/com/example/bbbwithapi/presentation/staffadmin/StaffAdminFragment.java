@@ -220,6 +220,8 @@ public class StaffAdminFragment extends Fragment {
                 double progress = 100.0;
                 progressDialog.setMessage("Downloaded " + ((int) progress) + "%...");
                 progressDialog.dismiss();
+
+                Toast.makeText(mycontext, "Internet tidak stabil. Mohon periksa kembali jaringan internet Anda", Toast.LENGTH_LONG).show();
             }
         });
     }
