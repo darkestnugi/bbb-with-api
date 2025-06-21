@@ -101,7 +101,7 @@ public class BBBActivity extends AppCompatActivity implements BottomNavigationVi
             getSupportActionBar().hide();
         }
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.flMainbbb, homeFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.flMainbbb, donationListFragment).commit();
     }
 
     @Override

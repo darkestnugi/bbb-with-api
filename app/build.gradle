@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.example.bbbwithapi"
-        minSdk 21
-        targetSdk 31
+        minSdk 24
+        targetSdk 35
         versionCode 1
         versionName "1.0.0.5"
         multiDexEnabled true
@@ -35,36 +35,36 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.4.0'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'com.google.code.gson:gson:2.13.1'
 
-    implementation 'com.firebaseui:firebase-ui:8.0.0'
-    implementation 'com.google.firebase:firebase-database:20.0.3'
-    implementation 'com.google.firebase:firebase-storage:20.0.0'
-    implementation 'com.google.firebase:firebase-auth:21.0.1'
-    implementation platform('com.google.firebase:firebase-bom:29.2.1')
+    implementation 'com.firebaseui:firebase-ui:9.0.0'
+    implementation 'com.google.firebase:firebase-database:21.0.0'
+    implementation 'com.google.firebase:firebase-storage:21.0.2'
+    implementation 'com.google.firebase:firebase-auth:23.2.1'
+    implementation platform('com.google.firebase:firebase-bom:33.15.0')
 
     implementation 'pub.devrel:easypermissions:3.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'androidx.annotation:annotation:1.3.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
-    implementation files('src\\main\\java\\com\\example\\bbbwithapi\\library\\poi-3.7.jar')
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.6'
-    implementation 'com.google.firebase:firebase-analytics:20.0.2'
+    implementation 'androidx.annotation:annotation:1.9.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.9.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1'
+    implementation files('src/main/java/com/example/bbbwithapi/library/poi-3.7.jar')
+    implementation 'com.google.firebase:firebase-crashlytics:19.4.4'
+    implementation 'com.google.firebase:firebase-analytics:22.4.0'
 
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
 
     //pdf generator
-    implementation 'com.itextpdf:itextpdf:5.5.13.3'
+    implementation 'com.itextpdf:itextpdf:5.5.13.4'
 //    implementation 'com.github.Gkemon:Android-XML-to-PDF-Generator:2.6.1'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }
