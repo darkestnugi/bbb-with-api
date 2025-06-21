@@ -12,6 +12,10 @@ public class ReportPersonal implements Comparable<ReportPersonal> {
     @Expose
     private String UserID;
 
+    @SerializedName("Month")
+    @Expose
+    private String Month;
+
     @SerializedName("Bulan Transaksi")
     @Expose
     private Integer BulanTransaksi;
@@ -23,6 +27,10 @@ public class ReportPersonal implements Comparable<ReportPersonal> {
     @SerializedName("Jumlah Transaksi")
     @Expose
     private Double JumlahTransaksi;
+
+    @SerializedName("Total Transaksi")
+    @Expose
+    private Double TotalTransaksi;
 
     @SerializedName("CreatedBy")
     @Expose
@@ -63,15 +71,17 @@ public class ReportPersonal implements Comparable<ReportPersonal> {
     public ReportPersonal() {
     }
 
-    public ReportPersonal(String ID, String UserID, Integer BulanTransaksi, Integer TahunTransaksi, Double JumlahTransaksi,
+    public ReportPersonal(String ID, String UserID, String Month, Integer BulanTransaksi, Integer TahunTransaksi, Double JumlahTransaksi, Double TotalTransaksi,
                           String CreatedBy, String CreatedIP, String CreatedPosition, String CreatedDate,
                           String ModifiedBy, String ModifiedIP, String ModifiedPosition, String ModifiedDate,
                           boolean IsActive) {
         this.ID = ID;
         this.UserID = UserID;
+        this.Month = Month;
         this.BulanTransaksi = BulanTransaksi;
         this.TahunTransaksi = TahunTransaksi;
         this.JumlahTransaksi = JumlahTransaksi;
+        this.TotalTransaksi = TotalTransaksi;
 
         this.CreatedBy = CreatedBy;
         this.CreatedIP = CreatedIP;
@@ -102,6 +112,10 @@ public class ReportPersonal implements Comparable<ReportPersonal> {
         this.UserID = UserID;
     }
 
+    public void setMonth(String Month) {
+        this.Month = Month;
+    }
+
     public Integer getBulanTransaksi() {
         return BulanTransaksi;
     }
@@ -124,6 +138,14 @@ public class ReportPersonal implements Comparable<ReportPersonal> {
 
     public void setJumlahTransaksi(Double JumlahTransaksi) {
         this.JumlahTransaksi = JumlahTransaksi;
+    }
+
+    public Double getTotalTransaksi() {
+        return TotalTransaksi;
+    }
+
+    public void setTotalTransaksi(Double TotalTransaksi) {
+        this.TotalTransaksi = TotalTransaksi;
     }
 
     public String getCreatedBy() {

@@ -8,7 +8,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

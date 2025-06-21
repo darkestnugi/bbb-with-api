@@ -76,6 +76,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -135,6 +136,9 @@ public class DonationDetailActivity extends AppCompatActivity{
     List<Category> list_category = new ArrayList<Category>();
 
     private String fileName, fileId, fileExtension;
+
+    private List<Donation> list_donation = new ArrayList<Donation>();
+    private ArrayList<ReportPersonal> list_report_personal = new ArrayList<ReportPersonal>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1419,8 +1423,228 @@ public class DonationDetailActivity extends AppCompatActivity{
             });
         }
 
+        updateDonation(prefManager.getUserName(), prefManager.getName(), prefManager.getDivision(), prefManager.getTeam(), prefManager.getUserClass());
+
         Toast.makeText(mycontext, "Donasi Anda telah berhasil disimpan. Kami akan segera mengkonfirmasinya.", Toast.LENGTH_SHORT).show();
+
         finish();
+    }
+
+    private void updateDonation(String refNumber, String refName, String refDiv, String refTeam, String refClass) {
+        final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Calendar c = Calendar.getInstance();
+
+        c.add(Calendar.MONTH, -1);
+        final String tempStartDate = formatter.format(c.getTime()).substring(0,7) + "-01";
+        final String tempEndDate = formatter.format(new Date());
+        final String mydate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(new Date());
+
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("donation").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(16384);
+        databaseDonation.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //clearing the previous artist list
+                long totalDonation = dataSnapshot.getChildrenCount();
+
+                if (totalDonation > 0) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        //getting artist
+                        Donation artist = postSnapshot.getValue(Donation.class);
+
+                        artist.setReferenceNumber(refNumber);
+                        artist.setReferenceName(refName);
+                        artist.setReferenceDivision(refDiv);
+                        artist.setReferenceTeam(refTeam);
+                        artist.setReferenceClass(refClass);
+
+                        artist.getUser().setDivision(refDiv);
+                        artist.getUser().setTeam(refTeam);
+                        artist.getUser().setUserClass(refClass);
+
+                        DatabaseReference dbDonation = FirebaseDatabase.getInstance()
+                                .getReference("donation");
+
+                        dbDonation
+                                .child(artist.getID())
+                                .setValue(artist);
+                        try {
+                            Date myStartDate = formatter.parse(tempStartDate);
+                            Date myEndDate = formatter.parse(tempEndDate);
+                            Date myTransDate = formatter.parse(artist.getTransactionDate());
+
+                            if (myTransDate.after(myStartDate) && myTransDate.before(myEndDate) || myTransDate.equals(myStartDate) || myTransDate.equals(myEndDate)) {
+                                list_donation.add(artist);
+                            }
+                        } catch (Exception Err) {
+                            Toast.makeText(mycontext, "Error " + Err.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    Query databaseDonationYearlyPersonal = FirebaseDatabase.getInstance().getReference("donationyearlypersonal").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(128);
+                    databaseDonationYearlyPersonal.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            //clearing the previous artist list
+                            long count = 0;
+                            long totalChildren = dataSnapshot.getChildrenCount();
+
+                            if (totalChildren > 0) {
+                                try {
+                                    Date myStartDate = formatter.parse(tempStartDate);
+                                    Date myEndDate = formatter.parse(tempEndDate);
+
+                                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                        //getting artist
+                                        ReportPersonal artist = postSnapshot.getValue(ReportPersonal.class);
+                                        Date myTransDate = formatter.parse(artist.getTahunTransaksi() + "-" + (artist.getBulanTransaksi() + 1) + "-01");
+
+                                        if (myTransDate.after(myStartDate) && myTransDate.before(myEndDate) || myTransDate.equals(myStartDate) || myTransDate.equals(myEndDate)) {
+                                            DatabaseReference dbDonationYearlyPersonal = FirebaseDatabase.getInstance()
+                                                    .getReference("donationyearlypersonal");
+
+                                            dbDonationYearlyPersonal
+                                                    .child(artist.getID())
+                                                    .removeValue();
+                                        }
+                                    }
+
+                                } catch (Exception Err) {
+                                    Toast.makeText(mycontext, "Error(1) " + Err.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+
+                                DatabaseReference dbDonationYearlyPersonal = FirebaseDatabase.getInstance()
+                                        .getReference("donationyearlypersonal");
+
+                                try {
+                                    Date myStartDate = formatter.parse(tempStartDate);
+                                    Date myEndDate = formatter.parse(tempEndDate);
+
+                                    Calendar start = Calendar.getInstance();
+                                    start.setTime(myStartDate);
+                                    Calendar end = Calendar.getInstance();
+                                    end.setTime(myEndDate);
+
+                                    list_report_personal.clear();
+
+                                    Integer tempYear = 0;
+                                    Integer tempMonth = 0;
+
+                                    for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+                                        Calendar cal = Calendar.getInstance();
+                                        cal.setTime(date);
+
+                                        Integer myYear = cal.get(Calendar.YEAR);
+                                        Integer myMonth = cal.get(Calendar.MONTH);
+
+                                        if (list_report_personal.size() == 0) {
+                                            String myID = dbDonationYearlyPersonal.push().getKey();
+                                            ReportPersonal artistV1 = new ReportPersonal();
+
+                                            artistV1.setID(myID);
+                                            artistV1.setUserID(prefManager.getUserID());
+                                            artistV1.setTahunTransaksi(myYear);
+                                            artistV1.setBulanTransaksi(myMonth);
+                                            artistV1.setMonth(artistV1.getMonth());
+
+                                            artistV1.setJumlahTransaksi(0.0);
+                                            artistV1.setTotalTransaksi(0.0);
+                                            artistV1.setCreatedBy(prefManager.getUserID());
+                                            artistV1.setCreatedDate(mydate);
+                                            artistV1.setModifiedBy(prefManager.getUserID());
+                                            artistV1.setModifiedDate(mydate);
+                                            artistV1.setIsActive(true);
+
+                                            dbDonationYearlyPersonal
+                                                    .child(myID)
+                                                    .setValue(artistV1);
+
+                                            list_report_personal.add(artistV1);
+                                            tempYear = myYear;
+                                            tempMonth = myMonth;
+                                        } else {
+                                            if (myYear.equals(tempYear) && myMonth.equals(tempMonth)) {
+                                                //Do Something?
+                                            } else {
+                                                String myID = dbDonationYearlyPersonal.push().getKey();
+                                                ReportPersonal artistV1 = new ReportPersonal();
+
+                                                artistV1.setID(myID);
+                                                artistV1.setUserID(prefManager.getUserID());
+                                                artistV1.setTahunTransaksi(myYear);
+                                                artistV1.setBulanTransaksi(myMonth);
+                                                artistV1.setMonth(artistV1.getMonth());
+
+                                                artistV1.setJumlahTransaksi(0.0);
+                                                artistV1.setTotalTransaksi(0.0);
+                                                artistV1.setCreatedBy(prefManager.getUserID());
+                                                artistV1.setCreatedDate(mydate);
+                                                artistV1.setModifiedBy(prefManager.getUserID());
+                                                artistV1.setModifiedDate(mydate);
+                                                artistV1.setIsActive(true);
+
+                                                dbDonationYearlyPersonal
+                                                        .child(myID)
+                                                        .setValue(artistV1);
+
+                                                list_report_personal.add(artistV1);
+                                                tempYear = myYear;
+                                                tempMonth = myMonth;
+                                            }
+                                        }
+                                    }
+                                } catch (Exception Err) {
+                                    Toast.makeText(mycontext, "Error(2) " + Err.getStackTrace(), Toast.LENGTH_SHORT).show();
+                                }
+
+                                for (ReportPersonal item : list_report_personal) {
+                                    Double jumlahTransaksi = 0.0;
+                                    Double totalTransaksi = 0.0;
+
+                                    for (Integer i = 0; i < list_donation.size(); i++) {
+                                        String transDate = list_donation.get(i).getTransactionDate();
+
+                                        if (transDate != null && !transDate.equals("") && transDate.length() >= 10) {
+                                            String transYear = transDate.substring(0, 4);
+                                            String transMonth = transDate.substring(5, 7);
+
+                                            Boolean tempYear = item.getTahunTransaksi().equals(Integer.parseInt(transYear));
+                                            Boolean tempMonth = item.getBulanTransaksi().equals(Integer.parseInt(transMonth) - 1);
+
+                                            if (tempYear && tempMonth) {
+                                                jumlahTransaksi = jumlahTransaksi + list_donation.get(i).getNominal();
+                                                totalTransaksi = totalTransaksi + 1.0;
+                                            }
+                                        }
+                                    }
+
+                                    item.setJumlahTransaksi(jumlahTransaksi);
+                                    item.setTotalTransaksi(totalTransaksi);
+                                    item.setCreatedBy(prefManager.getUserID());
+                                    item.setCreatedDate(mydate);
+                                    item.setModifiedBy(prefManager.getUserID());
+                                    item.setModifiedDate(mydate);
+                                    item.setIsActive(true);
+
+                                    dbDonationYearlyPersonal
+                                            .child(item.getID())
+                                            .setValue(item);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Toast.makeText(mycontext, "Error DB Donation Yearly Personal:" + databaseError.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(mycontext, "Error DB Donation:" + databaseError.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void askPermission() {

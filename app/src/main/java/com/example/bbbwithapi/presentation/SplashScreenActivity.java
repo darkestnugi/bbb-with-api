@@ -1,9 +1,5 @@
 package com.example.bbbwithapi.presentation;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -12,11 +8,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
-import com.example.bbbwithapi.model.Version;
-import com.example.bbbwithapi.presentation.login.LoginActivity;
-import com.example.bbbwithapi.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.bbbwithapi.BBBActivity;
+import com.example.bbbwithapi.R;
+import com.example.bbbwithapi.model.Version;
 import com.example.bbbwithapi.preference.PrefManager;
+import com.example.bbbwithapi.presentation.login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;

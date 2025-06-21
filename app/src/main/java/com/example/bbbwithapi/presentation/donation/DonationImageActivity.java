@@ -4,14 +4,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,15 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.bbbwithapi.R;
-import com.example.bbbwithapi.helper.ZoomableImageView;
 import com.example.bbbwithapi.model.Donation;
 import com.example.bbbwithapi.preference.PrefManager;
 import com.example.bbbwithapi.presentation.login.LoginActivity;
-import com.example.bbbwithapi.remote.BitMapTransform;
 import com.example.bbbwithapi.utils.IntentKeyUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,21 +32,15 @@ import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import okhttp3.ResponseBody;
 import pub.devrel.easypermissions.EasyPermissions;
 
 @RequiresApi(api = Build.VERSION_CODES.N)

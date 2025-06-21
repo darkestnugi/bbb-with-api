@@ -24,7 +24,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.bbbwithapi.R;
-import com.example.bbbwithapi.model.Donation;
+import com.example.bbbwithapi.model.ReportPersonal;
 import com.example.bbbwithapi.preference.PrefManager;
 import com.example.bbbwithapi.presentation.aboutbbb.AboutBBBActivity;
 import com.example.bbbwithapi.presentation.absence.AbsenceActivity;
@@ -48,7 +48,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -88,7 +87,8 @@ public class AccountFragment extends Fragment{
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseCrashlytics crashlytics;
 
-    double totalDonate = (double) 0;
+    double totalDonateMonth = (double) 0;
+    double totalDonateAll = (double) 0;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -197,8 +197,7 @@ public class AccountFragment extends Fragment{
     }
 
     private void initUi() {
-        totalDonationAccountMonthly();
-        totalDonationAccountYearly();
+        totalDonation();
 
         tvAvatarPhone.setText(prefManager.getMobilePhone());
         tvAvatarEmail.setText(prefManager.getEmail());
@@ -326,103 +325,66 @@ public class AccountFragment extends Fragment{
         initUi();
     }
 
-    private void totalDonationAccountMonthly() {
-        final ProgressDialog progressDialog = new ProgressDialog(requireContext());
+    private void totalDonation() {
+        final ProgressDialog progressDialog = new ProgressDialog(mycontext);
         progressDialog.setTitle("Downloading");
         progressDialog.show();
-        progressDialog.setMessage("Downloaded " + 50 + "%...");
+        progressDialog.setMessage("Downloading " + 1 + "%...");
 
         int year = Calendar.getInstance().get(Calendar.YEAR);
         int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
 
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("donation").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(1000);
+        Query databaseDonation = FirebaseDatabase.getInstance().getReference("donationyearlypersonal").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(64);
         databaseDonation.addValueEventListener(new ValueEventListener() {
             @SuppressLint("DefaultLocale")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 long count = 0;
                 long totalChildren = snapshot.getChildrenCount();
-                totalDonate = (double) 0;
+                totalDonateMonth = (double) 0;
+                totalDonateAll = (double) 0;
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    Donation artist = postSnapshot.getValue(Donation.class);
+                    try {
+                        ReportPersonal artist = postSnapshot.getValue(ReportPersonal.class);
 
-                    if (artist.getIsActive()) {
-                        int transYear = 0;
-                        int transMonth = 0;
-                        int transDay = 0;
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        if (artist.getIsActive()) {
+                            int transYear = 0;
+                            int transMonth = 0;
+                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-                        try {
-                            Date date = formatter.parse(artist.getTransactionDate());
+                            try {
+                                transYear = artist.getTahunTransaksi();
+                                transMonth = artist.getBulanTransaksi() + 1;
 
-                            transYear = date.getYear() + 1900;
-                            transMonth = date.getMonth() + 1;
-                            transDay = date.getDay();
+                                if (transYear == year && transMonth == month) {
+                                    totalDonateMonth = totalDonateMonth + artist.getJumlahTransaksi();
+                                }
 
-                            if (transYear == year && transMonth == month) {
-                                totalDonate = totalDonate + artist.getNominal();
+                                totalDonateAll = totalDonateAll + artist.getJumlahTransaksi();
+                            } catch (Exception err) {
+                                Toast.makeText(requireContext(), "Error Parse: " + err.getMessage(), Toast.LENGTH_LONG).show();
                             }
-                        } catch (Exception err) {
-                            Toast.makeText(requireContext(), "Error: " + err.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
-
-                    count++;
-                    double progress = (100.0 * count) / totalChildren;
-                    progressDialog.setMessage("Downloaded " + ((int) progress) + "%...");
-                }
-
-                tvCardTotalDonationMonthlyDetail.setText(String.format("Rp %,.2f", totalDonate));
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                double progress = 100.0;
-                progressDialog.setMessage("Downloaded " + ((int) progress) + "%...");
-                progressDialog.dismiss();
-
-                Toast.makeText(mycontext, "Internet tidak stabil. Mohon periksa kembali jaringan internet Anda", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void totalDonationAccountYearly() {
-        final ProgressDialog progressDialog = new ProgressDialog(requireContext());
-        progressDialog.setTitle("Downloading");
-        progressDialog.show();
-        progressDialog.setMessage("Downloaded " + 50 + "%...");
-
-        Query databaseDonation = FirebaseDatabase.getInstance().getReference("donation").orderByChild("userID").equalTo(prefManager.getUserID()).limitToLast(360000);
-        databaseDonation.addValueEventListener(new ValueEventListener() {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long count = 0;
-                long totalChildren = snapshot.getChildrenCount();
-                totalDonate = (double) 0;
-
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    Donation artist = postSnapshot.getValue(Donation.class);
-
-                    if (artist.getIsActive()) {
-                        totalDonate = totalDonate + artist.getNominal();
+                    catch (Exception err) {
+                        Toast.makeText(mycontext, "Error:" + err.getMessage() + " " + postSnapshot.getKey(), Toast.LENGTH_LONG).show();
                     }
 
                     count++;
                     double progress = (100.0 * count) / totalChildren;
-                    progressDialog.setMessage("Downloaded " + ((int) progress) + "%...");
+                    progressDialog.setMessage("Downloading " + ((int) progress) + "%...");
                 }
 
-                tvCardTotalDonationDetail.setText(String.format("Rp %,.2f", totalDonate));
+                tvCardTotalDonationMonthlyDetail.setText(String.format("Rp %,.2f", totalDonateMonth));
+                tvCardTotalDonationDetail.setText(String.format("Rp %,.2f", totalDonateAll));
                 progressDialog.dismiss();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 double progress = 100.0;
-                progressDialog.setMessage("Downloaded " + ((int) progress) + "%...");
+                progressDialog.setMessage("Downloading " + ((int) progress) + "%...");
                 progressDialog.dismiss();
 
                 Toast.makeText(mycontext, "Internet tidak stabil. Mohon periksa kembali jaringan internet Anda", Toast.LENGTH_LONG).show();

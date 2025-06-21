@@ -13,7 +13,6 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bbbwithapi.R;
-import com.example.bbbwithapi.model.Report;
 import com.example.bbbwithapi.model.ReportPDC;
 
 import java.util.ArrayList;

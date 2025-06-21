@@ -9,12 +9,6 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
-
 public class PhoneNumberEditText extends androidx.appcompat.widget.AppCompatEditText {
     private static String prefix = "+62";
     private static final int MAX_LENGTH = 20;
